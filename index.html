@@ -9,6 +9,60 @@
     <!-- 引入 Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+
+.chart-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.insight-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #1a73e8;
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #1a73e8;
+    font-weight: bold;
+}
+
+.insight-header i {
+    margin-right: 8px;
+}
+
+.insight-content {
+    color: #5f6368;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.suggestions {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 8px;
+    color: #1967d2;
+}
+
+.suggestion-item i {
+    margin-right: 8px;
+    color: #34a853;
+}
+
+        
         * {
             margin: 0;
             padding: 0;
@@ -142,7 +196,7 @@
 
     </style>
 </head>
-<body>
+<body>  
     <div class="dashboard">
         <div class="header">
             <h1>Social Performance Dashboard</h1>
@@ -167,6 +221,29 @@
                 <div class="metric-value">2.5h</div>
             </div>
         </div>
+
+        <div class="chart-card">
+    <div class="chart" id="global-audience-distribution"></div>
+    <div class="insight-container">
+        <div class="insight-header">
+            <i class="fas fa-globe"></i>
+            全球受众分布洞察
+        </div>
+        <div class="insight-content">
+            根据模拟数据，全球受众主要分布在北美、欧洲和亚洲。
+            <div class="suggestions">
+                <div class="suggestion-item">
+                    <i class="fas fa-lightbulb"></i>
+                    重点关注北美和亚洲市场，制定针对性策略
+                </div>
+                <div class="suggestion-item">
+                    <i class="fas fa-lightbulb"></i>
+                    提高欧洲地区的品牌影响力
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
         <div class="chart-container">
             <!-- 粉丝趋势图表卡片 -->
@@ -268,6 +345,10 @@
     </div>
 
     <script>
+
+        
+
+        
         // 更新时间
         document.getElementById('update-time').textContent = new Date().toLocaleString();
 
@@ -276,7 +357,52 @@
         const engagementChart = echarts.init(document.getElementById('engagement-chart'));
         const platformDistribution = echarts.init(document.getElementById('platform-distribution'));
         const sentimentAnalysis = echarts.init(document.getElementById('sentiment-analysis'));
+        const globalAudienceDistribution = echarts.init(document.getElementById('global-audience-distribution'));
 
+globalAudienceDistribution.setOption({
+    title: {
+        text: '全球受众分布'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    visualMap: {
+        min: 0,
+        max: 1000,
+        left: 'left',
+        top: 'bottom',
+        text: ['高', '低'],
+        calculable: true
+    },
+    series: [
+        {
+            name: '受众分布',
+            type: 'map',
+            mapType: 'world',
+            roam: true,
+            itemStyle: {
+                emphasis: { label: { show: true } }
+            },
+            data: [
+                { name: 'United States', value: 1000 },
+                { name: 'China', value: 800 },
+                { name: 'Germany', value: 600 },
+                { name: 'France', value: 500 },
+                { name: 'Canada', value: 400 },
+                { name: 'Brazil', value: 300 },
+                { name: 'India', value: 200 },
+                { name: 'Russia', value: 100 }
+            ]
+        }
+    ]
+});
+
+// Make the charts responsive
+window.addEventListener('resize', function() {
+    globalAudienceDistribution.resize();
+});
+
+        
         // 粉丝增长趋势
         followersTrend.setOption({
             title: {
@@ -454,11 +580,13 @@
 
         // 响应式处理
         window.addEventListener('resize', function() {
-            followersTrend.resize();
-            engagementChart.resize();
-            platformDistribution.resize();
-            sentimentAnalysis.resize();
-        });
+        followersTrend.resize();
+        engagementChart.resize();
+        platformDistribution.resize();
+        sentimentAnalysis.resize();
+        globalAudienceDistribution.resize();
+    });
+             
     </script>
 </body>
 </html>
