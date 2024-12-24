@@ -6,6 +6,8 @@
     <title>Social Performance Dashboard - @keevingfu</title>
     <!-- 引入 ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -74,17 +76,56 @@
             gap: 20px;
         }
 
-        .chart {
+        .chart-card {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            height: 400px;
-            transition: transform 0.3s ease;
+            margin-bottom: 20px;
         }
 
-        .chart:hover {
-            transform: translateY(-5px);
+        .insight-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1a73e8;
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+
+        .insight-header i {
+            margin-right: 8px;
+        }
+
+        .insight-content {
+            color: #5f6368;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .suggestions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 8px;
+            color: #1967d2;
+        }
+
+        .suggestion-item i {
+            margin-right: 8px;
+            color: #34a853;
         }
 
         @media (max-width: 768px) {
@@ -92,6 +133,13 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        .chart {
+            height: 400px;
+            margin-bottom: 20px; /* 添加底部间距 */
+            transition: transform 0.3s ease;
+        }
+
     </style>
 </head>
 <body>
@@ -121,10 +169,101 @@
         </div>
 
         <div class="chart-container">
-            <div class="chart" id="followers-trend"></div>
-            <div class="chart" id="engagement-chart"></div>
-            <div class="chart" id="platform-distribution"></div>
-            <div class="chart" id="sentiment-analysis"></div>
+            <!-- 粉丝趋势图表卡片 -->
+            <div class="chart-card">
+                <div class="chart" id="followers-trend"></div>
+                <div class="insight-container">
+                    <div class="insight-header">
+                        <i class="fas fa-chart-line"></i>
+                        粉丝增长洞察
+                    </div>
+                    <div class="insight-content">
+                        根据近6个月数据分析，粉丝增长呈现稳定上升趋势，5-6月增长最为显著。
+                        <div class="suggestions">
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                建议在5-6月期间增加内容发布频率
+                            </div>
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                关注高增长期的内容特点，复制成功经验
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 互动率分析图表卡片 -->
+            <div class="chart-card">
+                <div class="chart" id="engagement-chart"></div>
+                <div class="insight-container">
+                    <div class="insight-header">
+                        <i class="fas fa-comments"></i>
+                        互动率分析洞察
+                    </div>
+                    <div class="insight-content">
+                        周末互动率明显高于工作日，点赞量始终占据主导地位。
+                        <div class="suggestions">
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                建议在周末增加优质内容投放
+                            </div>
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                优化评论引导策略，提升深度互动
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 平台分布图表卡片 -->
+            <div class="chart-card">
+                <div class="chart" id="platform-distribution"></div>
+                <div class="insight-container">
+                    <div class="insight-header">
+                        <i class="fas fa-pie-chart"></i>
+                        平台分布洞察
+                    </div>
+                    <div class="insight-content">
+                        微信和微博是主要用户来源，抖音平台增长潜力较大。
+                        <div class="suggestions">
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                加大抖音平台的内容投入
+                            </div>
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                制定跨平台内容协同策略
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 情感分析图表卡片 -->
+            <div class="chart-card">
+                <div class="chart" id="sentiment-analysis"></div>
+                <div class="insight-container">
+                    <div class="insight-header">
+                        <i class="fas fa-heart"></i>
+                        情感分析洞察
+                    </div>
+                    <div class="insight-content">
+                        整体情感倾向积极，但负面情绪有小幅上升趋势。
+                        <div class="suggestions">
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                及时回应用户负面反馈
+                            </div>
+                            <div class="suggestion-item">
+                                <i class="fas fa-lightbulb"></i>
+                                加强正面内容引导和互动
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
