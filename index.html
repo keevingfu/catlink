@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Performance Dashboard - @keevingfu</title>
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #1a73e8;
+            margin-bottom: 10px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-title {
+            color: #5f6368;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        .chart {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        .chart:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Social Performance Dashboard</h1>
+            <p>Last updated: <span id="update-time"></span></p>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">总粉丝数</div>
+                <div class="metric-value">1.2M</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">互动率</div>
+                <div class="metric-value">5.8%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">本月发帖数</div>
+                <div class="metric-value">284</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">平均回复时间</div>
+                <div class="metric-value">2.5h</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart" id="followers-trend"></div>
+            <div class="chart" id="engagement-chart"></div>
+            <div class="chart" id="platform-distribution"></div>
+            <div class="chart" id="sentiment-analysis"></div>
+        </div>
+    </div>
+
+    <script>
+        // 更新时间
+        document.getElementById('update-time').textContent = new Date().toLocaleString();
+
+        // 初始化所有图表
+        const followersTrend = echarts.init(document.getElementById('followers-trend'));
+        const engagementChart = echarts.init(document.getElementById('engagement-chart'));
+        const platformDistribution = echarts.init(document.getElementById('platform-distribution'));
+        const sentimentAnalysis = echarts.init(document.getElementById('sentiment-analysis'));
+
+        // 粉丝增长趋势
+        followersTrend.setOption({
+            title: {
+                text: '粉丝增长趋势'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330],
+                type: 'line',
+                smooth: true,
+                itemStyle: {
+                    color: '#1a73e8'
+                },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0,
+                            color: 'rgba(26,115,232,0.3)'
+                        }, {
+                            offset: 1,
+                            color: 'rgba(26,115,232,0.05)'
+                        }]
+                    }
+                }
+            }]
+        });
+
+        // 互动率分析
+        engagementChart.setOption({
+            title: {
+                text: '互动率分析'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['点赞', '评论', '转发']
+            },
+            xAxis: {
+                type: 'category',
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '点赞',
+                    type: 'bar',
+                    data: [320, 332, 301, 334, 390, 330, 320],
+                    itemStyle: {
+                        color: '#1a73e8'
+                    }
+                },
+                {
+                    name: '评论',
+                    type: 'bar',
+                    data: [120, 132, 101, 134, 90, 230, 210],
+                    itemStyle: {
+                        color: '#34a853'
+                    }
+                },
+                {
+                    name: '转发',
+                    type: 'bar',
+                    data: [220, 182, 191, 234, 290, 330, 310],
+                    itemStyle: {
+                        color: '#fbbc04'
+                    }
+                }
+            ]
+        });
+
+        // 平台分布
+        platformDistribution.setOption({
+            title: {
+                text: '用户平台分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: '平台分布',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {value: 1048, name: '微信'},
+                        {value: 735, name: '微博'},
+                        {value: 580, name: '抖音'},
+                        {value: 484, name: '知乎'},
+                        {value: 300, name: '其他'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        });
+
+        // 情感分析
+        sentimentAnalysis.setOption({
+            title: {
+                text: '用户情感分析'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['正面', '中性', '负面']
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '正面',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    data: [320, 332, 301, 334, 390, 330],
+                    itemStyle: {
+                        color: '#34a853'
+                    }
+                },
+                {
+                    name: '中性',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    data: [120, 132, 101, 134, 90, 230],
+                    itemStyle: {
+                        color: '#fbbc04'
+                    }
+                },
+                {
+                    name: '负面',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    data: [220, 182, 191, 234, 290, 330],
+                    itemStyle: {
+                        color: '#ea4335'
+                    }
+                }
+            ]
+        });
+
+        // 响应式处理
+        window.addEventListener('resize', function() {
+            followersTrend.resize();
+            engagementChart.resize();
+            platformDistribution.resize();
+            sentimentAnalysis.resize();
+        });
+    </script>
+</body>
+</html>
