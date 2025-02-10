@@ -1,68 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Performance Dashboard - @keevingfu</title>
-    <!-- 引入 ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <!-- 引入 Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Catlink Portal</title>
     <style>
-
-.chart-card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-.insight-container {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #1a73e8;
-}
-
-.insight-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    color: #1a73e8;
-    font-weight: bold;
-}
-
-.insight-header i {
-    margin-right: 8px;
-}
-
-.insight-content {
-    color: #5f6368;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.suggestions {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #e0e0e0;
-}
-
-.suggestion-item {
-    display: flex;
-    align-items: flex-start;
-    margin-top: 8px;
-    color: #1967d2;
-}
-
-.suggestion-item i {
-    margin-right: 8px;
-    color: #34a853;
-}
-
-        
         * {
             margin: 0;
             padding: 0;
@@ -70,522 +12,115 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
-            padding: 20px;
-        }
-
-        .dashboard {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            color: #1a73e8;
-            margin-bottom: 10px;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .metric-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .metric-title {
-            color: #5f6368;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .metric-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a73e8;
-        }
-
-        .chart-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
-        }
-
-        .chart-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .insight-container {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #1a73e8;
-        }
-
-        .insight-header {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #0066cc;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            color: #1a73e8;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
             font-weight: bold;
+            text-decoration: none;
         }
 
-        .insight-header i {
-            margin-right: 8px;
-        }
-
-        .insight-content {
-            color: #5f6368;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .suggestions {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .suggestion-item {
+        nav ul {
+            list-style: none;
             display: flex;
-            align-items: flex-start;
-            margin-top: 8px;
-            color: #1967d2;
+            gap: 2rem;
         }
 
-        .suggestion-item i {
-            margin-right: 8px;
-            color: #34a853;
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
 
-        @media (max-width: 768px) {
-            .chart-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .chart {
-            height: 400px;
-            margin-bottom: 20px; /* 添加底部间距 */
-            transition: transform 0.3s ease;
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
+        nav a.active {
+            color: #ff0000;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: calc(100vh - 120px);
+            border: none;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+          }
+          
+          .container > * {
+            flex: 1 1 48%;
+            margin-bottom: 20px;
+           }
+          
+          h1, h2{
+            width: 100%;
+          }
     </style>
+    
 </head>
-<body>  
-    <div class="dashboard">
-        <div class="header">
-            <h1>Social Performance Dashboard</h1>
-            <p>Last updated: <span id="update-time"></span></p>
-        </div>
-
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-title">总粉丝数</div>
-                <div class="metric-value">1.2M</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">互动率</div>
-                <div class="metric-value">5.8%</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">本月发帖数</div>
-                <div class="metric-value">284</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">平均回复时间</div>
-                <div class="metric-value">2.5h</div>
-            </div>
-        </div>
-
-        <div class="chart-card">
-    <div class="chart" id="global-audience-distribution"></div>
-    <div class="insight-container">
-        <div class="insight-header">
-            <i class="fas fa-globe"></i>
-            全球受众分布洞察
-        </div>
-        <div class="insight-content">
-            根据模拟数据，全球受众主要分布在北美、欧洲和亚洲。
-            <div class="suggestions">
-                <div class="suggestion-item">
-                    <i class="fas fa-lightbulb"></i>
-                    重点关注北美和亚洲市场，制定针对性策略
-                </div>
-                <div class="suggestion-item">
-                    <i class="fas fa-lightbulb"></i>
-                    提高欧洲地区的品牌影响力
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-        <div class="chart-container">
-            <!-- 粉丝趋势图表卡片 -->
-            <div class="chart-card">
-                <div class="chart" id="followers-trend"></div>
-                <div class="insight-container">
-                    <div class="insight-header">
-                        <i class="fas fa-chart-line"></i>
-                        粉丝增长洞察
-                    </div>
-                    <div class="insight-content">
-                        根据近6个月数据分析，粉丝增长呈现稳定上升趋势，5-6月增长最为显著。
-                        <div class="suggestions">
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                建议在5-6月期间增加内容发布频率
-                            </div>
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                关注高增长期的内容特点，复制成功经验
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 互动率分析图表卡片 -->
-            <div class="chart-card">
-                <div class="chart" id="engagement-chart"></div>
-                <div class="insight-container">
-                    <div class="insight-header">
-                        <i class="fas fa-comments"></i>
-                        互动率分析洞察
-                    </div>
-                    <div class="insight-content">
-                        周末互动率明显高于工作日，点赞量始终占据主导地位。
-                        <div class="suggestions">
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                建议在周末增加优质内容投放
-                            </div>
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                优化评论引导策略，提升深度互动
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 平台分布图表卡片 -->
-            <div class="chart-card">
-                <div class="chart" id="platform-distribution"></div>
-                <div class="insight-container">
-                    <div class="insight-header">
-                        <i class="fas fa-pie-chart"></i>
-                        平台分布洞察
-                    </div>
-                    <div class="insight-content">
-                        微信和微博是主要用户来源，抖音平台增长潜力较大。
-                        <div class="suggestions">
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                加大抖音平台的内容投入
-                            </div>
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                制定跨平台内容协同策略
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 情感分析图表卡片 -->
-            <div class="chart-card">
-                <div class="chart" id="sentiment-analysis"></div>
-                <div class="insight-container">
-                    <div class="insight-header">
-                        <i class="fas fa-heart"></i>
-                        情感分析洞察
-                    </div>
-                    <div class="insight-content">
-                        整体情感倾向积极，但负面情绪有小幅上升趋势。
-                        <div class="suggestions">
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                及时回应用户负面反馈
-                            </div>
-                            <div class="suggestion-item">
-                                <i class="fas fa-lightbulb"></i>
-                                加强正面内容引导和互动
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<body>
+    <header>
+        <a href="#" class="logo">Catlink</a>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" data-page="overview">Overview</a></li>
+                <li><a href="#" data-page="insight">Insight</a></li>
+                <li><a href="#" data-page="koc">KOC/KOL</a></li>
+                <li><a href="#" data-page="feeds">Feeds</a></li>
+                <li><a href="#" data-page="private">Private</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <iframe id="content-frame" src="overview.html"></iframe>
+    </main>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('nav a');
+            const contentFrame = document.getElementById('content-frame');
 
-        
-
-        
-        // 更新时间
-        document.getElementById('update-time').textContent = new Date().toLocaleString();
-
-        // 初始化所有图表
-        const followersTrend = echarts.init(document.getElementById('followers-trend'));
-        const engagementChart = echarts.init(document.getElementById('engagement-chart'));
-        const platformDistribution = echarts.init(document.getElementById('platform-distribution'));
-        const sentimentAnalysis = echarts.init(document.getElementById('sentiment-analysis'));
-        const globalAudienceDistribution = echarts.init(document.getElementById('global-audience-distribution'));
-
-globalAudienceDistribution.setOption({
-    title: {
-        text: '全球受众分布'
-    },
-    tooltip: {
-        trigger: 'item'
-    },
-    visualMap: {
-        min: 0,
-        max: 1000,
-        left: 'left',
-        top: 'bottom',
-        text: ['高', '低'],
-        calculable: true
-    },
-    series: [
-        {
-            name: '受众分布',
-            type: 'map',
-            mapType: 'world',
-            roam: true,
-            itemStyle: {
-                emphasis: { label: { show: true } }
-            },
-            data: [
-                { name: 'United States', value: 1000 },
-                { name: 'China', value: 800 },
-                { name: 'Germany', value: 600 },
-                { name: 'France', value: 500 },
-                { name: 'Canada', value: 400 },
-                { name: 'Brazil', value: 300 },
-                { name: 'India', value: 200 },
-                { name: 'Russia', value: 100 }
-            ]
-        }
-    ]
-});
-
-// Make the charts responsive
-window.addEventListener('resize', function() {
-    globalAudienceDistribution.resize();
-});
-
-        
-        // 粉丝增长趋势
-        followersTrend.setOption({
-            title: {
-                text: '粉丝增长趋势'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            xAxis: {
-                type: 'category',
-                data: ['1月', '2月', '3月', '4月', '5月', '6月']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                data: [820, 932, 901, 934, 1290, 1330],
-                type: 'line',
-                smooth: true,
-                itemStyle: {
-                    color: '#1a73e8'
-                },
-                areaStyle: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [{
-                            offset: 0,
-                            color: 'rgba(26,115,232,0.3)'
-                        }, {
-                            offset: 1,
-                            color: 'rgba(26,115,232,0.05)'
-                        }]
-                    }
-                }
-            }]
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    link.classList.add('active');
+                    
+                    // Load corresponding page
+                    const page = link.getAttribute('data-page');
+                    contentFrame.src = `${page}.html`;
+                });
+            });
         });
-
-        // 互动率分析
-        engagementChart.setOption({
-            title: {
-                text: '互动率分析'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['点赞', '评论', '转发']
-            },
-            xAxis: {
-                type: 'category',
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name: '点赞',
-                    type: 'bar',
-                    data: [320, 332, 301, 334, 390, 330, 320],
-                    itemStyle: {
-                        color: '#1a73e8'
-                    }
-                },
-                {
-                    name: '评论',
-                    type: 'bar',
-                    data: [120, 132, 101, 134, 90, 230, 210],
-                    itemStyle: {
-                        color: '#34a853'
-                    }
-                },
-                {
-                    name: '转发',
-                    type: 'bar',
-                    data: [220, 182, 191, 234, 290, 330, 310],
-                    itemStyle: {
-                        color: '#fbbc04'
-                    }
-                }
-            ]
-        });
-
-        // 平台分布
-        platformDistribution.setOption({
-            title: {
-                text: '用户平台分布',
-                left: 'center'
-            },
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left'
-            },
-            series: [
-                {
-                    name: '平台分布',
-                    type: 'pie',
-                    radius: '50%',
-                    data: [
-                        {value: 1048, name: '微信'},
-                        {value: 735, name: '微博'},
-                        {value: 580, name: '抖音'},
-                        {value: 484, name: '知乎'},
-                        {value: 300, name: '其他'}
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        });
-
-        // 情感分析
-        sentimentAnalysis.setOption({
-            title: {
-                text: '用户情感分析'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['正面', '中性', '负面']
-            },
-            xAxis: {
-                type: 'category',
-                data: ['1月', '2月', '3月', '4月', '5月', '6月']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name: '正面',
-                    type: 'line',
-                    stack: 'Total',
-                    areaStyle: {},
-                    data: [320, 332, 301, 334, 390, 330],
-                    itemStyle: {
-                        color: '#34a853'
-                    }
-                },
-                {
-                    name: '中性',
-                    type: 'line',
-                    stack: 'Total',
-                    areaStyle: {},
-                    data: [120, 132, 101, 134, 90, 230],
-                    itemStyle: {
-                        color: '#fbbc04'
-                    }
-                },
-                {
-                    name: '负面',
-                    type: 'line',
-                    stack: 'Total',
-                    areaStyle: {},
-                    data: [220, 182, 191, 234, 290, 330],
-                    itemStyle: {
-                        color: '#ea4335'
-                    }
-                }
-            ]
-        });
-
-        // 响应式处理
-        window.addEventListener('resize', function() {
-        followersTrend.resize();
-        engagementChart.resize();
-        platformDistribution.resize();
-        sentimentAnalysis.resize();
-        globalAudienceDistribution.resize();
-    });             
     </script>
 </body>
-</html>
+</html> 

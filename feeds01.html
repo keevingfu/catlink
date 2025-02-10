@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Performance Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .chart-container {
+            height: 700px;
+            margin-top: 20px;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .legend h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .bubble-preview {
+            position: absolute;
+            display: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+            padding: 10px;
+            z-index: 1000;
+            width: 200px;
+        }
+
+        .bubble-preview img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .bubble-preview .title {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .bubble-preview .stats {
+            margin-top: 5px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .thumbnail-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+
+        .thumbnail-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .thumbnail-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 12px;
+            border-radius: 0 0 4px 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Content Performance Analysis</h1>
+            <div class="description">
+                Analyzing Neakasa content performance across various platforms, focusing on Ad Spend and ROAS distribution.
+            </div>
+        </div>
+
+        <div class="filters">
+            <select id="timeRange" aria-label="Select time range">
+                <option value="7d">Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="90d">Last 90 Days</option>
+            </select>
+            <select id="platform" aria-label="Select platform">
+                <option value="all">All Platforms</option>
+                <option value="tiktok">Amazon SBV</option>
+                <option value="instagram">Meta</option>
+                <option value="youtube">TikTok</option>
+                <option value="amazon">YouTube</option>
+            </select>
+        </div>
+
+        <div id="bubbleChart" class="chart-container"></div>
+
+        <div class="legend">
+            <h3>Content Performance Guide</h3>
+            <div class="legend-item">• Bubble Size: Indicates user engagement with Neakasa product features</div>
+            <div class="legend-item">• Color Intensity: Shows content effectiveness for product promotion</div>
+            <div class="legend-item">• X-Axis: Ad spend allocation for each feature/content</div>
+            <div class="legend-item">• Y-Axis: Return on ad spend (ROAS) performance</div>
+        </div>
+
+        <div class="thumbnail-grid" id="thumbnailGrid"></div>
+    </div>
+
+    <script>
+        const chart = echarts.init(document.getElementById('bubbleChart'));
+
+        const videoData = {
+            'Cat litter box': {
+                title: 'Smart Self-Cleaning Litter Box Overview',
+                image: 'https://source.unsplash.com/random/400x300/?cat,litterbox',
+                views: '60.5K',
+                likes: '8.2K'
+            },
+            'Cat litter': {
+                title: 'Best Cat Litter for Automatic Litter Box',
+                image: 'https://source.unsplash.com/random/400x300/?cat,litter',
+                views: '74K',
+                likes: '9.5K'
+            },
+            'Automatic litter box': {
+                title: 'Automatic Litter Box Features Demo',
+                image: 'https://source.unsplash.com/random/400x300/?automatic,cat',
+                views: '45K',
+                likes: '6.5K'
+            },
+            'Self-cleaning': {
+                title: 'Self-Cleaning Technology Explained',
+                image: 'https://source.unsplash.com/random/400x300/?technology,clean',
+                views: '42K',
+                likes: '5.8K'
+            },
+            'Health monitoring': {
+                title: 'Health Monitoring System Overview',
+                image: 'https://source.unsplash.com/random/400x300/?health,monitor',
+                views: '38K',
+                likes: '4.9K'
+            }
+        };
+
+        function generateData() {
+            const data = [];
+            const keywordData = [
+                { name: 'Cat litter', search: 74000, cpc: 7.34, competition: 95 },
+                { name: 'Cat litter box', search: 60500, cpc: 6.35, competition: 90 },
+                { name: 'Best litter for cats', search: 33100, cpc: 6.44, competition: 85 },
+                { name: 'Automatic litter box', search: 45000, cpc: 5.89, competition: 80 },
+                { name: 'Self-cleaning litter box', search: 42000, cpc: 5.75, competition: 75 },
+                { name: 'Smart litter box', search: 38000, cpc: 5.45, competition: 70 },
+                { name: 'Multi cat litter box', search: 35000, cpc: 4.89, competition: 65 },
+                { name: 'Health monitoring', search: 32000, cpc: 4.65, competition: 60 },
+                { name: 'Odor control', search: 30000, cpc: 4.45, competition: 55 },
+                { name: 'Easy clean', search: 28000, cpc: 4.25, competition: 50 }
+            ];
+
+            keywordData.forEach(keyword => {
+                const engagementScore = (keyword.search / 74000) * 100; // Normalize to 100 based on highest search volume
+                data.push({
+                    name: keyword.name,
+                    value: [
+                        keyword.search,    // X axis: Search Volume
+                        keyword.cpc,       // Y axis: CPC
+                        engagementScore,   // Bubble size
+                        keyword.competition, // Color intensity
+                        keyword.name,
+                        Math.round(keyword.search / 1000) // Monthly trend
+                    ],
+                    videoData: videoData[keyword.name] || {
+                        title: `${keyword.name} Feature Highlight`,
+                        image: `https://source.unsplash.com/random/400x300/?${keyword.name.replace(' ', ',')}`,
+                        views: `${Math.round(keyword.search/1000)}K`,
+                        likes: `${Math.round(engagementScore * 100)}`
+                    }
+                });
+            });
+
+            return data;
+        }
+
+        function updateChart() {
+            const option = {
+                title: {
+                    text: 'Keyword Performance Analysis',
+                    left: 'center',
+                    top: 20
+                },
+                tooltip: {
+                    formatter: function(params) {
+                        const data = params.data;
+                        return `
+                            <div style="padding: 5px;">
+                                <h4 style="margin: 0;">${data.name}</h4>
+                                <p style="margin: 5px 0;">Search Volume: ${data.value[0].toLocaleString()}</p>
+                                <p style="margin: 5px 0;">CPC: $${data.value[1].toFixed(2)}</p>
+                                <p style="margin: 5px 0;">Engagement Score: ${data.value[2].toFixed(1)}%</p>
+                                <p style="margin: 5px 0;">Competition Level: ${data.value[3]}%</p>
+                                <p style="margin: 5px 0;">Monthly Trend: ${data.value[5]}K searches</p>
+                            </div>
+                        `;
+                    }
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Monthly Search Volume',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    axisLabel: {
+                        formatter: value => `${value/1000}K`
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'CPC ($)',
+                    nameLocation: 'middle',
+                    nameGap: 30
+                },
+                visualMap: [{
+                    show: false,
+                    dimension: 3,
+                    min: 0,
+                    max: 100,
+                    inRange: {
+                        color: ['#B4E4FF', '#95BDFF', '#7B66FF', '#5800FF']
+                    }
+                }],
+                series: [{
+                    type: 'scatter',
+                    data: generateData(),
+                    symbolSize: function(data) {
+                        return data[2] / 2;  // Scale down the bubble size for better visualization
+                    },
+                    label: {
+                        show: true,
+                        formatter: function(param) {
+                            return param.data.name;
+                        },
+                        position: 'top',
+                        fontSize: 12,
+                        color: '#666'
+                    },
+                    emphasis: {
+                        focus: 'series',
+                        label: {
+                            show: true
+                        }
+                    }
+                }]
+            };
+
+            chart.setOption(option);
+            updateThumbnailGrid(generateData());
+        }
+
+        function updateThumbnailGrid(data) {
+            const grid = document.getElementById('thumbnailGrid');
+            grid.innerHTML = '';
+
+            data.forEach(item => {
+                const video = item.videoData;
+                const div = document.createElement('div');
+                div.className = 'thumbnail-item';
+                div.innerHTML = `
+                    <a href="${video.image}" data-fancybox="gallery" 
+                       data-caption="${video.title}<br>Views: ${video.views} • Likes: ${video.likes}">
+                        <img src="${video.image}" alt="${item.name}">
+                        <div class="thumbnail-info">
+                            <div>${item.name}</div>
+                            <div>${video.views} views</div>
+                        </div>
+                    </a>
+                `;
+                grid.appendChild(div);
+            });
+
+            Fancybox.bind("[data-fancybox]", {});
+        }
+
+        updateChart();
+
+        document.getElementById('timeRange').addEventListener('change', updateChart);
+        document.getElementById('platform').addEventListener('change', updateChart);
+        window.addEventListener('resize', function() {
+            chart.resize();
+        });
+
+        chart.on('mouseover', function(params) {
+            if (params.componentType === 'series') {
+                const video = params.data.videoData;
+                if (video) {
+                    showPreview(params.event.offsetX, params.event.offsetY, video);
+                }
+            }
+        });
+
+        chart.on('mouseout', function() {
+            hidePreview();
+        });
+
+        function showPreview(x, y, video) {
+            let preview = document.querySelector('.bubble-preview');
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.className = 'bubble-preview';
+                document.body.appendChild(preview);
+            }
+
+            preview.innerHTML = `
+                <img src="${video.image}" alt="${video.title}">
+                <div class="title">${video.title}</div>
+                <div class="stats">Views: ${video.views} • Likes: ${video.likes}</div>
+            `;
+
+            preview.style.left = `${x + 10}px`;
+            preview.style.top = `${y + 10}px`;
+            preview.style.display = 'block';
+        }
+
+        function hidePreview() {
+            const preview = document.querySelector('.bubble-preview');
+            if (preview) {
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

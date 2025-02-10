@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Market & Content Analysis Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .dashboard-title {
+            color: #0066cc;
+            margin-bottom: 2rem;
+        }
+
+        .heatmap-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0066cc;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart-controls {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chart-controls label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .chart-controls select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        .chart {
+            width: 100%;
+            height: 600px !important;
+            min-height: 600px;
+        }
+
+        .insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .insights h4 {
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .insights ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .insights li {
+            margin-bottom: 0.5rem;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .insights li:before {
+            content: "•";
+            color: #0066cc;
+            position: absolute;
+            left: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        .stat-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .content-analysis-section {
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="dashboard-title">Product Market & Content Analysis Dashboard</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Views</h3>
+            <div class="stat-value">19.06M</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <div class="stat-value">$8.84M</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Sales</h3>
+            <div class="stat-value">78,489</div>
+        </div>
+        <div class="stat-card">
+            <h3>Avg Rating</h3>
+            <div class="stat-value">4.67</div>
+        </div>
+    </div>
+
+    <div class="heatmap-section">
+        <div class="chart-container">
+            <div class="chart-controls">
+                <label for="metric-select">Analysis Metric:</label>
+                <select id="metric-select" onchange="updateHeatmap()">
+                    <option value="popularity">Product Popularity</option>
+                    <option value="sales">Sales Performance</option>
+                    <option value="satisfaction">Customer Satisfaction</option>
+                </select>
+            </div>
+            <div id="heatmap" class="chart"></div>
+            <div class="insights">
+                <h4>Market Analysis Insights</h4>
+                <ul id="insights-list">
+                    <li>Smart features demonstrate highest adoption rate across scenarios</li>
+                    <li>Health monitoring features perform well in multi-cat households</li>
+                    <li>Auto-cleaning functionality leads in satisfaction for busy environments</li>
+                </ul>
+            </div>
+            <div class="insights">
+                <h4>Strategic Recommendations</h4>
+                <ul id="recommendations-list">
+                    <li>Focus on developing smart integration features for modern homes</li>
+                    <li>Enhance health monitoring capabilities for premium segments</li>
+                    <li>Optimize auto-cleaning efficiency for high-traffic scenarios</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>Price vs Sales Distribution</h3>
+            <div id="priceChart" class="chart"></div>
+        </div>
+        <div class="chart-container">
+            <h3>Revenue Distribution</h3>
+            <div id="revenueChart" class="chart"></div>
+        </div>
+        <div class="chart-container">
+            <h3>Product Ratings</h3>
+            <div id="ratingChart" class="chart"></div>
+        </div>
+        <div class="chart-container">
+            <h3>Engagement Analysis</h3>
+            <div id="engagementChart" class="chart"></div>
+        </div>
+    </div>
+
+    <div class="content-analysis-section">
+        <h2 class="section-title">Content Performance Analysis</h2>
+        <div class="chart-container">
+            <div id="contentTrendChart" class="chart"></div>
+            <div class="insights">
+                <h4>Content Strategy Insights</h4>
+                <ul>
+                    <li>Product demos achieve 4.11% engagement rate</li>
+                    <li>Short-form content drives 2.8x more views</li>
+                    <li>Morning posts show 35% higher engagement</li>
+                    <li>Clear CTAs improve conversion by 45%</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let heatmapChart;
+        const features = [
+            'Smart Control', 'Auto Clean', 'Health Monitor', 
+            'UV Sterilize', 'Odor Control', 'App Integration',
+            'Voice Control', 'Eco-Friendly', 'Modular Design'
+        ];
+        
+        const scenarios = [
+            'Single Cat Home', 'Multi-Cat Home', 'Small Apartment',
+            'Large House', 'Pet Clinic', 'Smart Home',
+            'Travel Home', 'Elderly Home', 'Modern Family'
+        ];
+
+        const dataMap = {
+            popularity: [
+                [9, 8, 7, 6, 8, 9, 7, 6, 8],
+                [8, 9, 8, 7, 9, 8, 8, 7, 9],
+                [7, 8, 6, 5, 7, 8, 6, 8, 7],
+                [6, 7, 7, 6, 8, 7, 7, 7, 8],
+                [8, 9, 9, 8, 8, 8, 8, 6, 7],
+                [9, 8, 7, 7, 8, 9, 8, 7, 9],
+                [8, 9, 8, 7, 9, 8, 7, 8, 8],
+                [7, 8, 7, 6, 8, 7, 8, 9, 7],
+                [9, 8, 8, 7, 8, 9, 8, 7, 8]
+            ],
+            sales: [
+                [8, 7, 6, 5, 7, 8, 6, 5, 7],
+                [7, 8, 7, 6, 8, 7, 7, 6, 8],
+                [6, 7, 5, 4, 6, 7, 5, 7, 6],
+                [5, 6, 6, 5, 7, 6, 6, 6, 7],
+                [7, 8, 8, 7, 7, 7, 7, 5, 6],
+                [8, 7, 6, 6, 7, 8, 7, 6, 8],
+                [7, 8, 7, 6, 8, 7, 6, 7, 7],
+                [6, 7, 6, 5, 7, 6, 7, 8, 6],
+                [8, 7, 7, 6, 7, 8, 7, 6, 7]
+            ],
+            satisfaction: [
+                [9, 9, 8, 7, 9, 9, 8, 7, 9],
+                [9, 9, 9, 8, 9, 9, 9, 8, 9],
+                [8, 9, 7, 6, 8, 9, 7, 9, 8],
+                [7, 8, 8, 7, 9, 8, 8, 8, 9],
+                [9, 9, 9, 9, 9, 9, 9, 7, 8],
+                [9, 9, 8, 8, 9, 9, 9, 8, 9],
+                [9, 9, 9, 8, 9, 9, 8, 9, 9],
+                [8, 9, 8, 7, 9, 8, 9, 9, 8],
+                [9, 9, 9, 8, 9, 9, 9, 8, 9]
+            ]
+        };
+
+        const insightsMap = {
+            popularity: [
+                "Smart features and app integration show highest popularity across scenarios",
+                "Auto-cleaning functionality is particularly popular in multi-cat homes",
+                "Health monitoring features are gaining traction in modern households"
+            ],
+            sales: [
+                "Premium features drive higher sales in smart home environments",
+                "Basic functionality sells well in single-cat households",
+                "Multi-feature products perform best in modern family settings"
+            ],
+            satisfaction: [
+                "Smart control features receive highest satisfaction ratings",
+                "Health monitoring shows strong satisfaction in pet clinics",
+                "Auto-cleaning gets top marks from busy households"
+            ]
+        };
+
+        const recommendationsMap = {
+            popularity: [
+                "Prioritize smart feature development for market expansion",
+                "Focus on multi-cat household solutions",
+                "Enhance app integration capabilities"
+            ],
+            sales: [
+                "Develop tiered product offerings for different market segments",
+                "Strengthen distribution in smart home channels",
+                "Create targeted bundles for specific scenarios"
+            ],
+            satisfaction: [
+                "Maintain high quality standards in smart control features",
+                "Expand health monitoring capabilities",
+                "Optimize auto-cleaning efficiency"
+            ]
+        };
+
+        function initHeatmap() {
+            heatmapChart = echarts.init(document.getElementById('heatmap'));
+            updateHeatmap();
+        }
+
+        function updateHeatmap() {
+            const metric = document.getElementById('metric-select').value;
+            const data = dataMap[metric];
+            
+            // Update insights
+            document.getElementById('insights-list').innerHTML = 
+                insightsMap[metric].map(insight => `<li>${insight}</li>`).join('');
+            
+            // Update recommendations
+            document.getElementById('recommendations-list').innerHTML = 
+                recommendationsMap[metric].map(rec => `<li>${rec}</li>`).join('');
+
+            const option = {
+                tooltip: {
+                    position: 'top',
+                    formatter: function(params) {
+                        return `${params.name}<br/>
+                                ${scenarios[params.value[1]]}<br/>
+                                ${features[params.value[0]]}<br/>
+                                Score: ${params.value[2]}`;
+                    }
+                },
+                grid: {
+                    top: '60px',
+                    right: '10%',
+                    bottom: '15%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: features,
+                    splitArea: {
+                        show: true
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: scenarios,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                visualMap: {
+                    min: 0,
+                    max: 10,
+                    calculable: true,
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: '0%',
+                    inRange: {
+                        color: ['#e6f7ff', '#1890ff', '#002766']
+                    }
+                },
+                series: [{
+                    name: metric,
+                    type: 'heatmap',
+                    data: data.map((row, i) => 
+                        row.map((val, j) => [j, i, val])
+                    ).flat(),
+                    label: {
+                        show: true
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+
+            heatmapChart.setOption(option);
+        }
+
+        // Initialize additional charts
+        function initializeCharts() {
+            const priceChart = echarts.init(document.getElementById('priceChart'));
+            const revenueChart = echarts.init(document.getElementById('revenueChart'));
+            const ratingChart = echarts.init(document.getElementById('ratingChart'));
+            const engagementChart = echarts.init(document.getElementById('engagementChart'));
+            const contentTrendChart = echarts.init(document.getElementById('contentTrendChart'));
+
+            // Price vs Sales Chart
+            priceChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    }
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Price($)',
+                    axisLabel: {
+                        formatter: '${value}'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Sales'
+                },
+                series: [{
+                    type: 'scatter',
+                    data: [
+                        [29.99, 1359],
+                        [66.66, 10848],
+                        [36.99, 26489],
+                        [279.00, 9421],
+                        [68.98, 14545],
+                        [46.97, 2581],
+                        [289.00, 13246]
+                    ],
+                    symbolSize: function (data) {
+                        return Math.sqrt(data[1]) / 5;
+                    }
+                }]
+            });
+
+            // Revenue Distribution Chart
+            revenueChart.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: ${c}'
+                },
+                series: [{
+                    type: 'pie',
+                    radius: '65%',
+                    data: [
+                        {value: 40756.41, name: 'Sprinkle & Sweep'},
+                        {value: 619800.48, name: 'Petterm'},
+                        {value: 678383.29, name: 'PTLOM'},
+                        {value: 2557801.50, name: 'Meowant SC01'},
+                        {value: 1003314.10, name: 'AIPERRO'},
+                        {value: 112208.98, name: 'Holiday Haul'},
+                        {value: 3828094.00, name: 'MeoWant SC02'}
+                    ]
+                }]
+            });
+
+            // Rating Chart
+            ratingChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Sprinkle', 'Petterm', 'PTLOM', 'Meowant', 'AIPERRO', 'Holiday', 'MeoWant'],
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Rating',
+                    min: 4,
+                    max: 5
+                },
+                series: [{
+                    type: 'bar',
+                    data: [4.7, 4.7, 4.8, 4.6, 4.6, 4.9, 4.4]
+                }]
+            });
+
+            // Engagement Chart
+            engagementChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Likes', 'Comments', 'Saves']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Count'
+                },
+                series: [{
+                    type: 'bar',
+                    data: [430621, 3561, 59196]
+                }]
+            });
+
+            // Content Trend Chart
+            contentTrendChart.setOption({
+                title: {
+                    text: 'Content Performance Trends',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    }
+                },
+                legend: {
+                    data: ['Views', 'Engagement Rate', 'Conversion Rate'],
+                    bottom: 10
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Views',
+                        position: 'left',
+                        axisLabel: {
+                            formatter: function(value) {
+                                return (value / 1000000).toFixed(1) + 'M';
+                            }
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Rate (%)',
+                        position: 'right',
+                        axisLabel: {
+                            formatter: '{value}%'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Views',
+                        type: 'bar',
+                        data: [3.2, 4.1, 3.8, 4.5, 5.2, 4.9]
+                    },
+                    {
+                        name: 'Engagement Rate',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [2.8, 3.2, 2.9, 3.5, 3.8, 3.6]
+                    },
+                    {
+                        name: 'Conversion Rate',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [1.2, 1.5, 1.4, 1.8, 2.1, 1.9]
+                    }
+                ]
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                priceChart.resize();
+                revenueChart.resize();
+                ratingChart.resize();
+                engagementChart.resize();
+                contentTrendChart.resize();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initHeatmap();
+            initializeCharts();
+        });
+    </script>
+</body>
+</html> 

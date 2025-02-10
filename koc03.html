@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOL Content Trend</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .dashboard-title {
+            color: #0066cc;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 450px;
+        }
+
+        .chart-container h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .chart {
+            width: 100%;
+            height: 400px !important;
+            min-height: 400px;
+            background: #fff;
+        }
+
+        .insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .insights h4 {
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .insights ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .insights li {
+            margin-bottom: 0.5rem;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .insights li:before {
+            content: "•";
+            color: #0066cc;
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .insights-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .insights-container h3 {
+            color: #0066cc;
+            margin-bottom: 1.5rem;
+        }
+
+        .insights-section,
+        .recommendations-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .insights-container h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 0.5rem;
+        }
+
+        .insights-container ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .insights-container ul ul {
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .insights-container li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .insights-container li:before {
+            content: "•";
+            color: #0066cc;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="dashboard-title">KOL Content Trend</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Average Views</h3>
+            <div class="stat-value">19.1M</div>
+        </div>
+        <div class="stat-card">
+            <h3>Average Engagement</h3>
+            <div class="stat-value">422.9K</div>
+        </div>
+        <div class="stat-card">
+            <h3>Average Engagement Rate</h3>
+            <div class="stat-value">2.55%</div>
+        </div>
+        <div class="stat-card">
+            <h3>Average Sales</h3>
+            <div class="stat-value">$8,840</div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>Video Performance by KOL</h3>
+            <div id="kolChart" class="chart"></div>
+            <div class="insights">
+                <h4>KOL Insights</h4>
+                <ul>
+                    <li>Sprinkle & Sweep leads in engagement rate at 3.87%</li>
+                    <li>Floradelavanilla shows strong view-to-engagement conversion</li>
+                    <li>Multiple KOLs achieving over 1M views per video</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3>Engagement Metrics Distribution</h3>
+            <div id="engagementChart" class="chart"></div>
+            <div class="insights">
+                <h4>Engagement Insights</h4>
+                <ul>
+                    <li>Likes form the majority of engagement actions</li>
+                    <li>Save rate indicates high content value</li>
+                    <li>Comment rates show active community interaction</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3>Sales Performance</h3>
+            <div id="salesChart" class="chart"></div>
+            <div class="insights">
+                <h4>Sales Insights</h4>
+                <ul>
+                    <li>High-value products driving revenue</li>
+                    <li>Strong correlation between engagement and sales</li>
+                    <li>Premium products showing better conversion</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3>Video Duration vs. Engagement</h3>
+            <div id="durationChart" class="chart"></div>
+            <div class="insights">
+                <h4>Duration Insights</h4>
+                <ul>
+                    <li>Short videos (under 20s) show highest engagement</li>
+                    <li>Medium length videos optimal for product demos</li>
+                    <li>Longer videos effective for detailed reviews</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3>Content Trend Analysis</h3>
+            <div id="contentTrendChart" class="chart"></div>
+            <div class="insights">
+                <h4>Content Trend Insights</h4>
+                <ul>
+                    <li>Product demonstration videos show highest engagement (4.11%)</li>
+                    <li>Short-form content (under 30s) generates 2.8x more views</li>
+                    <li>Morning posts (8-11 AM) receive 35% higher engagement</li>
+                    <li>Videos with clear CTAs drive 45% better conversion</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="insights-container">
+        <h3>Content Strategy Insights & Recommendations</h3>
+        <div class="insights-section">
+            <h4>Key Trends</h4>
+            <ul>
+                <li>Content engagement peaks during weekday mornings (8-11 AM)</li>
+                <li>Product demonstration videos consistently outperform other formats</li>
+                <li>User-generated content drives 40% higher trust signals</li>
+                <li>Educational content maintains longer viewer retention</li>
+            </ul>
+        </div>
+        <div class="recommendations-section">
+            <h4>Strategic Recommendations</h4>
+            <ul>
+                <li>Content Optimization:
+                    <ul>
+                        <li>Focus on creating short, engaging product demonstrations</li>
+                        <li>Incorporate clear call-to-actions within first 15 seconds</li>
+                        <li>Leverage trending audio and effects for increased reach</li>
+                    </ul>
+                </li>
+                <li>Posting Strategy:
+                    <ul>
+                        <li>Schedule posts during peak engagement windows</li>
+                        <li>Maintain consistent posting frequency (3-4 times per week)</li>
+                        <li>Test different content formats across platforms</li>
+                    </ul>
+                </li>
+                <li>Performance Tracking:
+                    <ul>
+                        <li>Monitor engagement metrics across different content types</li>
+                        <li>Track conversion rates by content theme</li>
+                        <li>Analyze audience retention patterns</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+
+        function initCharts() {
+            // KOL Performance Chart
+            const kolChart = echarts.init(document.getElementById('kolChart'));
+            kolChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' }
+                },
+                legend: {
+                    data: ['Views', 'Engagement Rate']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['sprinklesweep', 'floradelavanilla', 'lisamots5', 'itschelseahope', 'undercovertabbies'],
+                    axisLabel: { rotate: 45 }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Views',
+                        position: 'left'
+                    },
+                    {
+                        type: 'value',
+                        name: 'Engagement Rate (%)',
+                        position: 'right'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Views',
+                        type: 'bar',
+                        data: [6053637, 3872752, 3738430, 2060161, 1154934]
+                    },
+                    {
+                        name: 'Engagement Rate',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [3.87, 4.11, 1.24, 0.91, 3.30]
+                    }
+                ]
+            });
+
+            // Engagement Distribution Chart
+            const engagementChart = echarts.init(document.getElementById('engagementChart'));
+            engagementChart.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '70%',
+                        data: [
+                            { value: 186564, name: 'Likes' },
+                            { value: 21711, name: 'Saves' },
+                            { value: 1045, name: 'Comments' }
+                        ]
+                    }
+                ]
+            });
+
+            // Sales Performance Chart
+            const salesChart = echarts.init(document.getElementById('salesChart'));
+            salesChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Sales Amount', 'Units Sold']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Product A', 'Product B', 'Product C', 'Product D'],
+                    axisLabel: { rotate: 45 }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Sales Amount ($)'
+                    },
+                    {
+                        type: 'value',
+                        name: 'Units'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Sales Amount',
+                        type: 'bar',
+                        data: [40756.41, 619800.48, 678383.29, 2557801.50]
+                    },
+                    {
+                        name: 'Units Sold',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [1359, 10848, 26489, 9421]
+                    }
+                ]
+            });
+
+            // Duration vs Engagement Chart
+            const durationChart = echarts.init(document.getElementById('durationChart'));
+            durationChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['6s', '34s', '35s', '20s', '44s', '60s']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Engagement Rate (%)'
+                },
+                series: [
+                    {
+                        type: 'scatter',
+                        symbolSize: function(data) {
+                            return Math.sqrt(data[1]) * 20;
+                        },
+                        data: [
+                            [0, 3.87],
+                            [1, 4.11],
+                            [2, 1.24],
+                            [3, 0.91],
+                            [4, 3.30],
+                            [5, 0.81]
+                        ]
+                    }
+                ]
+            });
+
+            // Content Trend Chart
+            const contentTrendChart = echarts.init(document.getElementById('contentTrendChart'));
+            contentTrendChart.setOption({
+                title: {
+                    text: 'Content Performance Trends',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    }
+                },
+                legend: {
+                    data: ['Views', 'Engagement Rate', 'Conversion Rate'],
+                    bottom: 10
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Views',
+                        position: 'left',
+                        axisLabel: {
+                            formatter: function(value) {
+                                return (value / 1000000).toFixed(1) + 'M';
+                            }
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Rate (%)',
+                        position: 'right',
+                        axisLabel: {
+                            formatter: '{value}%'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Views',
+                        type: 'bar',
+                        data: [3.2, 4.1, 3.8, 4.5, 5.2, 4.9]
+                    },
+                    {
+                        name: 'Engagement Rate',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [2.8, 3.2, 2.9, 3.5, 3.8, 3.6]
+                    },
+                    {
+                        name: 'Conversion Rate',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [1.2, 1.5, 1.4, 1.8, 2.1, 1.9]
+                    }
+                ]
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                kolChart.resize();
+                engagementChart.resize();
+                salesChart.resize();
+                durationChart.resize();
+                contentTrendChart.resize();
+            });
+        }
+    </script>
+</body>
+</html> 

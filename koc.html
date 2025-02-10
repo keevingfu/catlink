@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOC & KOL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            padding: 2rem 0;
+            border-right: 1px solid #ddd;
+        }
+
+        .sidebar h2 {
+            color: #0066cc;
+            padding: 0 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background: #e9ecef;
+        }
+
+        .nav-menu a.active {
+            color: #28a745;
+            background: #e9ecef;
+            font-weight: bold;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: calc(100vh - 4rem);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <h2>KOC & KOL</h2>
+        <ul class="nav-menu">
+            <li><a href="#" data-page="koc02">Popular Video</a></li>
+            <li><a href="#" data-page="koc03">Content Trend</a></li>
+            <li><a href="#" class="active" data-page="koc01">Content Production</a></li>
+            <li><a href="#" data-page="koc04">Competitive Product</a></li>
+            <li><a href="#" data-page="koc05">Tagging Quadrants</a></li>
+            <li><a href="#" data-page="koc06">Tagging System</a></li>
+            <li><a href="#" data-page="koc07">Viral_Script</a></li>
+            <li><a href="#" data-page="koc08">Brief</a></li>
+            <li><a href="#" data-page="koc09">Search Performance</a></li>
+            <li><a href="#" data-page="koc10">Google Keywords Research</a></li>
+            <li><a href="#" data-page="koc11">Amazon Keywords Research</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <iframe id="content-frame" src="koc01.html"></iframe>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            const contentFrame = document.getElementById('content-frame');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    link.classList.add('active');
+                    
+                    // Load corresponding page
+                    const page = link.getAttribute('data-page');
+                    contentFrame.src = `${page}.html`;
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatLink Scooper Competitor Analysis</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex; /* Use flexbox for layout */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: space-between; /* Distribute space between items */
+        }
+        .container > * {
+            flex: 1 1 48%; /* Each item takes up roughly half the container width, with some flexibility */
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            width: 100%; /* Ensure the h1 spans the full width */
+
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+    .good{
+      background-color: #dff0d8;
+    }
+    .bad{
+      background-color: #f2dede;
+    }
+    .mixed{
+      background-color: #fcf8e3
+    }
+    .label{
+      font-weight: bold;
+    }
+
+    .insights-recommendations {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .insights-recommendations strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>CatLink Scooper Competitor Analysis</h1>
+
+        <div>
+            <h2>Overall Sentiment Analysis</h2>
+            <div id="overall-sentiment-chart" class="chart-container"></div>
+            <div class="insights-recommendations">
+                <strong>Insights:</strong> The overall sentiment is mixed-negative. While positive reviews are slightly more (53%), negative reviews constitute a significant portion (39%), indicating substantial issues.  The high proportion of negative sentiment warrants immediate attention.
+                <br><strong>Recommendations:</strong> Prioritize addressing the root causes of negative reviews.  Focus on improving product reliability, customer service responsiveness, and app functionality (if applicable).  Consider a product recall or a substantial design revision if hardware issues are widespread.
+            </div>
+        </div>
+
+
+        <div>
+        <h2>Feature Sentiment Analysis</h2>
+        <div id="feature-sentiment-chart" class="chart-container"></div>
+            <div class="insights-recommendations">
+                <strong>Insights:</strong> Convenience and ease of use (when functioning) are strong positives.  Reliability and app functionality are major detractors.  Odor control is a polarizing feature. Customer service experiences are highly inconsistent.
+                <br><strong>Recommendations:</strong>
+                <ul>
+                    <li>Focus on resolving reliability issues (sensor and motor failures).</li>
+                    <li>Overhaul the app, ensuring reliable connectivity and intuitive functionality.</li>
+                    <li>Improve customer service consistency and responsiveness.</li>
+                    <li>Investigate and address the root causes of the mixed odor control reviews.</li>
+                </ul>
+            </div>
+      </div>
+
+
+
+        <div>
+           <h2>Competitor Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>CatLink Scooper (B09L7Q9446 & B09B354BLS)</th>
+                        <th>Litter-Robot (3 & 4)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label">Price</td>
+                        <td>Lower ($300-$500)</td>
+                        <td>Higher ($500-$700+)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Reliability</td>
+                        <td class="bad">Low. Numerous reports of malfunctions.</td>
+                        <td class="good">High. Generally considered reliable and durable.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Ease of Use</td>
+                        <td class="mixed">Easy setup, convenient daily operation, but cleaning and maintenance can be cumbersome.</td>
+                        <td class="good">Easy to set up and use.</td>
+                    </tr>
+                    <tr>
+                      <td class="label">Cat Acceptance</td>
+                      <td class="good">Most cats adapt quickly.</td>
+                      <td class="good">Generally high acceptance rate.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Odor Control</td>
+                        <td class="mixed">Mixed reviews.  Good initially, but inconsistent long-term performance.</td>
+                        <td class="good">Generally excellent odor control.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Cleaning Cycle Efficiency</td>
+                        <td class="mixed">Effective in most cases, but some issues with waste residue.</td>
+                        <td class="good">Generally efficient cleaning cycle.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">App Functionality</td>
+                        <td class="bad">Significant issues. Connection problems, poor user experience.</td>
+                        <td class="good">Robust and reliable app.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Customer Service</td>
+                        <td class="mixed">Inconsistent.  Positive and negative experiences reported.</td>
+                        <td class="good">Generally excellent customer service.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Waste Disposal</td>
+                        <td class="mixed">Easy bag replacement, but uneven waste distribution.</td>
+                        <td class="good">Convenient waste disposal.</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Size</td>
+                        <td >Large.</td>
+                        <td >Large.</td>
+                    </tr>
+                    <tr>
+                       <td class="label">Litter Compatibility</td>
+                        <td class="good">Most clumping litters.</td>
+                        <td >Most clumping litters.</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="insights-recommendations">
+            <strong>Insights:</strong> The CatLink Scooper's main advantage is its lower price point. However, it significantly underperforms compared to the Litter-Robot in terms of reliability, app functionality, and consistency of customer service.  The mixed reviews on ease of use and odor control highlight areas where CatLink needs to improve to be truly competitive.
+            <br><strong>Recommendations:</strong> CatLink needs to drastically improve product reliability to compete.  The value proposition is undermined by the high failure rate.  Focusing on matching or exceeding Litter-Robot's reliability and customer service should be the top priorities.  The app should either be significantly improved or removed as a feature if it cannot be made reliable.
+            </div>
+        </div>
+
+
+
+      <div>
+        <h2>Failure Type Statistics</h2>
+        <div id="failure-types-chart" class="chart-container"></div>
+          <div class="insights-recommendations">
+                <strong>Insights:</strong> Sensor failures are the most frequent issue, followed by motor/rotation problems.  These are critical components, and their high failure rate suggests a need for significant design or component changes.
+                <br><strong>Recommendations:</strong>
+                <ul>
+                  <li>Source higher-quality sensors and rigorously test them for durability.</li>
+                  <li>Redesign the motor and rotation mechanism for improved reliability and longevity.</li>
+                  <li>Simplify the internal design to reduce points of failure.</li>
+                  <li>Improve quality control processes to identify and address defects before shipping.</li>
+                </ul>
+          </div>
+      </div>
+
+      <div>
+        <h2>Sentiment Over Time</h2>
+        <div id="sentiment-over-time" class="chart-container"></div>
+          <div class="insights-recommendations">
+              <strong>Insights:</strong> The trend shows a clear decline in positive sentiment and an increase in negative sentiment over time. This indicates that issues are becoming more prevalent as the product ages, suggesting durability and quality control problems.
+              <br><strong>Recommendations:</strong>
+              <ul>
+                  <li>Conduct a thorough failure analysis of returned units to identify root causes of failures.</li>
+                  <li>Implement design changes to address identified weaknesses.</li>
+                  <li>Improve quality control processes to catch defects before products leave the factory.</li>
+                  <li>Consider offering extended warranties or proactive replacements for affected customers.</li>
+              </ul>
+          </div>
+      </div>
+
+    </div>
+
+    <script>
+        // Overall Sentiment Analysis Chart
+        var overallSentimentChart = echarts.init(document.getElementById('overall-sentiment-chart'));
+        var overallSentimentOption = {
+            title: {
+                text: 'Overall Sentiment Distribution',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['Positive', 'Neutral', 'Negative']
+            },
+            series: [
+                {
+                    name: 'Sentiment',
+                    type: 'pie',
+                    radius: '70%',
+                    center: ['50%', '50%'],
+                    data: [
+                        {value: 53, name: 'Positive'},
+                        {value: 8, name: 'Neutral'},
+                        {value: 39, name: 'Negative'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        overallSentimentChart.setOption(overallSentimentOption);
+
+        // Feature Sentiment Analysis
+      var featureSentimentChart = echarts.init(document.getElementById('feature-sentiment-chart'));
+        var featureSentimentOption = {
+          title: {
+            text: 'Feature Sentiment Analysis',
+            left: 'center'
+          },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Positive', 'Negative', "Neutral"],
+                top: '7%'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value'
+            },
+            yAxis: {
+                type: 'category',
+                data: ['Convenience', 'Odor Control', 'Reliability', 'App Functionality', 'Customer Service', 'Ease of Use', 'Cat Acceptance', 'Noise Level','Waste Disposal']
+            },
+            series: [
+                {
+                    name: 'Positive',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                        position: 'insideRight'
+                    },
+                    // Data needs to be filled in based on the actual review analysis results
+                    data: [85, 60, 10, 5, 40, 70, 75, 88, 65]  // Example data
+                },
+                {
+                    name: 'Negative',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                        position: 'insideRight'
+                    },
+                     // Data needs to be filled in based on the actual review analysis results
+                    data: [-10, -30, -80, -90, -50, -15, -10, -5, -25] // Example data
+                },
+                {
+                    name: 'Neutral',
+                    type: 'bar',
+                    stack: 'total',
+                    label: {
+                        show: true,
+                        position: 'insideRight'
+                    },
+                     // Data needs to be filled in based on the actual review analysis results
+                    data: [5, 10, 10, 5, 10, 15, 15, 7, 10] // Example data
+                }
+
+            ]
+        };
+        featureSentimentChart.setOption(featureSentimentOption);
+
+        // Failure Type Statistics Chart
+        var failureTypesChart = echarts.init(document.getElementById('failure-types-chart'));
+        var failureTypesOption = {
+          title: {
+                text: 'Failure Type Statistics',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left',
+            },
+            series: [
+                {
+                    name: 'Failure Type',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {value: 40, name: 'Sensor Failure'},
+                        {value: 30, name: 'Motor/Rotation Issues'},
+                        {value: 15, name: 'Control Panel/Electronics'},
+                        {value: 10, name: 'App Connection Issues'},
+                        {value: 5, name: 'Other'}
+                    ]
+                }
+            ]
+        };
+        failureTypesChart.setOption(failureTypesOption);
+
+          // Sentiment Over Time Chart
+          // Assuming data format: [{date: '2023-01', positive: 80, negative: 20}, {date: '2023-02', positive: 75, negative: 25}, ...]
+        var sentimentData = [
+          {date: '2023-06', positive: 80, negative: 20, neutral:5},
+          {date: '2023-07', positive: 75, negative: 25, neutral:5},
+          {date: '2023-08', positive: 78, negative: 20, neutral:5},
+          {date: '2023-09', positive: 70, negative: 30, neutral:5},
+          {date: '2023-10', positive: 68, negative: 30, neutral:5},
+          {date: '2023-11', positive: 65, negative: 35, neutral:5},
+          {date: '2023-12', positive: 60, negative: 40, neutral:5},
+          {date: '2024-01', positive: 55, negative: 45, neutral:5},
+          {date: '2024-02', positive: 50, negative: 50, neutral:5},
+          {date: '2024-03', positive: 48, negative: 50, neutral:5},
+          {date: '2024-04', positive: 45, negative: 50, neutral:5},
+          {date: '2024-05', positive: 40, negative: 55, neutral:5}
+
+        ];
+
+        var sentimentOverTime = echarts.init(document.getElementById('sentiment-over-time'));
+        var sentimentOverTimeOption = {
+            title: {
+                text: 'Sentiment Over Time',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Positive', 'Negative', 'Neutral'],
+                 top: '7%'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: sentimentData.map(item => item.date)
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'Positive',
+                    type: 'line',
+                    data: sentimentData.map(item => item.positive)
+                },
+                {
+                    name: 'Negative',
+                    type: 'line',
+                    data: sentimentData.map(item => item.negative)
+                },
+                {
+                    name: 'Neutral',
+                    type: 'line',
+                    data: sentimentData.map(item => item.neutral)
+                }
+            ]
+        };
+        sentimentOverTime.setOption(sentimentOverTimeOption);
+
+        // Responsive handling
+        window.addEventListener('resize', function() {
+            overallSentimentChart.resize();
+            featureSentimentChart.resize();
+            failureTypesChart.resize();
+          sentimentOverTime.resize();
+        });
+    </script>
+</body>
+</html>

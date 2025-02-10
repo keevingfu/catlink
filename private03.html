@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Content Performance Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card-content {
+            padding: 1rem;
+        }
+        #whatsappChart, #facebookChart, #linkedinChart, #edmChart {
+            height: 400px;
+            width: 100%;
+        }
+        #whatsappMetrics, #facebookMetrics, #linkedinMetrics, #edmMetrics {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="dashboard-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Video Content Performance Analysis</h1>
+                <select id="timeRangeSelect" class="form-select" style="width: 180px;" aria-label="Select time range">
+                    <option value="last7days">Last 7 Days</option>
+                    <option value="last30days" selected>Last 30 Days</option>
+                    <option value="last90days">Last 90 Days</option>
+                </select>
+            </div>
+
+            <!-- WhatsApp Analysis Section -->
+            <div class="section mb-4">
+                <h2 class="h4 mb-3"><i class="fab fa-whatsapp" style="color: #25D366; margin-right: 10px;"></i>WhatsApp Channel Analysis</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">WhatsApp Content Performance</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="whatsappChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Customer Loyalty Impact</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="whatsappMetrics"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- WhatsApp Insights Section -->
+                <div class="insights-section mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Key Insights</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="insights-list">
+                                        <li>Product demonstration videos drive highest engagement (90%)</li>
+                                        <li>Customer reviews show potential for higher shares (500)</li>
+                                        <li>Feature-focused content drives steady product inquiries</li>
+                                        <li>Save rate of 40% indicates value retention among customers</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Recommendations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="recommendations-list">
+                                        <li>Increase focus on user-generated content and reviews</li>
+                                        <li>Develop more interactive product demos with feature highlights</li>
+                                        <li>Create engaging content around product value and eco-friendly features</li>
+                                        <li>Leverage user-generated content to build trust and brand loyalty</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Facebook Group Analysis Section -->
+            <div class="section mb-4">
+                <h2 class="h4 mb-3"><i class="fab fa-facebook" style="color: #1877F2; margin-right: 10px;"></i>Facebook Group Analysis</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Facebook Group Activity</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="facebookChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Community Engagement</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="facebookMetrics"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Facebook Insights Section -->
+                <div class="insights-section mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Key Insights</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="insights-list">
+                                        <li>Member-focused content shows highest group engagement (88%)</li>
+                                        <li>Product tutorials and demos maintain steady views and strong retention (92%)</li>
+                                        <li>Community-building content, such as FAQs and support tips, grows engagement</li>
+                                        <li>Retention rates indicate loyalty, with 90% returning members</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Recommendations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="recommendations-list">
+                                        <li>Increase engagement with product-specific tutorials and member spotlights</li>
+                                        <li>Develop FAQs and eco-friendly tips for deeper community involvement</li>
+                                        <li>Strengthen interactive product demonstrations to boost product adoption</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LinkedIn Analysis Section -->
+            <div class="section mb-4">
+                <h2 class="h4 mb-3"><i class="fab fa-linkedin" style="color: #0A66C2; margin-right: 10px;"></i>LinkedIn Analysis</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">LinkedIn Content Impact</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="linkedinChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Professional Network Growth</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="linkedinMetrics"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- LinkedIn Insights Section -->
+                <div class="insights-section mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Key Insights</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="insights-list">
+                                        <li>Industry insights perform best in views (6,100) and shares (420)</li>
+                                        <li>Product innovation posts engage followers and expand professional network</li>
+                                        <li>Content related to smart pet technology resonates with a tech-savvy audience</li>
+                                        <li>Growth rate of LinkedIn network continues to increase (12% YoY)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Recommendations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="recommendations-list">
+                                        <li>Focus on thought leadership and industry insights related to smart pet care</li>
+                                        <li>Develop case studies and success stories to drive engagement</li>
+                                        <li>Strengthen networking by sharing product innovations and eco-friendly features</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDM Analysis Section -->
+            <div class="section mb-4">
+                <h2 class="h4 mb-3">EDM Analysis</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Email Campaign Performance</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="edmChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Email Content Effectiveness</h5>
+                            </div>
+                            <div class="card-content">
+                                <div id="edmMetrics"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- EDM Insights Section -->
+                <div class="insights-section mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Key Insights</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="insights-list">
+                                        <li>Exclusive Offers achieve highest open rate (35%) and conversion (5.1%)</li>
+                                        <li>Customer Stories drive strong video engagement (52% play rate)</li>
+                                        <li>Product Updates maintain consistent click rates</li>
+                                        <li>Video content shows increasing effectiveness</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Recommendations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="recommendations-list">
+                                        <li>Optimize exclusive offer frequency and timing</li>
+                                        <li>Develop more customer success story content</li>
+                                        <li>Enhance product update visualization</li>
+                                        <li>Increase video content in email campaigns</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize WhatsApp Chart
+        const whatsappChart = echarts.init(document.getElementById('whatsappChart'));
+        whatsappChart.setOption({
+            title: {
+                text: 'WhatsApp Content Performance',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Views', 'Shares', 'Saves'],
+                top: '10%'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Product Demo', 'Customer Reviews', 'Feature Focus', 'Usage Tips', 'Q&A']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'Views',
+                    type: 'bar',
+                    data: [1200, 980, 850, 750, 600]
+                },
+                {
+                    name: 'Shares',
+                    type: 'bar',
+                    data: [500, 420, 380, 320, 280]
+                },
+                {
+                    name: 'Saves',
+                    type: 'bar',
+                    data: [300, 250, 220, 180, 150]
+                }
+            ]
+        });
+
+        // Initialize WhatsApp Metrics
+        const whatsappMetrics = echarts.init(document.getElementById('whatsappMetrics'));
+        whatsappMetrics.setOption({
+            title: {
+                text: 'Customer Loyalty Breakdown',
+                left: 'center',
+                top: 0
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c}%'
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                center: ['50%', '60%'],
+                data: [
+                    { value: 45, name: 'Highly Engaged' },
+                    { value: 30, name: 'Regular Users' },
+                    { value: 15, name: 'Occasional' },
+                    { value: 10, name: 'Inactive' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        // Initialize Facebook Chart
+        const facebookChart = echarts.init(document.getElementById('facebookChart'));
+        facebookChart.setOption({
+            title: {
+                text: 'Facebook Group Activity',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Posts', 'Comments', 'Reactions'],
+                top: '10%'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Member Content', 'Product Tutorials', 'Support Tips', 'FAQs', 'Community Posts']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'Posts',
+                    type: 'line',
+                    data: [880, 920, 750, 680, 820]
+                },
+                {
+                    name: 'Comments',
+                    type: 'line',
+                    data: [650, 750, 580, 480, 620]
+                },
+                {
+                    name: 'Reactions',
+                    type: 'line',
+                    data: [1200, 1350, 980, 850, 1100]
+                }
+            ]
+        });
+
+        // Initialize Facebook Metrics
+        const facebookMetrics = echarts.init(document.getElementById('facebookMetrics'));
+        facebookMetrics.setOption({
+            title: {
+                text: 'Community Activity Distribution',
+                left: 'center',
+                top: 0
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c}%'
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                center: ['50%', '60%'],
+                data: [
+                    { value: 40, name: 'Active Contributors' },
+                    { value: 35, name: 'Regular Participants' },
+                    { value: 15, name: 'Observers' },
+                    { value: 10, name: 'New Members' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        // Initialize LinkedIn Chart
+        const linkedinChart = echarts.init(document.getElementById('linkedinChart'));
+        linkedinChart.setOption({
+            title: {
+                text: 'LinkedIn Content Impact',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Views', 'Engagements', 'Shares'],
+                top: '10%'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Industry Insights', 'Product Innovation', 'Tech Updates', 'Company News', 'Success Stories']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'Views',
+                    type: 'bar',
+                    data: [6100, 5200, 4800, 4200, 5500]
+                },
+                {
+                    name: 'Engagements',
+                    type: 'bar',
+                    data: [850, 720, 680, 580, 750]
+                },
+                {
+                    name: 'Shares',
+                    type: 'bar',
+                    data: [420, 380, 350, 280, 400]
+                }
+            ]
+        });
+
+        // Initialize LinkedIn Metrics
+        const linkedinMetrics = echarts.init(document.getElementById('linkedinMetrics'));
+        linkedinMetrics.setOption({
+            title: {
+                text: 'Network Composition',
+                left: 'center',
+                top: 0
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c}%'
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                center: ['50%', '60%'],
+                data: [
+                    { value: 35, name: 'Industry Leaders' },
+                    { value: 30, name: 'Pet Care Pros' },
+                    { value: 20, name: 'Tech Enthusiasts' },
+                    { value: 15, name: 'General Audience' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        // Initialize EDM Chart
+        const edmChart = echarts.init(document.getElementById('edmChart'));
+        edmChart.setOption({
+            title: {
+                text: 'Email Campaign Performance',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Open Rate', 'Click Rate', 'Conversion Rate'],
+                top: '10%'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Exclusive Offers', 'Customer Stories', 'Product Updates', 'Tips & Tricks', 'Newsletter']
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+            },
+            series: [
+                {
+                    name: 'Open Rate',
+                    type: 'line',
+                    data: [35, 28, 25, 22, 20]
+                },
+                {
+                    name: 'Click Rate',
+                    type: 'line',
+                    data: [12, 10, 8, 7, 6]
+                },
+                {
+                    name: 'Conversion Rate',
+                    type: 'line',
+                    data: [5.1, 4.2, 3.8, 3.2, 2.8]
+                }
+            ]
+        });
+
+        // Initialize EDM Metrics
+        const edmMetrics = echarts.init(document.getElementById('edmMetrics'));
+        edmMetrics.setOption({
+            title: {
+                text: 'Content Impact Analysis',
+                left: 'center',
+                top: 0
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c}%'
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                center: ['50%', '60%'],
+                data: [
+                    { value: 40, name: 'Product Updates' },
+                    { value: 30, name: 'Promotional Offers' },
+                    { value: 20, name: 'Educational Content' },
+                    { value: 10, name: 'User Stories' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            whatsappChart.resize();
+            whatsappMetrics.resize();
+            facebookChart.resize();
+            facebookMetrics.resize();
+            linkedinChart.resize();
+            linkedinMetrics.resize();
+            edmChart.resize();
+            edmMetrics.resize();
+        });
+    });
+    </script>
+</body>
+</html>

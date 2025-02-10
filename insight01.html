@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Litter Box Market Research</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 1400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-wrap: wrap; justify-content: space-between;}
+        h1, h2, h3 { color: #333; width: 100%;}
+        h2 { border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 30px;}
+        h3 { margin-top: 20px; }
+        .section { width: 100%; margin-bottom: 30px; } /* Full width sections */
+        .chart-container { width: 48%; height: 300px; margin-bottom: 20px;}
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; background-color: #fff; }
+        .card-title { font-size: 1.1em; font-weight: bold; margin-bottom: 10px; color: #444; }
+        ul { list-style: disc; margin-left: 20px; padding-left: 0; }
+        li { margin-bottom: 5px; }
+    .insights-recommendations {
+      margin-top: 10px;
+      padding: 15px;
+      background-color: #e9ecef;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+     }
+     .insights-recommendations strong {
+          display: block;
+          margin-bottom: 8px;
+          color: #212529;
+          font-weight: 600;
+      }
+        .text-data{
+          width: 48%;
+          margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+          .container{
+            flex-direction: column;
+          }
+            .chart-container, .text-data {
+                width: 100%; /* Full width on smaller screens */
+            }
+        }
+        .map-container {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .map-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .map-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #444;
+            margin: 0;
+        }
+        #regionalChart {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cat Litter Box Market Research</h1>
+
+    <section class="section">
+      <h2>Global Market Overview</h2>
+      <div class="text-data">
+        <h3>Market Size and Growth</h3>
+        <ul>
+            <li><strong>2020 Estimated Size:</strong> $1 billion USD</li>
+            <li><strong>2028 Projected Size:</strong> $2 billion USD</li>
+            <li><strong>CAGR:</strong> ~7%</li>
+        </ul>
+        <p><strong>Growth Drivers:</strong> Rising pet ownership, demand for convenient cleaning, product innovation.</p>
+        </div>
+      <div class="chart-container" id="market-growth-chart"></div>
+      <div class="insights-recommendations">
+            <strong>Insights:</strong>  The market is showing a healthy and consistent growth trajectory.
+            <br><strong>Recommendations:</strong>
+            <ul>
+                <li>Capitalize on the growth trend by investing in product development and marketing.</li>
+                <li>Focus on regions with high pet ownership and disposable income.</li>
+                <li>Track the CAGR closely to adjust projections and strategies.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Key Market Regions</h2>
+        <div class="map-container">
+            <div class="map-header">
+                <h3 class="map-title">Global Market Distribution</h3>
+            </div>
+            <div id="regionalChart"></div>
+        </div>
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-title">North America</div>
+                <ul>
+                    <li>Largest and most mature market.</li>
+                    <li>High demand for functional and smart products.</li>
+                    <li>Growing interest in eco-friendly options.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Europe</div>
+                <ul>
+                    <li>Steady growth.</li>
+                    <li>Increasing demand for high-tech automatic products.</li>
+                    <li>Strong emphasis on environmental sustainability.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Asia-Pacific</div>
+                <ul>
+                    <li>China and Japan are key markets.</li>
+                    <li>China: Rapidly growing pet market, especially among young people.</li>
+                    <li>Japan: High demand for automated and smart litter boxes.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="insights-recommendations">
+          <strong>Insights:</strong> Each region has unique characteristics and demands.  North America is the most mature, while Asia-Pacific offers significant growth potential.
+          <br><strong>Recommendations:</strong>
+          <ul>
+              <li>Tailor marketing and product strategies to each region's specific needs and preferences.</li>
+              <li>Consider offering different product variations for different markets (e.g., smaller sizes for Japan).</li>
+              <li>Prioritize expansion into high-growth regions like China.</li>
+          </ul>
+      </div>
+    </section>
+
+    <section class="section">
+        <h2>Consumer Trends and Needs</h2>
+        <ul>
+            <li><strong>Smart Products:</strong> High demand for automatic cleaning and app-controlled litter boxes.</li>
+            <li><strong>Eco-Friendly Products:</strong> Growing preference for sustainable materials.</li>
+            <li><strong>Design Aesthetics:</strong> Consumers want litter boxes that blend with their home decor.</li>
+            <li><strong>Variety of Product Types:</strong> Interest in enclosed, large-capacity, and travel litter boxes.</li>
+            <li><strong>Odor Control and Ease of Cleaning:</strong> Top priorities for consumers.</li>
+        </ul>
+      <div class="insights-recommendations">
+        <strong>Insights:</strong>  Consumers are increasingly seeking convenience, hygiene, and aesthetically pleasing designs. Sustainability is also a growing concern.
+        <br><strong>Recommendations:</strong>
+        <ul>
+          <li>Focus on product development that addresses these key trends.</li>
+          <li>Highlight these features in marketing materials.</li>
+          <li>Offer a range of product options to cater to different needs and preferences.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Major Competitors</h2>
+      <div id="competitor-pie-chart" class="chart-container"></div>
+       <div class="insights-recommendations">
+          <strong>Insights:</strong> The competitive landscape includes established brands with varying product focuses.
+          <br><strong>Recommendations:</strong>
+          <ul>
+              <li>Differentiate CatLink by focusing on a combination of smart features, reliability, design, and potentially, eco-friendliness.</li>
+              <li>Monitor competitor activities and pricing closely.</li>
+          </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Innovation and Product Trends</h2>
+        <ul>
+          <li>Automation and Smart Technology (Self-cleaning mechanisms, app integration)</li>
+            <li>Eco-Friendly Materials (Biodegradable, recycled materials)</li>
+            <li>Convenient Design (Enclosed designs, easy waste disposal)</li>
+        </ul>
+    </section>
+      <div class="insights-recommendations">
+        <strong>Insights:</strong>  The industry is moving towards smarter, more sustainable, and user-friendly products.
+        <br><strong>Recommendations:</strong>
+          <ul>
+              <li>Invest in R&D to develop innovative and reliable smart features.</li>
+              <li>Prioritize the use of sustainable materials.</li>
+              <li>Continuously improve the design for ease of use and maintenance.</li>
+          </ul>
+      </div>
+
+    <section class="section">
+        <h2>Future Development Trends</h2>
+        <ul>
+            <li>Increased Smart Features (IoT integration, advanced health monitoring)</li>
+            <li>Mainstream Eco-Friendly Materials</li>
+            <li>Customization and Personalization</li>
+        </ul>
+          <div class="insights-recommendations">
+            <strong>Insights:</strong>  The future of the market lies in advanced technology, sustainability, and personalization.
+            <br><strong>Recommendations:</strong>
+            <ul>
+                <li>Explore opportunities to integrate more advanced smart features, focusing on practical benefits for pet owners.</li>
+                <li>Commit to using sustainable materials in product development.</li>
+                <li>Consider offering customizable options to meet diverse consumer needs.</li>
+            </ul>
+          </div>
+    </section>
+</div>
+
+<script>
+// Market Growth Chart
+const marketGrowthData = [
+    { year: '2020', marketSize: 1 }, // Billions USD
+    { year: '2021', marketSize: 1.07 }, //Estimated, based on 7% growth
+    { year: '2022', marketSize: 1.14 }, //Estimated
+    { year: '2023', marketSize: 1.22 }, //Estimated
+    { year: '2024', marketSize: 1.31 }, //Estimated
+    { year: '2025', marketSize: 1.40 }, //Estimated
+    { year: '2026', marketSize: 1.50 }, //Estimated
+    { year: '2027', marketSize: 1.60 }, //Estimated
+    { year: '2028', marketSize: 2.00 } // Projected
+];
+
+var marketGrowthChart = echarts.init(document.getElementById('market-growth-chart'));
+var marketGrowthOption = {
+    title: {
+        text: 'Global Cat Litter Box Market Growth',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'axis',
+        formatter: '{b}: ${c} Billion'
+    },
+    xAxis: {
+        type: 'category',
+        data: marketGrowthData.map(item => item.year)
+    },
+    yAxis: {
+        type: 'value',
+        name: 'Market Size (USD Billions)',
+        axisLabel: {
+          formatter: '${value}B'
+        }
+    },
+    series: [{
+        data: marketGrowthData.map(item => item.marketSize),
+        type: 'line',
+        smooth: true
+    }]
+};
+marketGrowthChart.setOption(marketGrowthOption);
+
+  // Competitor Analysis - Pie Chart
+    var competitorPieChart = echarts.init(document.getElementById('competitor-pie-chart'));
+
+  // Sample data (replace with actual market share data)
+  const competitorData = [
+      { name: 'LitterMaid', value: 15 }, // Example percentages - replace with real data
+      { name: 'PetSafe', value: 20 },
+      { name: 'Tidy Cats', value: 10 },
+      { name: 'Omega Paw', value: 5 },
+      { name: 'Catit', value: 10 },
+      { name: 'Other', value: 40 } // Important to include "Other" for a complete picture
+  ];
+  var competitorPieOption = {
+      title: {
+        text: 'Market Share of Competitors',
+        left: 'center'
+      },
+      tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c}%'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: competitorData.map(item => item.name)
+      },
+      series: [
+          {
+              name: 'Market Share',
+              type: 'pie',
+              radius: '70%',
+            center: ['50%', '60%'],
+              data: competitorData,
+              emphasis: {
+                  itemStyle: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
+              }
+          }
+      ]
+  };
+
+  competitorPieChart.setOption(competitorPieOption);
+
+
+    // Responsive handling
+    window.addEventListener('resize', function() {
+       marketGrowthChart.resize();
+       competitorPieChart.resize();
+    });
+
+    // Regional Performance Chart
+    function initRegionalChart() {
+        const chart = echarts.init(document.getElementById('regionalChart'));
+        
+        const option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    const data = regionalPerformanceData.find(item => item.region === params.name);
+                    if (data) {
+                        return `
+                            <strong>${params.name}</strong><br/>
+                            Conversion Rate: ${data.conversion}%<br/>
+                            Engagement Rate: ${data.engagement}%<br/>
+                            Top Content: ${data.topContent}<br/>
+                            Popular Categories: ${data.popularCategories.join(', ')}
+                        `;
+                    }
+                    return params.name;
+                }
+            },
+            visualMap: {
+                min: 0,
+                max: 100,
+                text: ['High', 'Low'],
+                realtime: false,
+                calculable: true,
+                inRange: {
+                    color: ['#FFFBEB', '#FFA500']
+                }
+            },
+            series: [
+                {
+                    name: 'Regional Performance',
+                    type: 'map',
+                    map: 'world',
+                    roam: true,
+                    itemStyle: {
+                        areaColor: '#FFFBEB',
+                        borderColor: '#D4D4D4',
+                        borderWidth: 0.5
+                    },
+                    emphasis: {
+                        label: {
+                            show: true
+                        },
+                        itemStyle: {
+                            areaColor: '#FFB84C'
+                        }
+                    },
+                    data: [
+                        {name: 'Southeast Asia', value: 88},
+                        {name: 'United States', value: 80},
+                        {name: 'United Kingdom', value: 82},
+                        {name: 'France', value: 78},
+                        {name: 'Germany', value: 75},
+                        {name: 'Middle East', value: 85},
+                        {name: 'China', value: 90},
+                        {name: 'Japan', value: 84},
+                        {name: 'South Korea', value: 83},
+                        {name: 'Australia', value: 76}
+                    ]
+                }
+            ]
+        };
+
+        // Register world map data
+        fetch('https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/json/world.json')
+            .then(response => response.json())
+            .then(worldJson => {
+                echarts.registerMap('world', worldJson);
+                chart.setOption(option);
+            });
+
+        return chart;
+    }
+
+    // Initialize the regional chart
+    const regionalChart = initRegionalChart();
+
+    // Update resize handler
+    window.addEventListener('resize', function() {
+        marketGrowthChart.resize();
+        competitorPieChart.resize();
+        regionalChart.resize();
+    });
+
+</script>
+
+</body>
+</html>

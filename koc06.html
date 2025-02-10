@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tagging System</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .dashboard-title {
+            color: #0066cc;
+            margin-bottom: 2rem;
+        }
+
+        .tag-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0066cc;
+        }
+
+        .tag-tree-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .tag-tree-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .chart-container h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .chart {
+            width: 100%;
+            height: 400px !important;
+            min-height: 400px;
+        }
+
+        .insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .insights h4 {
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .insights ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .insights li {
+            margin-bottom: 0.5rem;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .insights li:before {
+            content: "•";
+            color: #0066cc;
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="dashboard-title">Tagging System Insights</h1>
+
+    <div class="tag-section">
+        <h2 class="section-title">Tagging System Tree</h2>
+        <div class="tag-tree-container">
+            <img src="catlink tag tree.svg" alt="catlink Tag Tree" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
+
+
+    <div class="tag-section">
+        <h2 class="section-title">User Profiles Analysis</h2>
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>User Segment Distribution</h3>
+                <div id="userSegmentChart" class="chart"></div>
+                <div class="insights">
+                    <h4>User Insights</h4>
+                    <ul>
+                        <li>Busy Professionals form largest segment</li>
+                        <li>Tech Enthusiasts show high engagement</li>
+                        <li>Growing Environmentally Conscious group</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>User Needs Analysis</h3>
+                <div id="userNeedsChart" class="chart"></div>
+                <div class="insights">
+                    <h4>Needs Insights</h4>
+                    <ul>
+                        <li>Convenience is top priority</li>
+                        <li>Smart features highly valued</li>
+                        <li>Health monitoring growing in demand</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tag-section">
+        <h2 class="section-title">Product Features Analysis</h2>
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>Feature Importance Rating</h3>
+                <div id="featureChart" class="chart"></div>
+                <div class="insights">
+                    <h4>Feature Insights</h4>
+                    <ul>
+                        <li>Smart features most valued</li>
+                        <li>Health monitoring rising in importance</li>
+                        <li>Eco-friendly materials trending up</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>Feature Correlation Map</h3>
+                <div id="correlationChart" class="chart"></div>
+                <div class="insights">
+                    <h4>Correlation Insights</h4>
+                    <ul>
+                        <li>Smart features drive adoption</li>
+                        <li>Convenience features most requested</li>
+                        <li>Health features gain traction</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tag-section">
+        <h2 class="section-title">Sales Channel Performance</h2>
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>Channel Distribution</h3>
+                <div id="channelChart" class="chart"></div>
+                <div class="insights">
+                    <h4>Channel Insights</h4>
+                    <ul>
+                        <li>E-commerce leads in sales volume</li>
+                        <li>Social media growing rapidly</li>
+                        <li>KOL collaboration highly effective</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>Market Performance Trends</h3>
+                <div id="marketTrendChart" class="chart"></div>
+                <div class="insights">
+                    <h4>Market Insights</h4>
+                    <ul>
+                        <li>Strong growth in online channels</li>
+                        <li>International markets expanding</li>
+                        <li>B2B channels show potential</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tag-section">
+        <h2 class="section-title">Content Distribution Strategy</h2>
+        <div class="chart-container">
+            <h3>Content Flow Analysis</h3>
+            <div id="sankeyChart" class="chart" style="height: 800px !important;"></div>
+            <div class="insights">
+                <h4>Distribution Flow Insights</h4>
+                <ul>
+                    <li>KOLs show strongest performance on TikTok for tech-savvy audience</li>
+                    <li>KOCs excel in educational content on YouTube for health-conscious users</li>
+                    <li>Instagram engagement highest with lifestyle-focused content</li>
+                    <li>E-commerce dominates smart feature product sales</li>
+                    <li>Direct sales effective for health monitoring features</li>
+                </ul>
+            </div>
+            <div class="insights">
+                <h4>Strategic Recommendations</h4>
+                <ul>
+                    <li>Strengthen KOL partnerships for TikTok product demonstrations</li>
+                    <li>Develop specialized content for each platform's primary audience</li>
+                    <li>Focus on educational content for YouTube's health-conscious viewers</li>
+                    <li>Optimize e-commerce presence for smart feature products</li>
+                    <li>Enhance B2B channels for bulk and institutional sales</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+
+        function initCharts() {
+            // User Segment Distribution Chart
+            const userSegmentChart = echarts.init(document.getElementById('userSegmentChart'));
+            userSegmentChart.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c}%'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '70%',
+                        data: [
+                            { value: 25, name: 'Busy Professionals' },
+                            { value: 20, name: 'Tech Enthusiasts' },
+                            { value: 15, name: 'New Cat Owners' },
+                            { value: 12, name: 'Eco-Conscious' },
+                            { value: 10, name: 'Health Concerned' },
+                            { value: 18, name: 'Others' }
+                        ]
+                    }
+                ]
+            });
+
+            // User Needs Analysis Chart
+            const userNeedsChart = echarts.init(document.getElementById('userNeedsChart'));
+            userNeedsChart.setOption({
+                radar: {
+                    indicator: [
+                        { name: 'Convenience', max: 100 },
+                        { name: 'Smart Features', max: 100 },
+                        { name: 'Health Monitoring', max: 100 },
+                        { name: 'Eco-Friendly', max: 100 },
+                        { name: 'Cost-Effective', max: 100 }
+                    ]
+                },
+                series: [{
+                    type: 'radar',
+                    data: [
+                        {
+                            value: [90, 85, 75, 70, 80],
+                            name: 'User Needs Priority'
+                        }
+                    ]
+                }]
+            });
+
+            // Feature Importance Chart
+            const featureChart = echarts.init(document.getElementById('featureChart'));
+            featureChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' }
+                },
+                xAxis: {
+                    type: 'value',
+                    max: 100
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['Smart Control', 'Auto Clean', 'Health Monitor', 'Eco-Friendly', 'UV Sterilize']
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        data: [95, 90, 85, 80, 75]
+                    }
+                ]
+            });
+
+            // Feature Correlation Chart
+            const correlationChart = echarts.init(document.getElementById('correlationChart'));
+            correlationChart.setOption({
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'force',
+                        data: [
+                            { name: 'Smart Features', value: 20, symbolSize: 60 },
+                            { name: 'Health', value: 15, symbolSize: 45 },
+                            { name: 'Eco', value: 10, symbolSize: 30 },
+                            { name: 'Auto', value: 18, symbolSize: 54 },
+                            { name: 'App', value: 12, symbolSize: 36 }
+                        ],
+                        links: [
+                            { source: 'Smart Features', target: 'Health' },
+                            { source: 'Smart Features', target: 'Auto' },
+                            { source: 'Auto', target: 'App' },
+                            { source: 'Health', target: 'Eco' }
+                        ],
+                        force: {
+                            repulsion: 100
+                        }
+                    }
+                ]
+            });
+
+            // Channel Distribution Chart
+            const channelChart = echarts.init(document.getElementById('channelChart'));
+            channelChart.setOption({
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        data: [
+                            { value: 40, name: 'E-commerce' },
+                            { value: 25, name: 'Social Media' },
+                            { value: 15, name: 'Retail' },
+                            { value: 12, name: 'B2B' },
+                            { value: 8, name: 'Others' }
+                        ]
+                    }
+                ]
+            });
+
+            // Market Trend Chart
+            const marketTrendChart = echarts.init(document.getElementById('marketTrendChart'));
+            marketTrendChart.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Online', 'Offline', 'International']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Growth Rate (%)'
+                },
+                series: [
+                    {
+                        name: 'Online',
+                        type: 'line',
+                        data: [30, 42, 51, 64]
+                    },
+                    {
+                        name: 'Offline',
+                        type: 'line',
+                        data: [20, 25, 28, 32]
+                    },
+                    {
+                        name: 'International',
+                        type: 'line',
+                        data: [15, 22, 35, 45]
+                    }
+                ]
+            });
+
+            // Sankey Chart
+            const sankeyChart = echarts.init(document.getElementById('sankeyChart'));
+            sankeyChart.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove',
+                    formatter: function(params) {
+                        if (params.dataType === 'node') {
+                            return params.name + ': ' + params.value;
+                        }
+                        return params.sourceData.name + ' → ' + 
+                               params.targetData.name + ': ' + params.value;
+                    }
+                },
+                series: [{
+                    type: 'sankey',
+                    layout: 'none',
+                    emphasis: {
+                        focus: 'adjacency'
+                    },
+                    layoutIterations: 64,
+                    nodeAlign: 'left',
+                    data: [
+                        // Creator Types (K)
+                        { name: 'KOL', itemStyle: { color: '#91cc75' } },
+                        { name: 'KOC', itemStyle: { color: '#91cc75' } },
+                        
+                        // Platforms
+                        { name: 'TikTok', itemStyle: { color: '#fac858' } },
+                        { name: 'YouTube', itemStyle: { color: '#fac858' } },
+                        { name: 'Instagram', itemStyle: { color: '#fac858' } },
+                        
+                        // User Profiles (人)
+                        { name: 'Tech Enthusiasts', itemStyle: { color: '#5470c6' } },
+                        { name: 'Busy Professionals', itemStyle: { color: '#5470c6' } },
+                        { name: 'Pet Health Concerned', itemStyle: { color: '#5470c6' } },
+                        { name: 'New Cat Owners', itemStyle: { color: '#5470c6' } },
+                        { name: 'Eco-Conscious Users', itemStyle: { color: '#5470c6' } },
+                        
+                        // Product Features (货)
+                        { name: 'Smart Features', itemStyle: { color: '#ee6666' } },
+                        { name: 'Health Monitoring', itemStyle: { color: '#ee6666' } },
+                        { name: 'Auto Cleaning', itemStyle: { color: '#ee6666' } },
+                        { name: 'Eco Materials', itemStyle: { color: '#ee6666' } },
+                        { name: 'App Control', itemStyle: { color: '#ee6666' } },
+                        
+                        // Sales Channels (场)
+                        { name: 'E-commerce', itemStyle: { color: '#73c0de' } },
+                        { name: 'Social Media Sales', itemStyle: { color: '#73c0de' } },
+                        { name: 'Physical Retail', itemStyle: { color: '#73c0de' } },
+                        { name: 'Direct Sales', itemStyle: { color: '#73c0de' } },
+                        { name: 'B2B Channels', itemStyle: { color: '#73c0de' } }
+                    ],
+                    links: [
+                        // K to Platform
+                        { source: 'KOL', target: 'TikTok', value: 40 },
+                        { source: 'KOL', target: 'YouTube', value: 35 },
+                        { source: 'KOL', target: 'Instagram', value: 25 },
+                        { source: 'KOC', target: 'TikTok', value: 30 },
+                        { source: 'KOC', target: 'YouTube', value: 40 },
+                        { source: 'KOC', target: 'Instagram', value: 30 },
+                        
+                        // Platform to User Profiles
+                        { source: 'TikTok', target: 'Tech Enthusiasts', value: 25 },
+                        { source: 'TikTok', target: 'Busy Professionals', value: 20 },
+                        { source: 'TikTok', target: 'New Cat Owners', value: 15 },
+                        { source: 'YouTube', target: 'Pet Health Concerned', value: 20 },
+                        { source: 'YouTube', target: 'Eco-Conscious Users', value: 15 },
+                        { source: 'YouTube', target: 'Tech Enthusiasts', value: 15 },
+                        { source: 'Instagram', target: 'Busy Professionals', value: 15 },
+                        { source: 'Instagram', target: 'New Cat Owners', value: 10 },
+                        { source: 'Instagram', target: 'Pet Health Concerned', value: 10 },
+                        
+                        // User Profiles to Product Features
+                        { source: 'Tech Enthusiasts', target: 'Smart Features', value: 25 },
+                        { source: 'Tech Enthusiasts', target: 'App Control', value: 20 },
+                        { source: 'Busy Professionals', target: 'Auto Cleaning', value: 25 },
+                        { source: 'Busy Professionals', target: 'App Control', value: 15 },
+                        { source: 'Pet Health Concerned', target: 'Health Monitoring', value: 20 },
+                        { source: 'New Cat Owners', target: 'Smart Features', value: 15 },
+                        { source: 'Eco-Conscious Users', target: 'Eco Materials', value: 20 },
+                        
+                        // Product Features to Sales Channels
+                        { source: 'Smart Features', target: 'E-commerce', value: 30 },
+                        { source: 'Smart Features', target: 'Social Media Sales', value: 20 },
+                        { source: 'Health Monitoring', target: 'Direct Sales', value: 15 },
+                        { source: 'Auto Cleaning', target: 'E-commerce', value: 25 },
+                        { source: 'Eco Materials', target: 'Physical Retail', value: 15 },
+                        { source: 'App Control', target: 'E-commerce', value: 20 },
+                        { source: 'App Control', target: 'B2B Channels', value: 15 }
+                    ],
+                    lineStyle: {
+                        color: 'gradient',
+                        curveness: 0.5
+                    }
+                }]
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                userSegmentChart.resize();
+                userNeedsChart.resize();
+                featureChart.resize();
+                correlationChart.resize();
+                channelChart.resize();
+                marketTrendChart.resize();
+                sankeyChart.resize();
+            });
+        }
+    </script>
+</body>
+</html> 

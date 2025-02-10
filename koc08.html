@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatLink Content Creation Guide</title>
+    <style>
+        /* ... (Previous CSS styles - keep all the styles from before) ... */
+         body { font-family: sans-serif; margin: 0; padding: 20px; background-color: #f7f7f7; }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #333; }
+        h2 { border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 30px; }
+        .section { margin-bottom: 30px; }
+        .chart-container { width: 100%; height: 300px; margin-bottom: 20px; } /* Smaller charts */
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; background-color: #fff; }
+        .card-title { font-size: 1.1em; font-weight: bold; margin-bottom: 10px; color: #444; }
+        ul { list-style: disc; margin-left: 20px; padding-left: 0; }
+        li { margin-bottom: 5px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .tag { display: inline-block; padding: 5px 10px; margin: 2px; background-color: #eee; border-radius: 4px; font-size: 0.9em; }
+        .tag-person { background-color: #d1ecf1; border: 1px solid #bee5eb; } /* Light blue */
+        .tag-product { background-color: #d4edda; border: 1px solid #c3e6cb; } /* Light green */
+        .tag-place { background-color: #f8d7da; border: 1px solid #f5c6cb; } /* Light red */
+        .insights-recommendations { margin-top: 10px; padding: 15px; background-color: #e9ecef; border: 1px solid #dee2e6; border-radius: 4px; }
+        .insights-recommendations strong { display: block; margin-bottom: 8px; color: #212529; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; } /* Stack cards on small screens */
+            .chart-container { height: 250px; } /* Smaller charts on mobile */
+        }
+        /* Style for the SVG charts */
+        .svg-chart-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-anchor: middle; /* Center the title */
+        }
+        .svg-chart-label {
+            font-size: 0.9em;
+            fill: #666;
+        }
+        .bar {
+          fill: steelblue;
+        }
+        .axis-label {
+            font-size: 0.8em;
+            fill: #777;
+        }
+        /* Add more specific styles as needed */
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>CatLink Content Creation Guide</h1>
+
+   <section class="section">
+        <h2>User Personas (人)</h2>
+        <div class="grid-2">
+           <div class="card">
+                <svg width="100%" height="250" viewBox="0 0 400 250">
+                    <text x="200" y="30" class="svg-chart-title">Core Users</text>
+                    <circle cx="200" cy="130" r="95" fill="#d1ecf1" stroke="#bee5eb" stroke-width="2"></circle>
+                    <circle cx="200" cy="130" r="75" fill="#a3d9e7"></circle>
+                    <circle cx="200" cy="130" r="55" fill="#76c5d3"></circle>
+                    <circle cx="200" cy="130" r="35" fill="#49b1bf"></circle>
+
+                    <text x="200" y="135" text-anchor="middle" fill="white">Cat Owners</text>
+                      <text x="300" y="80" class="svg-chart-label tag tag-person">BusyProfessional</text>
+                    <text x="330" y="135" class="svg-chart-label tag tag-person">TechEnthusiast</text>
+                    <text x="300" y="190" class="svg-chart-label tag tag-person">HealthConscious</text>
+                    <text x="100" y="190" class="svg-chart-label tag tag-person">MultiCatOwner</text>
+                    <text x="60" y="135" class="svg-chart-label tag tag-person">SingleCatOwner</text>
+                    <text x="100" y="80" class="svg-chart-label tag tag-person">EcoConscious</text>
+                </svg>
+                <div class="insights-recommendations">
+                  <strong>Insights:</strong> This visual represents core user groups as concentric circles, emphasizing the central importance of general "Cat Owners," with surrounding labels for specific segments.
+                  <br><strong>Recommendations:</strong>  Create tailored content for each segment.  For instance, "BusyProfessional" content could focus on time-saving features, while "HealthConscious" content could highlight health monitoring.
+                </div>
+            </div>
+
+            <div class="card">
+              <svg width="100%" height="250" viewBox="0 0 400 250">
+                <text x="200" y="30" class="svg-chart-title">Segmented Users</text>
+                  <g transform="translate(50,50)">
+                      <rect class="bar" x="0" y="0" width="40" height="40" />
+                      <text x="50" y="20" class="svg-chart-label">Millennial/GenZ</text>
+                       <rect class="bar" x="0" y="50" width="40" height="30" />
+                      <text x="50" y="70" class="svg-chart-label">HighIncome</text>
+                      <rect class="bar" x="0" y="90" width="40" height="20" />
+                      <text x="50" y="110" class="svg-chart-label">NewPetOwner</text>
+                      <rect class="bar"x="0" y="130" width="40" height="10" />
+                      <text x="50" y="150" class="svg-chart-label">SeniorCatOwner</text>
+                      <rect class="bar" x="0" y="170" width="40" height="5" />
+                      <text x="50" y="190" class="svg-chart-label">MobilityImpaired</text>
+                  </g>
+                  </svg>
+              <div class="insights-recommendations">
+                    <strong>Insights:</strong>  The bar chart (represented simplistically here) would visually show the relative proportions of segmented user groups.
+                    <br><strong>Recommendations:</strong>  Adjust marketing spend and content creation efforts based on the size of each segment.  Larger segments warrant more dedicated resources.
+              </div>
+            </div>
+        </div>
+    </section>
+
+   <section class="section">
+      <h2>Product Features (货)</h2>
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-title">Hardware Specs</div>
+                <p>
+                    <span class="tag tag-product">AutoCleaning</span> <span class="tag tag-product">LargeCapacity</span>
+                    <span class="tag tag-product">LowNoise</span> <span class="tag tag-product">InfraredSensor</span>
+                    <span class="tag tag-product">WeightSensor</span> <span class="tag tag-product">OpenTopDesign</span>
+                    <span class="tag tag-product">EnclosedDesign</span>
+                    <span class="tag tag-product">StainlessSteel</span><span class="tag tag-product">HighSided</span>
+                    <span class="tag tag-product">Lid</span>
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-title">Functionality</div>
+                <p>
+                   <span class="tag tag-product">AppControl</span> <span class="tag tag-product">MultiCatRecognition</span>
+                   <span class="tag tag-product">HealthMonitoring</span> <span class="tag tag-product">OdorControl</span>
+                   <span class="tag tag-product">LitterCompatibility</span>
+                   <span class="tag tag-product">ClumpingLitter</span> <span class="tag tag-product">PlantBasedLitter</span>
+                   <span class="tag tag-product">ClayLitter</span> <span class="tag tag-product">SilicaLitter</span>
+                   <span class="tag tag-product">KittenMode</span> <span class="tag tag-product">AutoBagging</span>
+                   <span class="tag tag-product">Anti-Leakage</span>
+                </p>
+
+            </div>
+            <div class="card">
+                <div class="card-title">Added Value</div>
+                 <p>
+                <span class="tag tag-product">EasyCleaning</span> <span class="tag tag-product">ModernDesign</span>
+                <span class="tag tag-product">EcoFriendly</span> <span class="tag tag-product">SpaceSaving</span>
+                <span class="tag tag-product">Durable</span> <span class="tag tag-product">Non-Sticky</span>
+                </p>
+            </div>
+        </div>
+        <div class="insights-recommendations">
+            <strong>Insights:</strong>  This section provides a comprehensive list of product features, categorized for clarity.
+            <br><strong>Recommendations:</strong> Use these tags consistently in all marketing materials.  Create content that specifically addresses each feature and its benefits.
+        </div>
+    </section>
+
+    <section class="section">
+      <h2>Sales Channels & Market (场)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Online and Offline Channels</div>
+          <svg width="100%" height="250" viewBox="0 0 400 250">
+              <text x="200" y="30" class="svg-chart-title">Sales Channels</text>
+                <circle cx="130" cy="120" r="60" fill="#f8d7da" stroke="#f5c6cb" stroke-width="2" opacity="0.7"></circle>
+              <circle cx="270" cy="120" r="60" fill="#d4edda" stroke="#c3e6cb" stroke-width="2" opacity="0.7"></circle>
+
+              <text x="130" y="120" text-anchor="middle" class="svg-chart-label">Online</text>
+              <text x="270" y="120" text-anchor="middle" class="svg-chart-label">Offline</text>
+
+                <text x="40" y="80" class="svg-chart-label tag tag-place">ECommerce</text>
+              <text x="40" y="100" class="svg-chart-label tag tag-place">Amazon</text>
+              <text x="40" y="120" class="svg-chart-label tag tag-place">Chewy</text>
+              <text x="40" y="140" class="svg-chart-label tag tag-place">BrandWebsite</text>
+              <text x="40" y="160" class="svg-chart-label tag tag-place">TikTokShop</text>
+              <text x="330" y="80" class="svg-chart-label tag tag-place">Pet Store</text>
+              <text x="330" y="100" class="svg-chart-label tag tag-place">Supermarket</text>
+              <text x="330" y="120" class="svg-chart-label tag tag-place">PetSmart</text>
+              <text x="330" y="140" class="svg-chart-label tag tag-place">Petco</text>
+              <text x="330" y="160" class="svg-chart-label tag tag-place">InStoreDemo</text>
+          </svg>
+          <div class="insights-recommendations">
+              <strong>Insights:</strong>  This Venn diagram visually represents the overlap and distinction between online and offline sales channels.
+              <br><strong>Recommendations:</strong>
+              <ul>
+                  <li>Strengthen online presence by optimizing product listings and running targeted ads.</li>
+                  <li>Explore partnerships with physical retail stores to offer in-store demonstrations and increase product visibility.</li>
+                  <li>Consider a multi-channel strategy, leveraging the strengths of both online and offline channels.</li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Market Performance</div>
+            <p>
+            <span class="tag tag-place">HighGrowthMarket</span>
+            <span class="tag tag-place">CompetitiveMarket</span>
+            <span class="tag tag-place">PriceCompetition</span>
+            <span class="tag tag-place">InnovationDriven</span>
+          </p>
+             <div class="insights-recommendations">
+                <strong>Insights:</strong> The market is characterized by high growth, intense competition, and a strong focus on innovation.  Price sensitivity is a key factor.
+                <br><strong>Recommendations:</strong>
+                <ul>
+                    <li>Focus on product differentiation through innovation and superior features.</li>
+                    <li>Monitor competitor pricing and adjust strategies accordingly.</li>
+                    <li>Highlight the value proposition to justify the price point.</li>
+                    <li>Invest in R&D to stay ahead of the competition.</li>
+                </ul>
+              </div>
+
+        </div>
+
+      </div>
+    </section>
+
+     <section class="section">
+        <h2>Content Theme Distribution</h2>
+        <div id="content-themes-chart" class="chart-container"></div>
+        <div class="insights-recommendations">
+            <strong>Insights:</strong>  This chart shows the relative focus on different content themes.  A balanced approach is generally recommended, but the optimal distribution depends on the target audience and platform.
+            <br><strong>Recommendations:</strong>
+            <ul>
+                <li>If a particular theme is underrepresented but relevant to a key target audience (e.g., "Health Monitoring" for health-conscious owners), consider creating more content around that theme.</li>
+                <li>If a theme is overrepresented and not driving engagement, consider diversifying content.</li>
+                <li>Analyze competitor content to identify gaps and opportunities.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Product Feature Importance</h2>
+        <div id="product-features-chart" class="chart-container"></div>
+          <div class="insights-recommendations">
+            <strong>Insights:</strong> This chart reveals which product features are most important to emphasize in content creation.  Features with high importance scores should be prominently featured.
+            <br><strong>Recommendations:</strong>
+            <ul>
+                <li>Create dedicated content showcasing the top 3-5 most important features.</li>
+                <li>Develop video demonstrations and tutorials that highlight how these features work.</li>
+                <li>Address any common misconceptions or concerns about these features.</li>
+                <li>Use customer testimonials and reviews that mention these features.</li>
+            </ul>
+        </div>
+    </section>
+        <section class="section">
+        <h2>Content Creation Guidelines</h2>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">Essential Elements to Showcase</div>
+                <ul>
+                    <li>APP interface and operation demonstration</li>
+                    <li>Cats using the product</li>
+                    <li>Cleaning and maintenance demonstration</li>
+                    <li>Data monitoring feature demonstration</li>
+                    <li>Multi-cat recognition demonstration (if applicable)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Important Notes</div>
+                <ul>
+                    <li>Avoid cats standing on top of the litter box.</li>
+                    <li>Ensure the litter box is placed on a hard, level surface.</li>
+                    <li>Show the complete usage process.</li>
+                    <li>Highlight the health monitoring value.</li>
+                    <li>Emphasize suitability for multi-cat households.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Core Message Communication</h2>
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-title">Brand Value</div>
+                <ul>
+                    <li>Founded in Shanghai in 2017</li>
+                    <li>Focuses on pet technology innovation</li>
+                    <li>Present in 106 countries</li>
+                    <li>30% domestic market share in China</li>
+                    <li>Top seller on Amazon in its category</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Product Advantages</div>
+                <ul>
+                    <li>Automated cleaning system</li>
+                    <li>Multi-cat recognition algorithm</li>
+                    <li>Health monitoring features</li>
+                    <li>Triple odor removal system</li>
+                    <li>APP smart control</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Target Outcomes</div>
+                <ul>
+                    <li>1 million+ monthly impressions</li>
+                    <li>Showcase product convenience</li>
+                    <li>Highlight health value</li>
+                    <li>Emphasize multi-cat advantages</li>
+                    <li>Convey brand message</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+  // Content Themes Pie Chart
+  const ContentThemes = [
+    { name: 'Product Demo', value: 30, color: '#8884d8' },
+    { name: 'User Experience', value: 25, color: '#82ca9d' },
+    { name: 'Pet Health', value: 20, color: '#ffc658' },
+    { name: 'Multi-Cat', value: 15, color: '#ff8042' },
+    { name: 'Cleaning/Maintenance', value: 10, color: '#a4de6c' }
+  ];
+
+  var contentThemesChart = echarts.init(document.getElementById('content-themes-chart'));
+  var contentThemesOption = {
+      tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c}%'
+      },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ContentThemes.map(item => item.name) // Add this line
+    },
+      series: [
+          {
+              name: 'Content Themes',
+              type: 'pie',
+              radius: '70%',
+              data: ContentThemes.map(item => ({ value: item.value, name: item.name })),
+              emphasis: {
+                  itemStyle: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
+              }
+          }
+      ]
+  };
+  contentThemesChart.setOption(contentThemesOption);
+
+  // Product Features Bar Chart
+  const ProductFeatures = [
+    { category: 'Automated Convenience', importance: 90, examples: 'Auto-scooping, real-time monitoring, APP control' },
+    { category: 'Health Monitoring', importance: 85, examples: 'Weight recording, bathroom habit analysis, water intake monitoring' },
+    { category: 'Multi-Cat Recognition', importance: 80, examples: 'Individual identification, independent data tracking' },
+    { category: 'Odor Removal System', importance: 75, examples: 'Triple odor removal, UV sterilization, activated carbon filtration' },
+    { category: 'User-Friendly Design', importance: 70, examples: 'Convenient cleaning, easy litter refilling, one-button APP control' }
+  ];
+  var productFeaturesChart = echarts.init(document.getElementById('product-features-chart'));
+  var productFeaturesOption = {
+      tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+              type: 'shadow'
+          }
+      },
+      xAxis: {
+          type: 'value',
+          axisLabel: {
+              formatter: '{value}%'
+          }
+      },
+      yAxis: {
+          type: 'category',
+          data: ProductFeatures.map(item => item.category),
+          axisLabel:{
+              interval: 0,
+              rotate: 20
+          }
+      },
+      series: [
+          {
+              name: 'Importance',
+              type: 'bar',
+              data: ProductFeatures.map(item => item.importance),
+              label: {
+                show:true,
+                formatter: '{c}%',
+                position: 'insideRight'
+              }
+          }
+      ]
+  };
+  productFeaturesChart.setOption(productFeaturesOption);
+
+    // Responsive handling
+    window.addEventListener('resize', function() {
+        contentThemesChart.resize();
+        productFeaturesChart.resize();
+    });
+</script>
+
+</body>
+</html>

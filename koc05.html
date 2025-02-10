@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Keyword Analysis Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .dashboard-title {
+            color: #0066cc;
+            margin-bottom: 2rem;
+        }
+
+        .matrix-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0066cc;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart {
+            width: 100%;
+            height: 600px !important;
+            min-height: 600px;
+        }
+
+        .insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .insights h4 {
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .insights ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .insights li {
+            margin-bottom: 0.5rem;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .insights li:before {
+            content: "•";
+            color: #0066cc;
+            position: absolute;
+            left: 0;
+        }
+
+        .legend {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="dashboard-title">Content Keyword Analysis Dashboard</h1>
+
+    <div class="matrix-section">
+        <h2 class="section-title">Interest Generation Keywords Matrix</h2>
+        <div class="chart-container">
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #91cc75"></div>
+                    <span>User Features</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fac858"></div>
+                    <span>Product Benefits</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #5470c6"></div>
+                    <span>Tech Features</span>
+                </div>
+            </div>
+            <div id="interestMatrix" class="chart"></div>
+            <div class="insights">
+                <h4>Interest Generation Insights</h4>
+                <ul>
+                    <li>Smart features and automation keywords drive highest engagement</li>
+                    <li>Health monitoring terms resonate with pet-conscious users</li>
+                    <li>Eco-friendly messaging appeals to environmentally conscious segment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="matrix-section">
+        <h2 class="section-title">Conversion Keywords Matrix</h2>
+        <div class="chart-container">
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ee6666"></div>
+                    <span>Product Features</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #73c0de"></div>
+                    <span>Purchase Benefits</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3ba272"></div>
+                    <span>Sales Channels</span>
+                </div>
+            </div>
+            <div id="conversionMatrix" class="chart"></div>
+            <div class="insights">
+                <h4>Conversion Insights</h4>
+                <ul>
+                    <li>Value proposition keywords show highest conversion rates</li>
+                    <li>Convenience features are key decision drivers</li>
+                    <li>Multi-channel availability increases purchase intent</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+
+        function initCharts() {
+            // Interest Generation Matrix
+            const interestMatrix = echarts.init(document.getElementById('interestMatrix'));
+            interestMatrix.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        return `${params.data.name}<br/>
+                                Impact: ${params.data.value[2]}<br/>
+                                Engagement: ${params.data.value[1]}%<br/>
+                                Reach: ${params.data.value[0]}K`;
+                    }
+                },
+                xAxis: {
+                    name: 'Reach (K)',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    type: 'value',
+                    scale: true
+                },
+                yAxis: {
+                    name: 'Engagement Rate (%)',
+                    nameLocation: 'middle',
+                    nameGap: 40,
+                    type: 'value',
+                    scale: true
+                },
+                series: [{
+                    type: 'scatter',
+                    data: [
+                        // User Features (Green)
+                        {
+                            name: 'Smart Home',
+                            value: [120, 4.5, 80],
+                            itemStyle: { color: '#91cc75' },
+                            symbolSize: 80
+                        },
+                        {
+                            name: 'Pet Health',
+                            value: [90, 3.8, 60],
+                            itemStyle: { color: '#91cc75' },
+                            symbolSize: 60
+                        },
+                        {
+                            name: 'Easy Clean',
+                            value: [150, 5.2, 90],
+                            itemStyle: { color: '#91cc75' },
+                            symbolSize: 90
+                        },
+                        // Product Benefits (Yellow)
+                        {
+                            name: 'Auto Clean',
+                            value: [200, 6.5, 100],
+                            itemStyle: { color: '#fac858' },
+                            symbolSize: 100
+                        },
+                        {
+                            name: 'Odor Free',
+                            value: [180, 5.8, 85],
+                            itemStyle: { color: '#fac858' },
+                            symbolSize: 85
+                        },
+                        {
+                            name: 'Low Maintenance',
+                            value: [160, 4.8, 75],
+                            itemStyle: { color: '#fac858' },
+                            symbolSize: 75
+                        },
+                        // Tech Features (Blue)
+                        {
+                            name: 'App Control',
+                            value: [140, 4.2, 70],
+                            itemStyle: { color: '#5470c6' },
+                            symbolSize: 70
+                        },
+                        {
+                            name: 'Smart Monitor',
+                            value: [130, 3.9, 65],
+                            itemStyle: { color: '#5470c6' },
+                            symbolSize: 65
+                        },
+                        {
+                            name: 'UV Sterilize',
+                            value: [110, 3.5, 55],
+                            itemStyle: { color: '#5470c6' },
+                            symbolSize: 55
+                        }
+                    ]
+                }]
+            });
+
+            // Conversion Matrix
+            const conversionMatrix = echarts.init(document.getElementById('conversionMatrix'));
+            conversionMatrix.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        return `${params.data.name}<br/>
+                                Conversion: ${params.data.value[2]}%<br/>
+                                CTR: ${params.data.value[1]}%<br/>
+                                Impressions: ${params.data.value[0]}K`;
+                    }
+                },
+                xAxis: {
+                    name: 'Impressions (K)',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    type: 'value',
+                    scale: true
+                },
+                yAxis: {
+                    name: 'Click-Through Rate (%)',
+                    nameLocation: 'middle',
+                    nameGap: 40,
+                    type: 'value',
+                    scale: true
+                },
+                series: [{
+                    type: 'scatter',
+                    data: [
+                        // Product Features (Red)
+                        {
+                            name: 'Smart Features',
+                            value: [250, 7.5, 4.2],
+                            itemStyle: { color: '#ee6666' },
+                            symbolSize: 84
+                        },
+                        {
+                            name: 'Health Monitor',
+                            value: [200, 6.8, 3.8],
+                            itemStyle: { color: '#ee6666' },
+                            symbolSize: 76
+                        },
+                        {
+                            name: 'Auto Clean',
+                            value: [300, 8.2, 4.5],
+                            itemStyle: { color: '#ee6666' },
+                            symbolSize: 90
+                        },
+                        // Purchase Benefits (Blue)
+                        {
+                            name: 'Free Shipping',
+                            value: [280, 7.8, 4.0],
+                            itemStyle: { color: '#73c0de' },
+                            symbolSize: 80
+                        },
+                        {
+                            name: 'Warranty',
+                            value: [220, 6.5, 3.5],
+                            itemStyle: { color: '#73c0de' },
+                            symbolSize: 70
+                        },
+                        {
+                            name: 'Easy Return',
+                            value: [180, 5.8, 3.2],
+                            itemStyle: { color: '#73c0de' },
+                            symbolSize: 64
+                        },
+                        // Sales Channels (Green)
+                        {
+                            name: 'Amazon',
+                            value: [350, 8.5, 4.8],
+                            itemStyle: { color: '#3ba272' },
+                            symbolSize: 96
+                        },
+                        {
+                            name: 'Official Store',
+                            value: [260, 7.2, 3.9],
+                            itemStyle: { color: '#3ba272' },
+                            symbolSize: 78
+                        },
+                        {
+                            name: 'Pet Stores',
+                            value: [240, 6.9, 3.6],
+                            itemStyle: { color: '#3ba272' },
+                            symbolSize: 72
+                        }
+                    ]
+                }]
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                interestMatrix.resize();
+                conversionMatrix.resize();
+            });
+        }
+    </script>
+</body>
+</html> 

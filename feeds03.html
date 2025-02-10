@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion Tag Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            height: 500px;
+            margin: 20px 0;
+        }
+        .insights-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .insights-box h4 {
+            color: #0d6efd;
+            margin-bottom: 15px;
+        }
+        .tag-list {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .quadrant-info {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .tag-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: white;
+        }
+        .high-high {
+            background-color: #28a745;
+        }
+        .high-low {
+            background-color: #ffc107;
+        }
+        .low-high {
+            background-color: #17a2b8;
+        }
+        .low-low {
+            background-color: #dc3545;
+        }
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Conversion Tag Quadrant</h1>
+        
+        <!-- Add filters -->
+        <div class="filters">
+            <select id="timeRange" aria-label="Select time range">
+                <option value="7d">Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="90d">Last 90 Days</option>
+            </select>
+            <select id="platform" aria-label="Select platform">
+                <option value="amazon">Amazon SBV</option>
+                <option value="meta">META</option>
+                <option value="tiktok">TikTok</option>
+                <option value="youtube">YouTube</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <!-- Conversion Tag Quadrant -->
+            <div class="col-12">
+                <div class="chart-container">
+                    <h3>Smart Cat Litter Box Performance</h3>
+                    <div id="conversionQuadrant" style="height: 100%;"></div>
+                </div>
+                <div class="quadrant-info">
+                    <h5>Quadrant Description</h5>
+                    <div><span class="tag-badge high-high">Upper Right</span> High Conversion Rate & High Order Value</div>
+                    <div><span class="tag-badge high-low">Lower Right</span> High Conversion Rate & Low Order Value</div>
+                    <div><span class="tag-badge low-high">Upper Left</span> Low Conversion Rate & High Order Value</div>
+                    <div><span class="tag-badge low-low">Lower Left</span> Low Conversion Rate & Low Order Value</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Insights -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="insights-box">
+                    <h4>Purchase (Conversion) Analysis</h4>
+                    <div class="mb-4">
+                        <h5>Conversion Performance Analysis</h5>
+                        <ul>
+                            <li>Users attracted by Neakasa's smart litter box features (automatic cleaning, odor control) have shown higher conversion rates.</li>
+                            <li>Tags promoting environmentally friendly materials and energy-saving features (Eco-Friendly) have higher order values.</li>
+                            <li>Users prioritizing ease of use (e.g., Minimalists) have a balanced combination of conversion rate and order value.</li>
+                        </ul>
+                    </div>
+                    <div class="mb-4">
+                        <h5>Optimization Suggestions</h5>
+                        <ul>
+                            <li>Increase promotional efforts for environmentally conscious and tech-savvy users who value smart features.</li>
+                            <li>For high order-value items, emphasize long-term cost savings and eco-friendly materials.</li>
+                            <li>For users with physical limitations (Elderly), emphasize ease of use and low-maintenance features in campaigns.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag List -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="tag-list">
+                    <h4>Popular Conversion Tags for Cat Litter Box</h4>
+                    <div>
+                        <span class="tag-badge high-high">Smart Features</span>
+                        <span class="tag-badge high-high">Eco-Friendly</span>
+                        <span class="tag-badge high-low">Automatic Cleaning</span>
+                        <span class="tag-badge high-low">Odor Control</span>
+                        <span class="tag-badge low-high">Ease of Use</span>
+                        <span class="tag-badge low-high">Energy Saving</span>
+                        <span class="tag-badge low-low">Affordable</span>
+                        <span class="tag-badge low-low">Minimalist Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize chart
+        const conversionChart = echarts.init(document.getElementById('conversionQuadrant'));
+
+        // Define data for different platforms and time ranges
+        const tagData = {
+            amazon: {
+                '7d': {
+                    awareness: ['Catlink Smart Litter Box', 'Automatic Cleaning', 'Odor Control', 'Eco-Friendly', 'Smart Features'],
+                    emotional: ['Customer Satisfaction', 'Ease of Use', 'Convenience', 'Happiness', 'Trust'],
+                    lifestyle: ['Pet Health', 'Sustainable Living', 'Minimalist Lifestyle', 'Tech Lovers', 'Pet Owners'],
+                    interactive: ['Reviews', 'Ratings', 'Feedback', 'Customer Photos', 'Q&A']
+                },
+                '30d': {
+                    awareness: ['Catlink Quality', 'Smart Tech for Pets', 'Eco-Friendly Product', 'Affordable Luxury', 'Advanced Features'],
+                    emotional: ['Customer Joy', 'Long-Term Savings', 'Sustainability', 'Trustworthy', 'Contentment'],
+                    lifestyle: ['Pet Health Monitoring', 'Sustainable Living', 'Tech-Savvy Pet Owners', 'Minimalistic Design', 'Efficient Living'],
+                    interactive: ['User Comments', 'Review Statistics', 'Ratings Feedback', 'Photos', 'Ratings']
+                },
+                '90d': {
+                    awareness: ['Brand Leadership', 'Tech-Driven Pet Solutions', 'Smart Home Integration', 'Environmentally Conscious', 'Efficient Cleaning'],
+                    emotional: ['Customer Trust', 'Quality Assurance', 'Sustainability Focus', 'Long-Term Value', 'Contentment'],
+                    lifestyle: ['Pet Health Monitoring', 'Smart Technology for Pets', 'Green Living', 'Minimalist Spaces', 'Tech Enthusiasts'],
+                    interactive: ['Customer Engagement', 'User Photos', 'Ratings Trends', 'Feedback Reviews', 'Questionnaires']
+                }
+            },
+            meta: {
+                '7d': {
+                    awareness: ['Catlink Smart Litter Box', 'Pet Health Tech', 'Convenient Cleaning', 'Sustainable Materials', 'Smart Features'],
+                    emotional: ['Happy Pet Owners', 'Customer Satisfaction', 'Ease of Use', 'Pet Health Care', 'Convenient Living'],
+                    lifestyle: ['Eco-Conscious Consumers', 'Tech Enthusiasts', 'Pet Owners', 'Minimalists', 'Sustainable Living'],
+                    interactive: ['Product Feedback', 'Customer Reviews', 'Photos', 'Ratings', 'Product Q&A']
+                },
+                '30d': {
+                    awareness: ['Smart Pet Solutions', 'Eco-Friendly Technology', 'Convenient Pet Care', 'Sustainable Pet Products', 'Affordable Smart Litter Boxes'],
+                    emotional: ['Satisfied Pet Owners', 'Long-Term Savings', 'Easy to Use', 'Sustainable Lifestyle', 'Trustworthy Products'],
+                    lifestyle: ['Tech-Savvy Pet Owners', 'Environmentally Conscious Living', 'Sustainable Pet Care', 'Easy Pet Care Solutions', 'Minimalist Lifestyle'],
+                    interactive: ['Customer Testimonials', 'Reviews', 'Photos', 'Q&A Sessions', 'Ratings']
+                },
+                '90d': {
+                    awareness: ['Pet Tech Revolution', 'Smart Litter Box Innovation', 'Sustainable Pet Products', 'Convenient Care Solutions', 'Green Living'],
+                    emotional: ['Happy Pet Owners', 'Trusted Product', 'Sustainability Focus', 'Long-Term Benefits', 'Convenient Living'],
+                    lifestyle: ['Tech-Savvy Pet Lovers', 'Eco-Friendly Solutions', 'Minimalist Pet Products', 'Efficient Care Solutions', 'Smart Home Integration'],
+                    interactive: ['Review Engagement', 'Customer Interaction', 'Ratings & Reviews', 'Customer Photos', 'Product Feedback']
+                }
+            }
+        };
+
+        function updateQuadrantData() {
+            const platform = document.getElementById('platform').value;
+            const timeRange = document.getElementById('timeRange').value;
+            const data = tagData[platform][timeRange];
+            
+            // Update chart data
+            const option = {
+                tooltip: {
+                    formatter: function(param) {
+                        return param.data.name + '<br/>Conversion Rate: ' + param.data.value[0].toFixed(2) + 
+                               '<br/>Order Value: ' + param.data.value[1].toFixed(2);
+                    }
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Conversion Rate',
+                    nameLocation: 'center',
+                    nameGap: 30,
+                    min: 0,
+                    max: 5,
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Order Value',
+                    nameLocation: 'center',
+                    nameGap: 30,
+                    min: 0,
+                    max: 5,
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'scatter',
+                    data: Object.entries(data).flatMap(([category, tags]) =>
+                        tags.map(tag => ({
+                            name: tag,
+                            value: [
+                                2 + Math.random() * 3,  // Conversion Rate: 2-5
+                                2 + Math.random() * 3,  // Order Value: 2-5
+                                category
+                            ],
+                            symbolSize: 30 + Math.random() * 40  // Bubble size: 30-70
+                        }))
+                    ),
+                    label: {
+                        show: true,
+                        formatter: function(param) {
+                            return param.data.name;
+                        },
+                        position: 'top',
+                        fontSize: 12,
+                        color: '#666'
+                    },
+                    itemStyle: {
+                        color: function(param) {
+                            const x = param.data.value[0];
+                            const y = param.data.value[1];
+                            if (x >= 3.5 && y >= 3.5) return '#28a745';  // High conversion & High order value
+                            if (x >= 3.5 && y < 3.5) return '#ffc107';   // High conversion & Low order value
+                            if (x < 3.5 && y >= 3.5) return '#17a2b8';   // Low conversion & High order value
+                            return '#dc3545';                            // Low conversion & Low order value
+                        },
+                        opacity: 0.7,
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }
+                }]
+            };
+            
+            conversionChart.setOption(option);
+            
+            // Update insights based on selection
+            updateInsights(platform, timeRange);
+        }
+
+        function updateInsights(platform, timeRange) {
+            const insights = {
+                amazon: {
+                    '7d': 'Catlink smart litter boxes are trending among pet owners on Amazon, especially for those looking for odor control and eco-friendly materials.',
+                    '30d': 'High engagement on features like automatic cleaning and sustainability on Amazon. The product is seen as both tech-savvy and environmentally friendly.',
+                    '90d': 'Catlink’s consistent growth in reviews shows increasing trust, with a high percentage of users leaving positive feedback on its smart features and ease of use.'
+                },
+                meta: {
+                    '7d': 'Meta users have been engaging more with Catlink’s environmentally friendly and tech-savvy aspects. Ads with “Eco-Friendly” and “Smart Features” tags showed a high conversion rate.',
+                    '30d': 'Longer-term campaigns on Meta have gained traction, especially targeting tech enthusiasts and minimalists, with the convenience factor leading to higher order values.',
+                    '90d': 'User-generated content on Meta, including photos and reviews, continues to drive engagement. Sustainability-focused campaigns have seen solid conversion rates.'
+                },
+                tiktok: {
+                    '7d': 'TikTok users are drawn to the fun, trendy side of Catlink’s smart litter box. Short, engaging videos showcasing its tech features and automatic cleaning have gained viral attention.',
+                    '30d': 'TikTok continues to drive high interaction rates, especially for campaigns featuring “Easy-to-Clean” and “Eco-Friendly” messages.',
+                    '90d': 'Catlink has established itself as a leading brand in the “Smart Pet Products” category, with an increasing number of TikTok creators sharing content related to the product.'
+                },
+                youtube: {
+                    '7d': 'Product reviews and detailed unboxings on YouTube have contributed to strong conversion rates, with users appreciating its tech-driven pet care solutions.',
+                    '30d': 'Catlink continues to gain momentum on YouTube through influencer reviews and sponsored content that emphasize its ease of use and eco-friendly design.',
+                    '90d': 'Long-form content on YouTube, such as detailed product tutorials and in-depth reviews, has helped build brand credibility and trust, contributing to steady growth.'
+
+                }
+            };
+            
+            // Update insights text
+            document.querySelector('.insights-box').innerHTML = insights[platform][timeRange] || '';
+        }
+
+        // Add event listeners
+        document.getElementById('platform').addEventListener('change', updateQuadrantData);
+        document.getElementById('timeRange').addEventListener('change', updateQuadrantData);
+
+        // Initial chart update
+        updateQuadrantData();
+
+        // Handle responsive resizing
+        window.addEventListener('resize', function() {
+            conversionChart.resize();
+        });
+    </script>
+</body>
+</html>

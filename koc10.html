@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Keyword Research</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #333; }
+        h2 { border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 30px; }
+        h3 { margin-top: 20px; }
+        .table-container { overflow-x: auto; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f8f8f8; font-weight: bold; }
+        .chart-container { 
+            width: 100%; 
+            height: 400px;
+            margin-bottom: 20px; 
+        }
+        .chart {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+        .keyword-table { margin-bottom: 30px; } /* Add spacing between tables */
+        .keyword-table td:nth-child(2),  /* Search volume column */
+        .keyword-table td:nth-child(3) { /* Competition column */
+            text-align: center;
+        }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .insights-recommendations {
+        margin-top: 10px;
+        padding: 15px;
+        background-color: #e9ecef;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+      }
+      .insights-recommendations strong {
+          display: block;
+          margin-bottom: 8px;
+          color: #212529;
+          font-weight: 600;
+        }
+        @media (max-width: 768px) {
+          .grid-2, .grid-3, .grid-4,.grid-5 { grid-template-columns: 1fr; }
+          .chart-container { height: 350px; }
+          .chart { min-height: 350px; }
+        }
+        .keyword-analysis-container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .keyword-analysis-container > * {
+            margin-bottom: 30px;
+        }
+
+        .keyword-analysis-container > *:last-child {
+            margin-bottom: 0;
+        }
+
+        .keyword-analysis-container .grid-2 {
+            margin-bottom: 30px;
+        }
+
+        .keyword-analysis-container .chart-container {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .keyword-analysis-container .keyword-table {
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Google Keyword Research</h1>
+
+    <section class="section">
+        <h2>Keyword Categories</h2>
+
+      <div class="grid-2">
+        <div>
+          <h3>Keyword Volume and Competition</h3>
+          <div id="keyword-volume-chart" class="chart-container"></div>
+          <div class="insights-recommendations">
+              <strong>Insights:</strong> This chart visualizes the relationship between search volume and competition for the primary keywords.
+              <br><strong>Recommendations:</strong>
+              <ul>
+                  <li>Prioritize keywords with high search volume and manageable competition.</li>
+                  <li>Consider targeting lower-competition keywords even if they have slightly lower volume, for better chances of ranking.</li>
+                  <li>Use a mix of high-volume and low-competition keywords for a balanced SEO strategy.</li>
+              </ul>
+          </div>
+        </div>
+
+        <div>
+        <h3>Keyword Category Distribution</h3>
+        <div id="keyword-category-chart" class="chart-container"></div>
+        <div class="insights-recommendations">
+            <strong>Insights:</strong>  This pie chart shows the distribution of keywords across different categories.
+            <br><strong>Recommendations:</strong>
+            <ul>
+                <li>Allocate content creation efforts based on the distribution. For example, if "Problem-based Keywords" are a large segment, create content addressing those problems.</li>
+                <li>Identify underrepresented categories that might present opportunities.</li>
+                <li>Ensure your website has dedicated pages/sections for the major categories (e.g., a page for "Self-Cleaning Litter Boxes," a page for "Odor Control").</li>
+            </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+        <h2>Keyword research</h2>
+        <div class="keyword-analysis-container">
+            <div class="grid-2">
+                <div class="chart-container">
+                    <div id="searchTrend" style="width: 100%; height: 400px;"></div>
+                    <div class="insights-recommendations">
+                        <strong>Search Volume Trends</strong>
+                        <p>Visualizes the search volume distribution across different keyword types.</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div id="competition" style="width: 100%; height: 400px;"></div>
+                    <div class="insights-recommendations">
+                        <strong>Competition Level Analysis</strong>
+                        <p>Shows the competition level distribution for each keyword category.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="chart-container">
+                    <div id="keywordType" style="width: 100%; height: 400px;"></div>
+                    <div class="insights-recommendations">
+                        <strong>Keyword Type Distribution</strong>
+                        <p>Compares different types of keywords and their characteristics.</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div id="brandComparison" style="width: 100%; height: 400px;"></div>
+                    <div class="insights-recommendations">
+                        <strong>Brand Keyword Analysis</strong>
+                        <p>Analyzes brand-related keywords and their performance metrics.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="keyword-table">
+                <h3>Primary Keywords</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Keyword</th>
+                            <th>Search Volume</th>
+                            <th>Competition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Cat Litter Box</td><td>50,000 - 100,000/month</td><td>High</td></tr>
+                        <tr><td>Best Cat Litter Box</td><td>10,000 - 50,000/month</td><td>High</td></tr>
+                        <tr><td>Automatic Cat Litter Box</td><td>10,000 - 50,000/month</td><td>High</td></tr>
+                        <tr><td>Self Cleaning Cat Litter Box</td><td>5,000 - 20,000/month</td><td>High</td></tr>
+                        <tr><td>Cat Litter Box Review</td><td>5,000 - 20,000/month</td><td>Medium</td></tr>
+                        <tr><td>Best Self-Cleaning Litter Box</td><td>5,000 - 10,000/month</td><td>High</td></tr>
+                        <tr><td>Cat Litter Box for Multiple Cats</td><td>3,000 - 10,000/month</td><td>Medium</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="keyword-table">
+                <h3>Related Keywords</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Keyword</th>
+                            <th>Search Volume</th>
+                            <th>Competition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <tr><td>Cat Litter Box for Apartments</td><td>5,000 - 10,000/month</td><td>Medium</td></tr>
+                        <tr><td>Cat Litter Box with Odor Control</td><td>10,000 - 50,000/month</td><td>High</td></tr>
+                        <tr><td>Eco-Friendly Cat Litter Box</td><td>5,000 - 15,000/month</td><td>Medium</td></tr>
+                        <tr><td>Cat Litter Box for Small Spaces</td><td>2,000 - 5,000/month</td><td>Medium</td></tr>
+                        <tr><td>Best Cat Litter Box for Sensitive Cats</td><td>1,000 - 5,000/month</td><td>Low</td></tr>
+                        <tr><td>High Sided Cat Litter Box</td><td>1,000 - 5,000/month</td><td>Medium</td></tr>
+                        <tr><td>Top Rated Cat Litter Box</td><td>1,000 - 5,000/month</td><td>Medium</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+          <div class="keyword-table">
+                <h3>Long-Tail Keywords</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Keyword</th>
+                        <th>Search Volume</th>
+                        <th>Competition</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Best Self Cleaning Litter Box for Small Apartments</td><td>500 - 2,000/month</td><td>Medium</td></tr>
+                    <tr><td>How to Clean a Self Cleaning Cat Litter Box</td><td>500 - 1,000/month</td><td>Low</td></tr>
+                    <tr><td>Non-Tracking Cat Litter Box</td><td>500 - 1,500/month</td><td>Medium</td></tr>
+                    <tr><td>Cat Litter Box for Senior Cats with Arthritis</td><td>200 - 1,000/month</td><td>Low</td></tr>
+                    <tr><td>Best Clumping Cat Litter Box for Odor Control</td><td>500 - 1,500/month</td><td>Medium</td></tr>
+                    <tr><td>Affordable Automatic Litter Box for Multiple Cats</td><td>200 - 1,000/month</td><td>Low</td></tr>
+                    <tr><td>Cat Litter Box with High Sides for Litter Scatter</td><td>500 - 1,000/month</td><td>Low</td></tr>
+                    <tr><td>Litter Box Alternatives for Cats with Allergies</td><td>100 - 500/month</td><td>Low</td></tr>
+                    <tr><td>How to Stop Cat from Urinating Outside the Litter Box</td><td>500 - 1,500/month</td><td>High</td></tr>
+                  </tbody>
+              </table>
+            </div>
+
+            <div class="keyword-table">
+              <h3>Problem-Based Keywords</h3>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Keyword</th>
+                          <th>Search Volume</th>
+                          <th>Competition</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Why is My Cat Not Using the Litter Box?</td><td>1,000 - 5,000/month</td><td>High</td></tr>
+                    <tr><td>How to Get My Cat to Use the Litter Box</td><td>1,000 - 5,000/month</td><td>High</td></tr>
+                    <tr><td>How to Reduce Litter Box Odor</td><td>500 - 2,000/month</td><td>High</td></tr>
+                    <tr><td>How to Clean a Litter Box Without Making a Mess</td><td>500 - 2,000/month</td><td>Medium</td></tr>
+                    <tr><td>Cat Litter Box with No Smell</td><td>1,000 - 5,000/month</td><td>High</td></tr>
+                    <tr><td>How to Train a Cat to Use a Litter Box</td><td>500 - 2,000/month</td><td>Medium</td></tr>
+                    <tr><td>Best Litter Box for Cats with Urinary Tract Issues</td><td>200 - 1,000/month</td><td>Low</td></tr>
+                  </tbody>
+              </table>
+          </div>
+
+          <div class="keyword-table">
+                <h3>Product Feature Keywords</h3>
+                 <table>
+                    <thead>
+                        <tr>
+                            <th>Keyword</th>
+                            <th>Search Volume</th>
+                            <th>Competition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Self-Cleaning Litter Box with Wi-Fi</td><td>500 - 2,000/month</td><td>High</td></tr>
+                        <tr><td>Cat Litter Box with Smart Features</td><td>500 - 1,000/month</td><td>Medium</td></tr>
+                        <tr><td>Litter Box with Removable Tray</td><td>500 - 1,500/month</td><td>Medium</td></tr>
+                        <tr><td>Cat Litter Box with Filter System</td><td>200 - 1,000/month</td><td>Low</td></tr>
+                        <tr><td>Automatic Litter Box with High Sides</td><td>100 - 500/month</td><td>Low</td></tr>
+                        <tr><td>Best Odor Control Litter Box with Activated Carbon</td><td>500 - 1,500/month</td><td>High</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="keyword-table">
+                <h3>Brand and Model Keywords</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Keyword</th>
+                            <th>Search Volume</th>
+                            <th>Competition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>LitterMaid Self-Cleaning Litter Box</td><td>10,000 - 50,000/month</td><td>High</td></tr>
+                        <tr><td>PetSafe ScoopFree Litter Box</td><td>5,000 - 20,000/month</td><td>High</td></tr>
+                        <tr><td>Tidy Cats Litter Box</td><td>10,000 - 50,000/month</td><td>High</td></tr>
+                        <tr><td>Omega Paw Self-Cleaning Litter Box</td><td>1,000 - 5,000/month</td><td>Medium</td></tr>
+                        <tr><td>Catit Self-Cleaning Litter Box</td><td>5,000 - 20,000/month</td><td>High</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="insights-recommendations">
+                <strong>Insights:</strong> The keyword landscape is competitive, with a mix of high-volume, high-competition terms and more specific, lower-competition long-tail keywords.
+                <br><strong>Recommendations:</strong>
+                <ul>
+                    <li>Target a mix of high-volume and long-tail keywords.</li>
+                    <li>Create high-quality content that addresses user search intent and provides valuable information.</li>
+                    <li>Build high-quality backlinks to improve website authority and search rankings.</li>
+                    <li>Monitor keyword rankings and adjust strategies as needed.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+  <section class="section">
+        <h2>Keyword Competition Analysis</h2>
+        <p><strong>High Competition Keywords:</strong> "Cat Litter Box," "Automatic Litter Box," "Self-Cleaning Litter Box" - These have high search volume but intense competition, requiring a refined SEO strategy.</p>
+        <p><strong>Low Competition Keywords:</strong> "Cat Litter Box for Senior Cats," "Non-Tracking Cat Litter Box" - These have lower search volume but offer opportunities to attract a specific, targeted audience.</p>
+        <div class="insights-recommendations">
+          <strong>Insights:</strong> The keyword landscape is competitive, with a mix of high-volume, high-competition terms and more specific, lower-competition long-tail keywords.
+          <br><strong>Recommendations:</strong>
+          <ul>
+              <li>Target a mix of high-volume and long-tail keywords.</li>
+              <li>Create high-quality content that addresses user search intent and provides valuable information.</li>
+              <li>Build high-quality backlinks to improve website authority and search rankings.</li>
+              <li>Monitor keyword rankings and adjust strategies as needed.</li>
+          </ul>
+      </div>
+    </section>
+
+    <section class="section">
+        <h2>SEO and PPC Strategy Suggestions</h2>
+        <p><strong>SEO Optimization:</strong></p>
+        <ul>
+            <li>Optimize for core keywords (e.g., "Cat Litter Box") and related long-tail keywords (e.g., "Best self-cleaning litter box for small apartments").</li>
+            <li>Emphasize user problem-solving (e.g., "How to stop cat from urinating outside the litter box") and product features (e.g., "odor control").</li>
+        </ul>
+        <p><strong>PPC Advertising Strategy:</strong></p>
+        <ul>
+            <li>Run PPC ads for high-search-volume primary keywords (e.g., "Automatic Cat Litter Box").</li>
+            <li>Use long-tail keywords (e.g., "Best self-cleaning litter box for multiple cats") for precise targeting and potentially higher conversion rates.</li>
+        </ul>
+      <div class="insights-recommendations">
+            <strong>Insights:</strong>  A combined SEO and PPC strategy is recommended, targeting both broad and specific keywords.
+            <br><strong>Recommendations:</strong>
+              <ul>
+                  <li>Allocate budget strategically between SEO (long-term, organic traffic) and PPC (short-term, paid traffic).</li>
+                  <li>Continuously monitor and refine keyword targeting based on performance data.</li>
+                  <li>A/B test different ad copy and landing pages to optimize PPC campaigns.</li>
+                  <li>Use keyword research to inform content creation (blog posts, articles, FAQs) to improve organic search rankings.</li>
+              </ul>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Volume and Competition Chart
+        const competitionMap = { 'Low': 1, 'Medium': 2, 'High': 3 };
+        const keywordVolumeData = [
+            { name: 'Cat Litter Box', searchVolume: 75000, competition: 'High' },
+            { name: 'Best Cat Litter Box', searchVolume: 30000, competition: 'High' },
+            { name: 'Automatic Cat Litter Box', searchVolume: 30000, competition: 'High' },
+            { name: 'Self Cleaning Cat Litter Box', searchVolume: 12500, competition: 'High' },
+            { name: 'Cat Litter Box Review', searchVolume: 12500, competition: 'Medium' },
+            { name: 'Best Self-Cleaning Litter Box', searchVolume: 7500, competition: 'High' },
+            { name: 'Cat Litter Box for Multiple Cats', searchVolume: 6500, competition: 'Medium' },
+        ];
+        
+        // Style adjustments for all chart containers
+        const chartContainers = document.querySelectorAll('.chart-container');
+        chartContainers.forEach(container => {
+            container.style.height = '400px';
+            container.style.margin = '20px 0';
+        });
+
+        const charts = document.querySelectorAll('.chart');
+        charts.forEach(chart => {
+            chart.style.height = '100%';
+            chart.style.width = '100%';
+        });
+
+        // Initialize all charts
+        try {
+            const keywordVolumeChart = echarts.init(document.getElementById('keyword-volume-chart'));
+            const keywordCategoryChart = echarts.init(document.getElementById('keyword-category-chart'));
+            const searchTrendChart = echarts.init(document.getElementById('searchTrend'));
+            const competitionChart = echarts.init(document.getElementById('competition'));
+            const keywordTypeChart = echarts.init(document.getElementById('keywordType'));
+            const brandComparisonChart = echarts.init(document.getElementById('brandComparison'));
+
+            // Add loading animation
+            [searchTrendChart, competitionChart, keywordTypeChart, brandComparisonChart].forEach(chart => {
+                chart.showLoading();
+            });
+
+            keywordVolumeChart.setOption({
+                title: {
+                    text: 'Keyword Volume vs. Competition',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (param) {
+                        return param.value[2] + '<br/>Search Volume: ' + param.value[0] + '<br/>Competition: ' + (param.value[1] === 1 ? 'Low' : (param.value[1] === 2 ? 'Medium' : 'High'));
+                    }
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Search Volume',
+                    axisLabel: {
+                      formatter: '{value}'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Competition Level',
+                  scale: true,
+                  axisLabel:{
+                    formatter: function(value){
+                      if (value == 1){
+                        return "Low";
+                      }else if (value ==2){
+                        return "Medium";
+                      }else{
+                        return "High";
+                      }
+                    }
+                  }
+
+                },
+                series: [{
+                    data: keywordVolumeData.map(item => ({
+                        name: item.name,
+                        value: [item.searchVolume, competitionMap[item.competition], item.name], // [x, y, label]
+                    })),
+                    type: 'scatter',
+                    symbolSize: 20, // Adjust as needed
+                    emphasis: {
+                      itemStyle:{
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                    }
+                }]
+            });
+
+            // 2. Category Distribution Chart
+            const keywordCategories = [
+                { name: 'Primary Keywords', value: 7 },
+                { name: 'Related Keywords', value: 7 },
+                { name: 'Long-Tail Keywords', value: 9 },
+                { name: 'Problem-Based Keywords', value: 7 },
+                { name: 'Product Feature Keywords', value: 6 },
+                { name: 'Brand and Model Keywords', value: 6 }
+            ];
+
+            keywordCategoryChart.setOption({
+                title: {
+                    text: 'Keyword Category Distribution',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                series: [
+                    {
+                        name: 'Keyword Categories',
+                        type: 'pie',
+                        radius: '70%',
+                        data: keywordCategories.map(cat => ({ name: cat.name, value: cat.value })),
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            });
+
+            // 3. Search Trend Chart
+            searchTrendChart.setOption({
+                title: { 
+                    text: 'Search Volume by Keyword Type', 
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        fontSize: 16
+                    }
+                },
+                grid: {
+                    top: 60,
+                    bottom: 90,
+                    left: 80,
+                    right: 40,
+                    containLabel: true
+                },
+                tooltip: { trigger: 'axis' },
+                legend: { 
+                    data: ['Average Volume', 'Total Keywords'],
+                    bottom: 10
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Primary', 'Related', 'Long-tail', 'Problem-based', 'Feature', 'Brand'],
+                    axisLabel: { rotate: 45 }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Search Volume',
+                        axisLabel: {
+                            formatter: '{value}k'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Number of Keywords'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Average Volume',
+                        type: 'bar',
+                        data: [75, 45, 15, 25, 30, 50]
+                    },
+                    {
+                        name: 'Total Keywords',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [7, 7, 9, 7, 6, 5]
+                    }
+                ]
+            });
+
+            // 4. Competition Chart
+            competitionChart.setOption({
+                title: { 
+                    text: 'Keyword Competition Distribution', 
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        fontSize: 16
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} keywords'
+                },
+                series: {
+                    type: 'sunburst',
+                    data: [
+                        {
+                            name: 'High',
+                            value: 15,
+                            children: [
+                                { name: 'Primary', value: 5 },
+                                { name: 'Related', value: 4 },
+                                { name: 'Brand', value: 4 },
+                                { name: 'Problem', value: 2 }
+                            ]
+                        },
+                        {
+                            name: 'Medium',
+                            value: 12,
+                            children: [
+                                { name: 'Long-tail', value: 4 },
+                                { name: 'Feature', value: 4 },
+                                { name: 'Related', value: 4 }
+                            ]
+                        },
+                        {
+                            name: 'Low',
+                            value: 8,
+                            children: [
+                                { name: 'Long-tail', value: 5 },
+                                { name: 'Feature', value: 3 }
+                            ]
+                        }
+                    ],
+                    radius: ['20%', '90%']
+                }
+            });
+
+            // 5. Keyword Type Chart
+            keywordTypeChart.setOption({
+                title: { 
+                    text: '', 
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        fontSize: 16
+                    }
+                },
+                legend: {
+                    bottom: 10,
+                    type: 'scroll'
+                },
+                radar: {
+                    indicator: [
+                        { name: 'Search Volume', max: 100 },
+                        { name: 'Competition', max: 100 },
+                        { name: 'Conversion Rate', max: 100 },
+                        { name: 'CPC', max: 100 },
+                        { name: 'ROI', max: 100 }
+                    ]
+                },
+                series: [{
+                    type: 'radar',
+                    data: [
+                        {
+                            value: [90, 95, 70, 85, 65],
+                            name: 'Primary Keywords'
+                        },
+                        {
+                            value: [70, 65, 85, 60, 80],
+                            name: 'Long-tail Keywords'
+                        },
+                        {
+                            value: [80, 75, 90, 70, 85],
+                            name: 'Brand Keywords'
+                        }
+                    ]
+                }]
+            });
+
+            // 6. Brand Comparison Chart
+            brandComparisonChart.setOption({
+                title: { 
+                    text: '', 
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        fontSize: 16
+                    }
+                },
+                grid: {
+                    top: 60,
+                    bottom: 90,
+                    left: 80,
+                    right: 40,
+                    containLabel: true
+                },
+                tooltip: { trigger: 'axis' },
+                legend: {
+                    data: ['Search Volume', 'Competition Score'],
+                    bottom: 10
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['LitterMaid', 'PetSafe', 'Tidy Cats', 'Omega Paw', 'Catit'],
+                    axisLabel: { rotate: 45 }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Monthly Searches',
+                        axisLabel: { formatter: '{value}k' }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Competition',
+                        max: 100
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Search Volume',
+                        type: 'bar',
+                        data: [30, 12, 30, 3, 12]
+                    },
+                    {
+                        name: 'Competition Score',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [90, 85, 85, 65, 85]
+                    }
+                ]
+            });
+
+            // Remove loading animation
+            [searchTrendChart, competitionChart, keywordTypeChart, brandComparisonChart].forEach(chart => {
+                chart.hideLoading();
+            });
+
+            // Unified window resize handler
+            window.addEventListener('resize', function() {
+                keywordVolumeChart.resize();
+                keywordCategoryChart.resize();
+                searchTrendChart.resize();
+                competitionChart.resize();
+                keywordTypeChart.resize();
+                brandComparisonChart.resize();
+            });
+
+        } catch (error) {
+            console.error('Error initializing charts:', error);
+        }
+    });
+</script>
+
+</body>
+</html>
