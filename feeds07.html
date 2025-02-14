@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Facebook Ad Campaign Performance Report</title>
+  <!-- Import ECharts from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <style>
+    /* Basic styling for the report */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+    }
+    .dashboard {
+      max-width: 1400px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    /* Grid layout: two charts per row */
+    .chart-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .chart-item {
+      flex: 1 1 calc(50% - 20px);
+      background: #fafafa;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .chart-item h3 {
+      text-align: center;
+      margin: 10px 0;
+      font-size: 18px;
+      color: #333;
+    }
+    .chart {
+      width: 100%;
+      height: 300px;
+    }
+    .chart-footer {
+      margin-top: 10px;
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 15px;
+      color: #2e7d32;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .chart-footer ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .chart-footer li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>Facebook Ad Campaign Performance Report</h1>
+    
+    <!-- Chart Grid: Two charts per row -->
+    <div class="chart-grid">
+      <!-- Chart 1: Amount Spent, Conversion Value, and ROAS -->
+      <div class="chart-item">
+        <h3>Spend vs. Conversion Value &amp; ROAS</h3>
+        <div id="chart-spend-conv" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart shows "Amount Spent" and "Conversion Value" (in USD) while the overlaid line chart represents ROAS.
+          <ul>
+            <li><strong>Insight:</strong> Campaigns like “SE Q4 - Flexi” show high spend and conversion value with a ROAS near 2.0, whereas some ads report very low conversion value and ROAS.</li>
+            <li><strong>Recommendation:</strong> Allocate more budget to high-performing ads and review the creative or targeting for underperformers.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Chart 2: CTR, CPC, and CPM -->
+      <div class="chart-item">
+        <h3>CTR, CPC &amp; CPM by Campaign</h3>
+        <div id="chart-ctr-cpc-cpm" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Dual-axis line chart where CTR (in %) and CPC (in USD) use the left axis and CPM (USD per 1,000 impressions) uses the right axis.
+          <ul>
+            <li><strong>Insight:</strong> Variations in CTR and CPC across ads indicate differences in engagement and bidding competitiveness. CPM differences highlight variable cost efficiency in impression delivery.</li>
+            <li><strong>Recommendation:</strong> Optimize ad copy and targeting for ads with lower CTR, and adjust bids to lower CPC while maintaining effective CPM.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Chart 3: Reach vs. Impressions (Scatter Plot) -->
+      <div class="chart-item">
+        <h3>Reach vs. Impressions</h3>
+        <div id="chart-reach-impr" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Scatter plot comparing Reach and Impressions for each ad. Each point is labeled with its campaign-ad name.
+          <ul>
+            <li><strong>Insight:</strong> A strong correlation between reach and impressions is evident, though some ads may be overexposed (high frequency) relative to their reach.</li>
+            <li><strong>Recommendation:</strong> Monitor frequency to avoid ad fatigue and adjust targeting to expand unique reach.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Chart 4: Frequency -->
+      <div class="chart-item">
+        <h3>Frequency per Ad</h3>
+        <div id="chart-frequency" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart displaying the average frequency (number of impressions per unique user) for each ad.
+          <ul>
+            <li><strong>Insight:</strong> Higher frequency may indicate ad fatigue and overexposure in some campaigns.</li>
+            <li><strong>Recommendation:</strong> Rotate ad creatives and refine audience segmentation to maintain optimal exposure without diminishing returns.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Sample Data: Derived from the provided table
+    const campaignData = [
+      { label: "SE Q4 - Flexi", reach: 30247, impressions: 93632, frequency: 3.09557973, spent: 2258.94, ctr: 1.97154819, cpc: 1.22369447, cpm: 24.12572625, conversionValue: 4457.14, roas: 1.97311128 },
+      { label: "SE Q4 - 3", reach: 4726, impressions: 9703, frequency: 2.05311045, spent: 189.23, ctr: 1.37071009, cpc: 1.42278195, cpm: 19.50221581, conversionValue: 29.99, roas: 0.15848438 },
+      { label: "Test-SE Campaign - 1 - Copy", reach: 3044, impressions: 8401, frequency: 2.75985545, spent: 167.43, ctr: 1.17843114, cpc: 1.69121212, cpm: 19.92977027, conversionValue: 99.99, roas: 0.5972048 },
+      { label: "SE Q4 - 5", reach: 6052, impressions: 12426, frequency: 2.05320555, spent: 163.99, ctr: 1.50490906, cpc: 0.87695187, cpm: 13.19732818, conversionValue: 57.98, roas: 0.35355814 },
+      { label: "Test-SE Campaign - 1", reach: 2838, impressions: 5810, frequency: 2.04721635, spent: 82.49, ctr: 0.92943201, cpc: 1.52759259, cpm: 14.1979346, conversionValue: 0, roas: 0 },
+      { label: "Test-SE Campaign - 2", reach: 1409, impressions: 3854, frequency: 2.73527324, spent: 65.48, ctr: 0.62272963, cpc: 2.72833333, cpm: 16.99014011, conversionValue: 26.99, roas: 0.41218693 },
+      { label: "SE Testing R2 Campaign - T1", reach: 993, impressions: 2565, frequency: 2.58308157, spent: 55.68, ctr: 2.30019493, cpc: 0.94372881, cpm: 21.70760234, conversionValue: 0, roas: 0 },
+      { label: "SE Testing R2 Campaign - T2", reach: 675, impressions: 1404, frequency: 2.08, spent: 25.34, ctr: 1.06837607, cpc: 1.68933333, cpm: 18.04843305, conversionValue: 0, roas: 0 },
+      { label: "SE Testing R2 Campaign - T3", reach: 445, impressions: 1138, frequency: 2.55730337, spent: 19.45, ctr: 1.75746924, cpc: 0.9725, cpm: 17.0913884, conversionValue: 0, roas: 0 },
+      { label: "SE Testing R2 Campaign - T4", reach: 349, impressions: 780, frequency: 2.23495702, spent: 12.48, ctr: 0.64102564, cpc: 2.496, cpm: 16, conversionValue: 29.99, roas: 2.40304487 }
+    ];
+    
+    // Prepare arrays for each metric
+    const labels = campaignData.map(d => d.label);
+    const spentData = campaignData.map(d => d.spent);
+    const conversionValueData = campaignData.map(d => d.conversionValue);
+    const roasData = campaignData.map(d => d.roas);
+    
+    const ctrData = campaignData.map(d => d.ctr);
+    const cpcData = campaignData.map(d => d.cpc);
+    const cpmData = campaignData.map(d => d.cpm);
+    
+    const reachData = campaignData.map(d => d.reach);
+    const impressionsData = campaignData.map(d => d.impressions);
+    
+    const frequencyData = campaignData.map(d => d.frequency);
+    
+    /* ---------- Chart 1: Spend vs. Conversion Value & ROAS ---------- */
+    const chartSpendConv = echarts.init(document.getElementById('chart-spend-conv'));
+    const optionSpendConv = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Amount Spent', 'Conversion Value', 'ROAS']
+      },
+      xAxis: {
+        type: 'category',
+        data: labels,
+        axisLabel: { rotate: 30 }
+      },
+      yAxis: [
+        { // Primary Y Axis for USD amounts
+          type: 'value',
+          name: 'USD',
+          position: 'left'
+        },
+        { // Secondary Y Axis for ROAS
+          type: 'value',
+          name: 'ROAS',
+          position: 'right'
+        }
+      ],
+      series: [
+        {
+          name: 'Amount Spent',
+          type: 'bar',
+          data: spentData,
+          itemStyle: { color: '#4caf50' }
+        },
+        {
+          name: 'Conversion Value',
+          type: 'bar',
+          data: conversionValueData,
+          itemStyle: { color: '#2196f3' }
+        },
+        {
+          name: 'ROAS',
+          type: 'line',
+          yAxisIndex: 1,
+          data: roasData,
+          itemStyle: { color: '#ff9800' },
+          smooth: true
+        }
+      ]
+    };
+    chartSpendConv.setOption(optionSpendConv);
+    
+    /* ---------- Chart 2: CTR, CPC & CPM ---------- */
+    const chartCTRCPCCPM = echarts.init(document.getElementById('chart-ctr-cpc-cpm'));
+    const optionCTRCPCCPM = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['CTR (%)', 'CPC (USD)', 'CPM (USD)']
+      },
+      xAxis: {
+        type: 'category',
+        data: labels,
+        axisLabel: { rotate: 30 }
+      },
+      yAxis: [
+        { // Left Y Axis for CTR and CPC
+          type: 'value',
+          name: 'CTR & CPC',
+          position: 'left'
+        },
+        { // Right Y Axis for CPM
+          type: 'value',
+          name: 'CPM',
+          position: 'right'
+        }
+      ],
+      series: [
+        {
+          name: 'CTR (%)',
+          type: 'line',
+          data: ctrData,
+          itemStyle: { color: '#42a5f5' },
+          smooth: true
+        },
+        {
+          name: 'CPC (USD)',
+          type: 'line',
+          data: cpcData,
+          itemStyle: { color: '#8e24aa' },
+          smooth: true
+        },
+        {
+          name: 'CPM (USD)',
+          type: 'line',
+          yAxisIndex: 1,
+          data: cpmData,
+          itemStyle: { color: '#d81b60' },
+          smooth: true
+        }
+      ]
+    };
+    chartCTRCPCCPM.setOption(optionCTRCPCCPM);
+    
+    /* ---------- Chart 3: Reach vs. Impressions (Scatter Plot) ---------- */
+    const chartReachImpr = echarts.init(document.getElementById('chart-reach-impr'));
+    // Prepare scatter data: each point is [reach, impressions] with label attached.
+    const scatterData = campaignData.map(d => ({
+      name: d.label,
+      value: [d.reach, d.impressions]
+    }));
+    const optionReachImpr = {
+      tooltip: {
+        trigger: 'item',
+        formatter: function (params) {
+          return params.data.name + '<br/>Reach: ' + params.data.value[0] + '<br/>Impressions: ' + params.data.value[1];
+        }
+      },
+      xAxis: {
+        type: 'value',
+        name: 'Reach'
+      },
+      yAxis: {
+        type: 'value',
+        name: 'Impressions'
+      },
+      series: [{
+        symbolSize: 20,
+        data: scatterData,
+        type: 'scatter',
+        itemStyle: { color: '#26a69a' }
+      }]
+    };
+    chartReachImpr.setOption(optionReachImpr);
+    
+    /* ---------- Chart 4: Frequency per Ad ---------- */
+    const chartFrequency = echarts.init(document.getElementById('chart-frequency'));
+    const optionFrequency = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Frequency']
+      },
+      xAxis: {
+        type: 'category',
+        data: labels,
+        axisLabel: { rotate: 30 }
+      },
+      yAxis: {
+        type: 'value',
+        name: 'Frequency'
+      },
+      series: [{
+        name: 'Frequency',
+        type: 'bar',
+        data: frequencyData,
+        itemStyle: { color: '#ff7043' }
+      }]
+    };
+    chartFrequency.setOption(optionFrequency);
+    
+    // Resize charts on window resize
+    window.addEventListener('resize', function() {
+      chartSpendConv.resize();
+      chartCTRCPCCPM.resize();
+      chartReachImpr.resize();
+      chartFrequency.resize();
+    });
+  </script>
+</body>
+</html>

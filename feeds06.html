@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Ad Campaign Performance</title>
+  <!-- Import ECharts from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <style>
+    /* Basic styling for the dashboard */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+    .dashboard {
+      max-width: 1400px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    .chart-container {
+      margin: 20px 0;
+    }
+    /* USA Map Chart (full width) */
+    .map-chart {
+      width: 100%;
+      height: 500px;
+      margin-bottom: 10px;
+    }
+    /* Grid for all other charts (2 per row) */
+    .chart-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .chart-item {
+      flex: 1 1 calc(50% - 20px);
+      background: #fafafa;
+      padding: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .chart-item h3 {
+      text-align: center;
+      margin: 10px 0;
+      font-size: 18px;
+      color: #333;
+    }
+    .chart {
+      width: 100%;
+      height: 300px;
+    }
+    .chart-footer {
+      margin-top: 10px;
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 15px 20px;
+      color: #2e7d32;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .chart-footer ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .chart-footer li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>Google Ad Campaign Performance</h1>
+    
+    <!-- USA Map Chart at the Top -->
+    <div class="chart-container">
+      <h2>USA Regional Performance Map</h2>
+      <div id="usa-map-chart" class="map-chart"></div>
+      <div class="chart-footer">
+        <strong>Legend:</strong> The map displays daily ad spend (USD) by state.<br>
+        <ul>
+          <li><strong>Insight:</strong> States like California, Texas, and Florida have the highest ad spend, indicating strong market focus.</li>
+          <li><strong>Recommendation:</strong> Analyze market-specific data to further optimize bids and creatives in high-spend states, and consider testing new strategies in lower-spend states.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Grid for All Other Analysis Topics (2 per row) -->
+    <div class="chart-grid">
+      
+      <!-- 1. Click-Through Rate (CTR) -->
+      <div class="chart-item">
+        <h3>Click-Through Rate (CTR)</h3>
+        <div id="chart-ctr" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Line chart showing daily CTR (%) over one week.
+          <ul>
+            <li><strong>Insight:</strong> CTR fluctuates between 1.2% and 2.0%, suggesting variability in ad engagement.</li>
+            <li><strong>Recommendation:</strong> Experiment with different ad headlines and creative formats on days with lower CTR to boost overall engagement.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 2. Conversion Rate -->
+      <div class="chart-item">
+        <h3>Conversion Rate</h3>
+        <div id="chart-conversion-rate" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart representing daily conversion rates (%).
+          <ul>
+            <li><strong>Insight:</strong> Conversion rates range from 3% to 4.2%, indicating a moderate success in converting clicks.</li>
+            <li><strong>Recommendation:</strong> Optimize landing pages and improve call-to-action clarity to raise conversion rates on underperforming days.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 3. Cost Per Click (CPC) -->
+      <div class="chart-item">
+        <h3>Cost Per Click (CPC)</h3>
+        <div id="chart-cpc" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Line chart showing average daily CPC in USD.
+          <ul>
+            <li><strong>Insight:</strong> CPC is steady between $2.0 and $2.4, reflecting competitive bidding environments.</li>
+            <li><strong>Recommendation:</strong> Monitor keyword performance to identify opportunities for bid adjustments and potentially lower the average CPC without sacrificing ad visibility.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 4. Cost Per Acquisition (CPA) -->
+      <div class="chart-item">
+        <h3>Cost Per Acquisition (CPA)</h3>
+        <div id="chart-cpa" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart depicting daily CPA in USD.
+          <ul>
+            <li><strong>Insight:</strong> CPA ranges from $13 to $16, highlighting some variability in campaign efficiency.</li>
+            <li><strong>Recommendation:</strong> Refine audience targeting and adjust bid strategies to lower the CPA, especially on days with peak acquisition costs.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 5. Quality Score -->
+      <div class="chart-item">
+        <h3>Quality Score</h3>
+        <div id="chart-quality" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Line chart displaying daily Quality Scores (scale of 1-10).
+          <ul>
+            <li><strong>Insight:</strong> Quality Scores remain stable around 7.0 to 7.4, indicating decent ad relevance and landing page experience.</li>
+            <li><strong>Recommendation:</strong> Focus on improving ad copy and optimizing landing page load times to further enhance Quality Scores and ad rankings.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 6. Impressions -->
+      <div class="chart-item">
+        <h3>Impressions</h3>
+        <div id="chart-impressions" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart showing daily ad impressions.
+          <ul>
+            <li><strong>Insight:</strong> Daily impressions range from 10,000 to 16,000, reflecting overall ad visibility.</li>
+            <li><strong>Recommendation:</strong> Increase ad frequency during high-traffic periods and refine targeting to ensure impressions translate into meaningful interactions.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 7. Ad Spend -->
+      <div class="chart-item">
+        <h3>Ad Spend</h3>
+        <div id="chart-adspend" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart detailing daily ad spend in USD.
+          <ul>
+            <li><strong>Insight:</strong> Daily spend ranges from $500 to $620, showing a consistent budget allocation.</li>
+            <li><strong>Recommendation:</strong> Reallocate budgets to optimize spending on high-performing days and adjust underperforming segments accordingly.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 8. Return on Investment (ROI) -->
+      <div class="chart-item">
+        <h3>Return on Investment (ROI)</h3>
+        <div id="chart-roi" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Line chart showing daily ROI percentages.
+          <ul>
+            <li><strong>Insight:</strong> ROI consistently remains between 120% and 130%, suggesting profitable campaign performance.</li>
+            <li><strong>Recommendation:</strong> Use ROI insights to reinvest in the best-performing ad sets and further fine-tune underperforming ones.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 9. Keyword Performance -->
+      <div class="chart-item">
+        <h3>Keyword Performance</h3>
+        <div id="chart-keyword" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Horizontal bar chart showing the number of conversions per keyword.
+          <ul>
+            <li><strong>Insight:</strong> Top keywords are driving the majority of conversions, with a clear performance gap between high- and low-performing terms.</li>
+            <li><strong>Recommendation:</strong> Expand investment in high-performing keywords while refining or pausing those that do not deliver sufficient ROI.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 10. Audience Insights -->
+      <div class="chart-item">
+        <h3>Audience Insights</h3>
+        <div id="chart-audience" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Pie chart representing audience age group distribution.
+          <ul>
+            <li><strong>Insight:</strong> The 25-34 age group dominates the audience, indicating strong appeal to younger demographics.</li>
+            <li><strong>Recommendation:</strong> Tailor creative messaging and offers specifically for the dominant age group while exploring potential in secondary segments.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 11. Device Performance -->
+      <div class="chart-item">
+        <h3>Device Performance</h3>
+        <div id="chart-device" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Pie chart showing device breakdown (desktop, mobile, tablet).
+          <ul>
+            <li><strong>Insight:</strong> Mobile devices account for 50% of interactions, followed by desktop and tablet.</li>
+            <li><strong>Recommendation:</strong> Optimize creatives and landing pages for mobile-first experiences to capture the largest share of traffic.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 12. Geographic Performance -->
+      <div class="chart-item">
+        <h3>Geographic Performance</h3>
+        <div id="chart-geographic" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Bar chart comparing performance metrics across regions.
+          <ul>
+            <li><strong>Insight:</strong> North America and Europe are leading in performance metrics, while Asia and Africa show room for growth.</li>
+            <li><strong>Recommendation:</strong> Develop region-specific strategies to boost engagement and conversion in emerging markets.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 13. Ad Placement -->
+      <div class="chart-item">
+        <h3>Ad Placement</h3>
+        <div id="chart-placement" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Pie chart illustrating distribution of ad placements.
+          <ul>
+            <li><strong>Insight:</strong> Search placements dominate, but display and video placements are emerging as valuable channels.</li>
+            <li><strong>Recommendation:</strong> Reallocate budgets to test and scale non-search placements to diversify campaign performance.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 14. Campaign Settings -->
+      <div class="chart-item">
+        <h3>Campaign Settings</h3>
+        <div id="chart-campaign" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Radar chart evaluating key campaign settings (bidding, budget, ad relevance, landing page, targeting).
+          <ul>
+            <li><strong>Insight:</strong> Settings related to ad relevance and landing pages score well, but targeting and budget allocation require further refinement.</li>
+            <li><strong>Recommendation:</strong> Experiment with advanced bidding strategies and reallocate budget based on performance data to optimize overall campaign efficiency.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 15. Competitive Analysis -->
+      <div class="chart-item">
+        <h3>Competitive Analysis</h3>
+        <div id="chart-competitive" class="chart"></div>
+        <div class="chart-footer">
+          <strong>Legend:</strong> Grouped bar chart comparing key performance metrics of our campaign against competitors.
+          <ul>
+            <li><strong>Insight:</strong> Our campaign shows a higher ROI and conversion rate, yet there is an opportunity to further improve CPC efficiency compared to competitors.</li>
+            <li><strong>Recommendation:</strong> Analyze competitor strategies to adopt best practices and further optimize cost efficiency across campaigns.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> <!-- End of Chart Grid -->
+    
+  </div> <!-- End of Dashboard -->
+
+  <script>
+    /* ---------------- USA Map Chart ---------------- */
+    fetch("https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json")
+      .then(response => response.json())
+      .then(geoJson => {
+        echarts.registerMap('USA', geoJson);
+        const mapChart = echarts.init(document.getElementById('usa-map-chart'));
+        const mapOption = {
+          title: { text: 'USA Ad Spend by State', left: 'center' },
+          tooltip: { trigger: 'item', formatter: '{b}<br/>Ad Spend: ${c}' },
+          visualMap: {
+            min: 0,
+            max: 4000,
+            left: 'left',
+            top: 'bottom',
+            text: ['High', 'Low'],
+            calculable: true,
+            inRange: { color: ['#e0f7fa', '#006064'] }
+          },
+          series: [{
+            name: 'Ad Spend',
+            type: 'map',
+            map: 'USA',
+            roam: true,
+            data: [
+              { name: 'California', value: 3534.44 },
+              { name: 'Texas', value: 3059.15 },
+              { name: 'Florida', value: 2544.04 },
+              { name: 'New York', value: 2211.22 },
+              { name: 'Illinois', value: 1310.70 }
+            ]
+          }]
+        };
+        mapChart.setOption(mapOption);
+        window.addEventListener('resize', () => mapChart.resize());
+      });
+
+    /* ---------------- Chart 1: Click-Through Rate (CTR) ---------------- */
+    const chartCTR = echarts.init(document.getElementById('chart-ctr'));
+    const optionCTR = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'CTR (%)' },
+      series: [{
+        data: [1.2, 1.5, 1.7, 1.4, 1.9, 2.0, 1.8],
+        type: 'line',
+        smooth: true,
+        itemStyle: { color: '#42a5f5' }
+      }]
+    };
+    chartCTR.setOption(optionCTR);
+
+    /* ---------------- Chart 2: Conversion Rate ---------------- */
+    const chartConversionRate = echarts.init(document.getElementById('chart-conversion-rate'));
+    const optionConversionRate = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'Conversion Rate (%)' },
+      series: [{
+        data: [3.0, 4.0, 3.5, 4.2, 3.8, 4.0, 3.9],
+        type: 'bar',
+        itemStyle: { color: '#66bb6a' }
+      }]
+    };
+    chartConversionRate.setOption(optionConversionRate);
+
+    /* ---------------- Chart 3: Cost Per Click (CPC) ---------------- */
+    const chartCPC = echarts.init(document.getElementById('chart-cpc'));
+    const optionCPC = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'CPC (USD)' },
+      series: [{
+        data: [2.0, 2.1, 2.3, 2.2, 2.4, 2.3, 2.2],
+        type: 'line',
+        smooth: true,
+        itemStyle: { color: '#ffca28' }
+      }]
+    };
+    chartCPC.setOption(optionCPC);
+
+    /* ---------------- Chart 4: Cost Per Acquisition (CPA) ---------------- */
+    const chartCPA = echarts.init(document.getElementById('chart-cpa'));
+    const optionCPA = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'CPA (USD)' },
+      series: [{
+        data: [15, 14, 16, 15, 13, 14, 15],
+        type: 'bar',
+        itemStyle: { color: '#ef5350' }
+      }]
+    };
+    chartCPA.setOption(optionCPA);
+
+    /* ---------------- Chart 5: Quality Score ---------------- */
+    const chartQuality = echarts.init(document.getElementById('chart-quality'));
+    const optionQuality = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'Quality Score' },
+      series: [{
+        data: [7.0, 7.2, 7.1, 7.3, 7.0, 7.4, 7.2],
+        type: 'line',
+        smooth: true,
+        itemStyle: { color: '#ab47bc' }
+      }]
+    };
+    chartQuality.setOption(optionQuality);
+
+    /* ---------------- Chart 6: Impressions ---------------- */
+    const chartImpressions = echarts.init(document.getElementById('chart-impressions'));
+    const optionImpressions = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'Impressions' },
+      series: [{
+        data: [10000, 12000, 15000, 13000, 14000, 16000, 15500],
+        type: 'bar',
+        itemStyle: { color: '#29b6f6' }
+      }]
+    };
+    chartImpressions.setOption(optionImpressions);
+
+    /* ---------------- Chart 7: Ad Spend ---------------- */
+    const chartAdSpend = echarts.init(document.getElementById('chart-adspend'));
+    const optionAdSpend = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'Ad Spend (USD)' },
+      series: [{
+        data: [500, 600, 550, 580, 610, 620, 590],
+        type: 'bar',
+        itemStyle: { color: '#8d6e63' }
+      }]
+    };
+    chartAdSpend.setOption(optionAdSpend);
+
+    /* ---------------- Chart 8: Return on Investment (ROI) ---------------- */
+    const chartROI = echarts.init(document.getElementById('chart-roi'));
+    const optionROI = {
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+      yAxis: { type: 'value', name: 'ROI (%)' },
+      series: [{
+        data: [120, 125, 123, 130, 128, 127, 129],
+        type: 'line',
+        smooth: true,
+        itemStyle: { color: '#66bb6a' }
+      }]
+    };
+    chartROI.setOption(optionROI);
+
+    /* ---------------- Chart 9: Keyword Performance ---------------- */
+    const chartKeyword = echarts.init(document.getElementById('chart-keyword'));
+    const optionKeyword = {
+      xAxis: { type: 'value', name: 'Conversions' },
+      yAxis: { 
+        type: 'category', 
+        data: ['Cat Litter Box', 'Best Cat Litter Box', 'Automatic Cat Litter Box', 'Self Cleaning Cat Litter Box', 'Best Self-Cleaning Litter Box'],
+        axisLabel: { interval: 0, width: 200, overflow: 'break' }
+      },
+      series: [{
+        data: [50, 40, 60, 55, 45],
+        type: 'bar',
+        itemStyle: { color: '#42a5f5' },
+        label: { show: true, position: 'right' }
+      }],
+      grid: {
+        left: '25%',
+        right: '10%'
+      }
+    };
+    chartKeyword.setOption(optionKeyword);
+
+    /* ---------------- Chart 10: Audience Insights ---------------- */
+    const chartAudience = echarts.init(document.getElementById('chart-audience'));
+    const optionAudience = {
+      series: [{
+        type: 'pie',
+        radius: '55%',
+        data: [
+          { value: 15, name: '18-24' },
+          { value: 35, name: '25-34' },
+          { value: 25, name: '35-44' },
+          { value: 15, name: '45-54' },
+          { value: 10, name: '55+' }
+        ],
+        itemStyle: {
+          normal: {
+            label: { show: true },
+            labelLine: { show: true }
+          }
+        }
+      }],
+      tooltip: { trigger: 'item', formatter: '{b}: {d}%' }
+    };
+    chartAudience.setOption(optionAudience);
+
+    /* ---------------- Chart 11: Device Performance ---------------- */
+    const chartDevice = echarts.init(document.getElementById('chart-device'));
+    const optionDevice = {
+      series: [{
+        type: 'pie',
+        radius: '55%',
+        data: [
+          { value: 40, name: 'Desktop' },
+          { value: 50, name: 'Mobile' },
+          { value: 10, name: 'Tablet' }
+        ],
+        itemStyle: {
+          normal: {
+            label: { show: true },
+            labelLine: { show: true }
+          }
+        }
+      }],
+      tooltip: { trigger: 'item', formatter: '{b}: {d}%' }
+    };
+    chartDevice.setOption(optionDevice);
+
+    /* ---------------- Chart 12: Geographic Performance ---------------- */
+    const chartGeographic = echarts.init(document.getElementById('chart-geographic'));
+    const optionGeographic = {
+      xAxis: { type: 'category', data: ['North America', 'Europe', 'Asia', 'South America', 'Africa'] },
+      yAxis: { type: 'value', name: 'Performance Metric' },
+      series: [{
+        data: [300, 250, 200, 150, 100],
+        type: 'bar',
+        itemStyle: { color: '#26a69a' }
+      }]
+    };
+    chartGeographic.setOption(optionGeographic);
+
+    /* ---------------- Chart 13: Ad Placement ---------------- */
+    const chartPlacement = echarts.init(document.getElementById('chart-placement'));
+    const optionPlacement = {
+      series: [{
+        type: 'pie',
+        radius: '55%',
+        data: [
+          { value: 50, name: 'Search' },
+          { value: 30, name: 'Display' },
+          { value: 15, name: 'Video' },
+          { value: 5, name: 'Other' }
+        ],
+        itemStyle: {
+          normal: {
+            label: { show: true },
+            labelLine: { show: true }
+          }
+        }
+      }],
+      tooltip: { trigger: 'item', formatter: '{b}: {d}%' }
+    };
+    chartPlacement.setOption(optionPlacement);
+
+    /* ---------------- Chart 14: Campaign Settings (Radar) ---------------- */
+    const chartCampaign = echarts.init(document.getElementById('chart-campaign'));
+    const optionCampaign = {
+      tooltip: {},
+      radar: {
+        indicator: [
+          { name: 'Bidding', max: 100 },
+          { name: 'Budget', max: 100 },
+          { name: 'Ad Relevance', max: 100 },
+          { name: 'Landing Page', max: 100 },
+          { name: 'Targeting', max: 100 }
+        ]
+      },
+      series: [{
+        name: 'Campaign Settings',
+        type: 'radar',
+        data: [{
+          value: [80, 75, 90, 85, 70],
+          name: 'Settings Score'
+        }],
+        itemStyle: { color: '#ffa726' }
+      }]
+    };
+    chartCampaign.setOption(optionCampaign);
+
+    /* ---------------- Chart 15: Competitive Analysis ---------------- */
+    const chartCompetitive = echarts.init(document.getElementById('chart-competitive'));
+    const optionCompetitive = {
+      legend: { data: ['Our Campaign', 'Competitors'] },
+      xAxis: { type: 'category', data: ['ROI', 'Ad Spend Efficiency', 'Conversion Rate'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'Our Campaign',
+          type: 'bar',
+          data: [130, 120, 4.0],
+          itemStyle: { color: '#8e24aa' }
+        },
+        {
+          name: 'Competitors',
+          type: 'bar',
+          data: [125, 115, 3.8],
+          itemStyle: { color: '#d81b60' }
+        }
+      ]
+    };
+    chartCompetitive.setOption(optionCompetitive);
+
+    /* ---------------- Resize all charts on window resize ---------------- */
+    window.addEventListener('resize', function() {
+      chartCTR.resize();
+      chartConversionRate.resize();
+      chartCPC.resize();
+      chartCPA.resize();
+      chartQuality.resize();
+      chartImpressions.resize();
+      chartAdSpend.resize();
+      chartROI.resize();
+      chartKeyword.resize();
+      chartAudience.resize();
+      chartDevice.resize();
+      chartGeographic.resize();
+      chartPlacement.resize();
+      chartCampaign.resize();
+      chartCompetitive.resize();
+    });
+  </script>
+</body>
+</html>
