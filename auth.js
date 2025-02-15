@@ -31,6 +31,10 @@ function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
 }
 
+// Predefined user credentials
+const VALID_USERNAME = 'catlink001';
+const VALID_PASSWORD = 'Catlink-001';
+
 // Handle login form submission
 if (document.getElementById('loginForm')) {
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -39,10 +43,8 @@ if (document.getElementById('loginForm')) {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         
-        const users = getUsers();
-        const user = users.find(u => u.username === username && u.password === password);
-        
-        if (user) {
+        // Check against predefined credentials
+        if (username === VALID_USERNAME && password === VALID_PASSWORD) {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', username);
             window.location.href = 'index.html';
