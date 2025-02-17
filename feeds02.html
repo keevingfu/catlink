@@ -3,339 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Features & Selling Points </title>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Catlink Campaign Performance</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            font-family: sans-serif;
+            margin: 0;
             padding: 20px;
+            background-color: #f4f4f4;
         }
+
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2, h3 {
+            color: #444;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .section {
+            margin-bottom: 2em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
         .chart-container {
-            height: 600px;
-            margin: 20px 0;
+            width: 100%; /* Full width initially */
+            height: 300px;
+            margin-bottom: 20px;
         }
-        .metric-selector {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+        /* Responsive adjustments */
+        @media (min-width: 768px) { /* For tablets and larger */
+            .chart-row {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .chart-container {
+                width: 48%; /* Two charts per row on larger screens */
+            }
         }
-        .insights-box {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
+        .recommendations {
+           list-style-type: disc;
+           padding-left: 20px;
         }
-        .insights-box h4 {
-            color: #0d6efd;
-            margin-bottom: 15px;
+        .recommendations li {
+            margin-bottom: 0.5em;
         }
-        .top-combinations {
-            margin-top: 20px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .metric-card {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #0d6efd;
-        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="mb-4">Product Features & Selling Points</h1>
-        
-        <!-- Metric Selector -->
-        <div class="metric-selector">
-            <div class="row align-items-center">
-                <div class="col-md-2">
-                    <label class="form-label">Select Analysis Metric:</label>
-                </div>
-                <div class="col-md-10">
-                    <div class="btn-group" role="group">
-                        <input type="radio" class="btn-check" name="metric" id="ctr" value="ctr" checked>
-                        <label class="btn btn-outline-primary" for="ctr">Click-Through Rate (CTR)</label>
 
-                        <input type="radio" class="btn-check" name="metric" id="cvr" value="cvr">
-                        <label class="btn btn-outline-primary" for="cvr">Conversion Rate (CVR)</label>
+<div class="container">
+    <h1>Catlink Overall Campaign Performance & Optimization</h1>
 
-                        <input type="radio" class="btn-check" name="metric" id="roas" value="roas">
-                        <label class="btn btn-outline-primary" for="roas">Return on Ad Spend (ROAS)</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Data Overview Cards -->
-        <div class="row">
-            <div class="col-md-4">
-                <div class="metric-card">
-                    <h5>Best Feature-Selling Point Combination</h5>
-                    <div class="metric-value" id="bestCombo">Smart Features + Cost-Effectiveness</div>
-                    <small class="text-muted">Best Performing Combination</small>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="metric-card">
-                    <h5>Average Performance</h5>
-                    <div class="metric-value" id="avgPerformance">3.2%</div>
-                    <small class="text-muted">Average Performance of All Combinations</small>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="metric-card">
-                    <h5>Room for Improvement</h5>
-                    <div class="metric-value" id="improvement">+45%</div>
-                    <small class="text-muted">Gap from Best Combination</small>
-                </div>
-            </div>
-        </div>
-
-        <!-- Heatmap -->
-        <div class="chart-container" id="heatmap"></div>
-
-        <!-- Analysis Insights -->
-        <div class="row">
-            <div class="col-md-8">
-                <div class="insights-box">
-                    <h4>Insights & Recommendations</h4>
-                    <div class="mb-4">
-                        <h5>High-Performance Combination Analysis</h5>
-                        <ul>
-                            <li>Smart Features + Cost-Effectiveness combination performs best in CTR, recommend highlighting these aspects in ad creatives</li>
-                            <li>Convenience + Ease of Use combination shows significant results in conversion rate, can be strengthened specifically</li>
-                            <li>Energy Saving + Brand Impact combination leads in ROAS, suitable for high-investment advertising campaigns</li>
-                        </ul>
-                    </div>
-                    <div class="mb-4">
-                        <h5>Optimization Suggestions</h5>
-                        <ul>
-                            <li>Recommend increasing the combination of smart features and cost-effectiveness to improve ad performance</li>
-                            <li>Try combining convenience features with brand impact to create new effective combinations</li>
-                            <li>For underperforming combinations, consider redesigning ad creatives or adjusting target audience</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="top-combinations">
-                    <h4>Top 5 Best Combinations</h4>
-                    <div class="list-group">
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Smart Features + Cost-Effectiveness</h6>
-                                <small class="text-success">5.2%</small>
-                            </div>
-                            <small class="text-muted">Best CTR Performance</small>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Convenience + Ease of Use</h6>
-                                <small class="text-success">4.8%</small>
-                            </div>
-                            <small class="text-muted">Best CVR Performance</small>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Energy Saving + Brand Impact</h6>
-                                <small class="text-success">4.5%</small>
-                            </div>
-                            <small class="text-muted">Best ROAS Performance</small>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Smart Features + Ease of Use</h6>
-                                <small class="text-success">4.2%</small>
-                            </div>
-                            <small class="text-muted">Excellent Overall Performance</small>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Convenience + Cost-Effectiveness</h6>
-                                <small class="text-success">4.0%</small>
-                            </div>
-                            <small class="text-muted">Potential Combination</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="section">
+        <h2>Executive Summary</h2>
+        <p>
+            This dashboard provides an overview of the Facebook Ad campaign performance for Catlink's "SE Testing R2 Ad set"
+            during the period of February 9-15, 2025. The campaign's primary objective is to drive offsite purchases
+            tracked via the Facebook pixel.  Ad T4 demonstrates superior efficiency.  However, quality rankings are low,
+            presenting a key area for improvement.
+        </p>
     </div>
 
-    <script>
-        // Initialize heatmap
-        const heatmapChart = echarts.init(document.getElementById('heatmap'));
-        
-        // Define data
-        const features = ['Smart Features', 'Energy Saving', 'Convenience', 'Efficiency', 'Eco-Friendly'];
-        const sellingPoints = ['Cost-Effectiveness', 'Brand Impact', 'Ease of Use', 'Innovation', 'Reliability'];
-        
-        // Generate heatmap data
-        function generateHeatmapData(metric) {
-            const data = [];
-            const baseValues = {
-                'ctr': [
-                    [5.2, 4.1, 4.8, 3.9, 3.5],
-                    [3.8, 4.5, 3.7, 4.2, 3.9],
-                    [4.6, 3.8, 4.9, 3.5, 4.1],
-                    [3.9, 4.2, 3.6, 4.7, 3.8],
-                    [4.3, 3.9, 4.2, 3.7, 4.4]
-                ],
-                'cvr': [
-                    [4.8, 3.9, 5.1, 3.7, 3.8],
-                    [3.5, 4.8, 3.9, 4.5, 3.7],
-                    [4.9, 3.7, 4.7, 3.8, 4.3],
-                    [3.7, 4.5, 3.8, 4.9, 3.6],
-                    [4.1, 3.8, 4.5, 3.9, 4.6]
-                ],
-                'roas': [
-                    [4.5, 4.2, 4.7, 3.8, 3.9],
-                    [3.9, 4.7, 3.8, 4.3, 3.6],
-                    [4.8, 3.9, 4.5, 3.7, 4.2],
-                    [3.8, 4.3, 3.7, 4.8, 3.9],
-                    [4.2, 3.7, 4.4, 3.8, 4.5]
-                ]
-            };
+    <div class="section">
+      <h2>Key Performance Indicators (KPIs)</h2>
+      <div class="chart-row">
+          <div id="roas-chart" class="chart-container"></div>
+          <div id="cpr-chart" class="chart-container"></div>
+      </div>
+      <div class="chart-row">
+            <div id="ctr-cpc-chart" class="chart-container"></div>
+            <div id="freq-chart" class="chart-container"></div>
+      </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Ad Name</th>
+                <th>Results</th>
+                <th>Cost per Result</th>
+                <th>Purchase ROAS</th>
+                <th>Amount Spent (USD)</th>
+                <th>Reach</th>
+                <th>Impressions</th>
+                <th>Frequency</th>
+                <th>CPC (all)</th>
+                <th>CTR (all)</th>
+                <th>Quality Ranking</th>
+                <th>Engagement Rate Ranking</th>
+                <th>Conversion Rate Ranking</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>T1</td><td>2</td><td>31.23</td><td>8.53</td><td>62.45</td><td>1063</td><td>3066</td><td>2.88</td><td>1.04</td><td>1.96%</td><td>Below average (Bottom 35%)</td><td>Average</td><td>Average</td>
+            </tr>
+            <tr>
+                <td>T2</td><td>1</td><td>23.64</td><td>8.76</td><td>23.64</td><td>446</td><td>1006</td><td>2.26</td><td>1.31</td><td>1.79%</td><td>Below average (Bottom 35%)</td><td>Average</td><td>Average</td>
+            </tr>
+            <tr>
+                <td>T3</td><td>1</td><td>36.52</td><td>12.57</td><td>36.52</td><td>569</td><td>1902</td><td>3.34</td><td>1.01</td><td>1.89%</td><td>Below average (Bottom 35%)</td><td>Average</td><td>Average</td>
+            </tr>
+            <tr>
+                <td>T4</td><td>2</td><td>8.51</td><td>29.92</td><td>17.01</td><td>411</td><td>1022</td><td>2.49</td><td>1.31</td><td>1.27%</td><td>Below average (Bottom 35%)</td><td>Average</td><td>Average</td>
+            </tr>
 
-            const values = baseValues[metric];
-            for (let i = 0; i < features.length; i++) {
-                for (let j = 0; j < sellingPoints.length; j++) {
-                    data.push([i, j, values[i][j]]);
-                }
-            }
-            return data;
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Key Findings and Analysis</h2>
+        <ul>
+            <li><strong>T4 is the Most Efficient Ad:</strong> Ad T4 significantly outperforms the others in ROAS (29.92) and Cost per Result ($8.51).</li>
+            <li><strong>ROAS Variability:</strong> Significant differences in ROAS across ads suggest creative/targeting effectiveness disparities.</li>
+            <li><strong>Low Quality Rankings:</strong> All ads have "Below average" Quality Rankings, indicating a crucial improvement area.</li>
+            <li><strong>Moderate CTR and CPC:</strong>  Values are reasonable, but low conversion rates suggest post-click issues.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Recommendations</h2>
+        <ul class="recommendations">
+          <li><strong>Prioritize Ad T4:</strong> Allocate more budget to Ad T4.</li>
+          <li><strong>Investigate and Improve Ad Quality:</strong>  This is critical.  Focus on stronger headlines, ad copy, high-quality visuals, and A/B testing.</li>
+          <li><strong>Review Landing Page Experience:</strong> Ensure consistency with the ad and optimize for conversions.</li>
+          <li><strong>Monitor Frequency:</strong> Watch for ad fatigue, especially for T3 and T4.</li>
+          <li><strong>Gradually Increase Budget for T4:</strong>  Increase budget cautiously while monitoring performance.</li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+
+// Data from the table (ideally, this would come from an API)
+const adData = [
+    { name: 'T1', results: 2, costPerResult: 31.23, roas: 8.53, amountSpent: 62.45, reach: 1063, impressions: 3066, frequency: 2.88, cpc: 1.04, ctr: 0.0196 },
+    { name: 'T2', results: 1, costPerResult: 23.64, roas: 8.76, amountSpent: 23.64, reach: 446, impressions: 1006, frequency: 2.26, cpc: 1.31, ctr: 0.0179 },
+    { name: 'T3', results: 1, costPerResult: 36.52, roas: 12.57, amountSpent: 36.52, reach: 569, impressions: 1902, frequency: 3.34, cpc: 1.01, ctr: 0.0189 },
+    { name: 'T4', results: 2, costPerResult: 8.51, roas: 29.92, amountSpent: 17.01, reach: 411, impressions: 1022, frequency: 2.49, cpc: 1.31, ctr: 0.0127 }
+];
+
+// ROAS Chart
+const roasChart = echarts.init(document.getElementById('roas-chart'));
+const roasOption = {
+    title: { text: 'Purchase ROAS by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: {
+        data: ['ROAS'],
+        bottom: 0
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: { type: 'value' },
+    series: [{
+        name: 'ROAS',
+        data: adData.map(item => item.roas),
+        type: 'bar',
+        label: { show: true, position: 'top' }
+    }]
+};
+roasChart.setOption(roasOption);
+
+// Cost Per Result Chart
+const cprChart = echarts.init(document.getElementById('cpr-chart'));
+const cprOption = {
+    title: { text: 'Cost Per Result by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: {
+        data: ['Cost Per Result'],
+        bottom: 0
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: { type: 'value' },
+    series: [{
+        name: 'Cost Per Result',
+        data: adData.map(item => item.costPerResult),
+        type: 'bar',
+        label: { show: true, position: 'top', formatter: '${c}' }
+    }]
+};
+cprChart.setOption(cprOption);
+
+// CTR and CPC Chart (Combined)
+const ctrCpcChart = echarts.init(document.getElementById('ctr-cpc-chart'));
+const ctrCpcOption = {
+    title: { text: 'CTR and CPC by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: {
+        data: ['CTR', 'CPC'],
+        bottom: 0
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: [
+        { type: 'value', name: 'CTR', axisLabel: { formatter: '{value} %' } },
+        { type: 'value', name: 'CPC', axisLabel: { formatter: '${value}' } }
+    ],
+    series: [
+        {
+            name: 'CTR',
+            data: adData.map(item => (item.ctr * 100).toFixed(2)),
+            type: 'bar',
+            label: { show: true, position: 'top', formatter: '{c}%' },
+            yAxisIndex: 0
+        },
+        {
+            name: 'CPC',
+            data: adData.map(item => item.cpc),
+            type: 'line',
+            yAxisIndex: 1,
+            label: { show: true, position: 'top', formatter: '${c}' }
         }
+    ]
+};
+ctrCpcChart.setOption(ctrCpcOption);
 
-        // Configure heatmap options
-        function updateHeatmap(metric) {
-            const option = {
-                title: {
-                    text: 'Product Features & Selling Points Combination Analysis',
-                    left: 'center',
-                    top: 0
-                },
-                tooltip: {
-                    position: 'top',
-                    formatter: function(params) {
-                        return `Feature: ${features[params.data[0]]}<br>` +
-                               `Selling Point: ${sellingPoints[params.data[1]]}<br>` +
-                               `${metric.toUpperCase()}: ${params.data[2]}%`;
-                    }
-                },
-                grid: {
-                    top: '60px',
-                    bottom: '10%',
-                    left: '10%',
-                    right: '10%'
-                },
-                xAxis: {
-                    type: 'category',
-                    data: sellingPoints,
-                    splitArea: {
-                        show: true
-                    }
-                },
-                yAxis: {
-                    type: 'category',
-                    data: features,
-                    splitArea: {
-                        show: true
-                    }
-                },
-                visualMap: {
-                    min: 0,
-                    max: 6,
-                    calculable: true,
-                    orient: 'horizontal',
-                    left: 'center',
-                    bottom: '0%',
-                    text: ['High', 'Low'],
-                    inRange: {
-                        color: ['#fff', '#67c23a']
-                    }
-                },
-                series: [{
-                    name: metric.toUpperCase(),
-                    type: 'heatmap',
-                    data: generateHeatmapData(metric),
-                    label: {
-                        show: true,
-                        formatter: function(params) {
-                            return params.data[2] + '%';
-                        }
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }]
-            };
+// Frequency Chart
+const freqChart = echarts.init(document.getElementById('freq-chart'));
+const freqOption = {
+    title: { text: 'Frequency by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: {
+        data: ['Frequency'],
+        bottom: 0
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: { type: 'value' },
+    series: [{
+        name: 'Frequency',
+        data: adData.map(item => item.frequency),
+        type: 'bar',
+        label: { show: true, position: 'top' }
+    }]
+};
+freqChart.setOption(freqOption);
 
-            heatmapChart.setOption(option);
-        }
+// Resize charts on window resize
+window.addEventListener('resize', () => {
+    roasChart.resize();
+    cprChart.resize();
+    ctrCpcChart.resize();
+    freqChart.resize();
+});
 
-        // Initialize display with CTR data
-        updateHeatmap('ctr');
+</script>
 
-        // Listen for metric changes
-        document.querySelectorAll('input[name="metric"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                updateHeatmap(this.value);
-                updateMetrics(this.value);
-            });
-        });
-
-        // Update metric cards
-        function updateMetrics(metric) {
-            const metrics = {
-                'ctr': {
-                    bestCombo: 'Smart Features + Cost-Effectiveness',
-                    avgPerformance: '3.2%',
-                    improvement: '+45%'
-                },
-                'cvr': {
-                    bestCombo: 'Convenience + Ease of Use',
-                    avgPerformance: '2.8%',
-                    improvement: '+42%'
-                },
-                'roas': {
-                    bestCombo: 'Energy Saving + Brand Impact',
-                    avgPerformance: '3.5x',
-                    improvement: '+38%'
-                }
-            };
-
-            document.getElementById('bestCombo').textContent = metrics[metric].bestCombo;
-            document.getElementById('avgPerformance').textContent = metrics[metric].avgPerformance;
-            document.getElementById('improvement').textContent = metrics[metric].improvement;
-        }
-
-        // Handle responsive resizing
-        window.addEventListener('resize', function() {
-            heatmapChart.resize();
-        });
-    </script>
 </body>
 </html>

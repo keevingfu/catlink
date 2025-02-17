@@ -3,507 +3,644 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOL Content Trend</title>
+    <title>Catlink KOC Social Performance</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
+        body {
+            font-family: sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            background-color: #f7f7f7;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            padding: 2rem;
-            background: #f8f9fa;
-        }
-
-        .dashboard-title {
-            color: #0066cc;
-            margin-bottom: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .stat-card h3 {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
 
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #0066cc;
-        }
-
-        .charts-grid {
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .grid-container-kpi {
+            grid-template-columns: repeat(4, 1fr); /* For the KPI row, use 4 */
+        }
+        .grid-container-full {
+            grid-template-columns: 1fr !important; /* Full width container */
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-title i {
+            font-size: 1.2em;
+        }
+        
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        /* KPI Card Colors */
+        .kpi-views .card-title,
+        .kpi-views .metric-value {
+            color: #FF4B4B;  /* Red */
+        }
+        
+        .kpi-engagements .card-title,
+        .kpi-engagements .metric-value {
+            color: #FF9F40;  /* Orange */
+        }
+        
+        .kpi-daily .card-title,
+        .kpi-daily .metric-value {
+            color: #4CAF50;  /* Green */
+        }
+        
+        .kpi-posts .card-title,
+        .kpi-posts .metric-value {
+            color: #9C27B0;  /* Purple */
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
         }
 
         .chart-container {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            min-height: 450px;
-        }
-
-        .chart-container h3 {
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .chart {
             width: 100%;
-            height: 400px !important;
-            min-height: 400px;
-            background: #fff;
+            height: 300px; /* Fixed chart height */
+        }
+         .koc-chart-container { /* Special container for the vertical bar chart */
+            height: 400px; /* Make taller for vertical bars */
         }
 
         .insights {
             margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 4px;
         }
-
-        .insights h4 {
-            color: #0066cc;
+        .insights p {
             margin-bottom: 0.5rem;
         }
 
-        .insights ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
+        .insights-bold {
+            font-weight: bold;
         }
 
-        .insights li {
-            margin-bottom: 0.5rem;
-            padding-left: 20px;
-            position: relative;
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .insights li:before {
-            content: "•";
-            color: #0066cc;
-            position: absolute;
-            left: 0;
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
         }
 
-        @media (max-width: 1200px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
+        th {
+          background-color: #f2f2f2;
         }
 
-        .insights-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 2rem;
+        .video-table-container {
+            height: 300px; /* Or whatever height you need */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        .video-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .video-table th, .video-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+         .video-table th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0; /* Make the header sticky */
+            z-index: 1; /* Ensure header is above the scrolling content */
+        }
+        .video-table a {
+            color: blue;
+            text-decoration: underline;
         }
 
-        .insights-container h3 {
-            color: #0066cc;
-            margin-bottom: 1.5rem;
-        }
 
-        .insights-section,
-        .recommendations-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .insights-container h4 {
-            color: #333;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #0066cc;
-            padding-bottom: 0.5rem;
-        }
-
-        .insights-container ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .insights-container ul ul {
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .insights-container li {
-            margin-bottom: 0.5rem;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .insights-container li:before {
-            content: "•";
-            color: #0066cc;
-            position: absolute;
-            left: 0;
-        }
     </style>
 </head>
 <body>
-    <h1 class="dashboard-title">KOL Content Trend</h1>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>Average Views</h3>
-            <div class="stat-value">19.1M</div>
+<div class="container">
+    <h1>Catlink KOC Social Performance</h1>
+
+
+    <div class="grid-container grid-container-kpi">
+        <div class="card kpi-views">
+            <div class="card-title">
+                <i class="fas fa-eye"></i>
+                Total Views
+            </div>
+            <div class="metric-value">2,154,765</div>
         </div>
-        <div class="stat-card">
-            <h3>Average Engagement</h3>
-            <div class="stat-value">422.9K</div>
+        <div class="card kpi-engagements">
+            <div class="card-title">
+                <i class="fas fa-heart"></i>
+                Total Engagements
+            </div>
+            <div class="metric-value">26,342</div>
         </div>
-        <div class="stat-card">
-            <h3>Average Engagement Rate</h3>
-            <div class="stat-value">2.55%</div>
+        <div class="card kpi-daily">
+            <div class="card-title">
+                <i class="fas fa-chart-line"></i>
+                Avg Daily Views
+            </div>
+            <div class="metric-value">46,843</div>
         </div>
-        <div class="stat-card">
-            <h3>Average Sales</h3>
-            <div class="stat-value">$8,840</div>
+        <div class="card kpi-posts">
+            <div class="card-title">
+                <i class="fas fa-video"></i>
+                Total Posts
+            </div>
+            <div class="metric-value">946</div>
         </div>
     </div>
 
-    <div class="charts-grid">
-        <div class="chart-container">
-            <h3>Video Performance by KOL</h3>
-            <div id="kolChart" class="chart"></div>
+    <div class="grid-container grid-container-full">
+        <div class="card">
+            <div class="card-title">Overall Performance Trends Analysis</div>
+            <div class="chart-container" id="overallTrendsChart"></div>
             <div class="insights">
-                <h4>KOL Insights</h4>
-                <ul>
-                    <li>Sprinkle & Sweep leads in engagement rate at 3.87%</li>
-                    <li>Floradelavanilla shows strong view-to-engagement conversion</li>
-                    <li>Multiple KOLs achieving over 1M views per video</li>
+                <p class="insights-bold">Key Observations:</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 10px 0;">
+                    <li>Highest peak performance: 342,913 views (Feb 7, 2025)</li>
+                    <li>Highest engagement day: 1,640 interactions (Feb 7, 2025)</li>
+                    <li>Average daily posts decreased from 28 to 18 over the period</li>
+                    <li>Mid-January showed highest average engagement at 807 per day</li>
                 </ul>
-            </div>
-        </div>
-        <div class="chart-container">
-            <h3>Engagement Metrics Distribution</h3>
-            <div id="engagementChart" class="chart"></div>
-            <div class="insights">
-                <h4>Engagement Insights</h4>
-                <ul>
-                    <li>Likes form the majority of engagement actions</li>
-                    <li>Save rate indicates high content value</li>
-                    <li>Comment rates show active community interaction</li>
+                <p class="insights-bold">Period Analysis:</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 10px 0;">
+                    <li><strong>Early Period (Dec-Jan):</strong> High posting frequency with moderate engagement</li>
+                    <li><strong>Mid Period (Jan):</strong> Peak engagement despite reduced posting frequency</li>
+                    <li><strong>Recent Period (Jan-Feb):</strong> Lower posting volume but maintained view efficiency</li>
                 </ul>
-            </div>
-        </div>
-        <div class="chart-container">
-            <h3>Sales Performance</h3>
-            <div id="salesChart" class="chart"></div>
-            <div class="insights">
-                <h4>Sales Insights</h4>
-                <ul>
-                    <li>High-value products driving revenue</li>
-                    <li>Strong correlation between engagement and sales</li>
-                    <li>Premium products showing better conversion</li>
-                </ul>
-            </div>
-        </div>
-        <div class="chart-container">
-            <h3>Video Duration vs. Engagement</h3>
-            <div id="durationChart" class="chart"></div>
-            <div class="insights">
-                <h4>Duration Insights</h4>
-                <ul>
-                    <li>Short videos (under 20s) show highest engagement</li>
-                    <li>Medium length videos optimal for product demos</li>
-                    <li>Longer videos effective for detailed reviews</li>
-                </ul>
-            </div>
-        </div>
-        <div class="chart-container">
-            <h3>Content Trend Analysis</h3>
-            <div id="contentTrendChart" class="chart"></div>
-            <div class="insights">
-                <h4>Content Trend Insights</h4>
-                <ul>
-                    <li>Product demonstration videos show highest engagement (4.11%)</li>
-                    <li>Short-form content (under 30s) generates 2.8x more views</li>
-                    <li>Morning posts (8-11 AM) receive 35% higher engagement</li>
-                    <li>Videos with clear CTAs drive 45% better conversion</li>
+                <p class="insights-bold">Recommendations:</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 10px 0;">
+                    <li>Optimize posting schedule based on mid-January performance patterns</li>
+                    <li>Focus on quality over quantity - fewer but more engaging posts</li>
+                    <li>Analyze high-performing Feb 7 content for replication</li>
+                    <li>Consider increasing post frequency while maintaining content quality</li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="insights-container">
-        <h3>Content Strategy Insights & Recommendations</h3>
-        <div class="insights-section">
-            <h4>Key Trends</h4>
-            <ul>
-                <li>Content engagement peaks during weekday mornings (8-11 AM)</li>
-                <li>Product demonstration videos consistently outperform other formats</li>
-                <li>User-generated content drives 40% higher trust signals</li>
-                <li>Educational content maintains longer viewer retention</li>
-            </ul>
+    <div class="grid-container">
+      
+        <div class="card">
+            <div class="card-title">Platform Performance</div>
+            <div class="chart-container" id="platformChart"></div>
+            <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1. TikTok has the highest total views among the three platforms.</p>
+                <p>2. Instagram has relatively lower engagement compared to views.</p>
+                 <p class="insights-bold">Recommendations:</p>
+                <p>1. Continue to leverage TikTok for maximum reach.</p>
+                <p>2.  Work on improving Instagram's content strategy to boost engagement.</p>
+            </div>
         </div>
-        <div class="recommendations-section">
-            <h4>Strategic Recommendations</h4>
-            <ul>
-                <li>Content Optimization:
-                    <ul>
-                        <li>Focus on creating short, engaging product demonstrations</li>
-                        <li>Incorporate clear call-to-actions within first 15 seconds</li>
-                        <li>Leverage trending audio and effects for increased reach</li>
-                    </ul>
-                </li>
-                <li>Posting Strategy:
-                    <ul>
-                        <li>Schedule posts during peak engagement windows</li>
-                        <li>Maintain consistent posting frequency (3-4 times per week)</li>
-                        <li>Test different content formats across platforms</li>
-                    </ul>
-                </li>
-                <li>Performance Tracking:
-                    <ul>
-                        <li>Monitor engagement metrics across different content types</li>
-                        <li>Track conversion rates by content theme</li>
-                        <li>Analyze audience retention patterns</li>
-                    </ul>
-                </li>
-            </ul>
+
+       
+        <div class="card">
+            <div class="card-title">KOC Performance</div>
+            <div class="koc-chart-container" id="kocChart"></div> 
+            <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1.  dinomcmah significantly outperforms other KOCs in terms of views.</p>
+                <p>2.  Engagement rates vary widely among KOCs.</p>
+                 <p class="insights-bold">Recommendations:</p>
+                <p>1.  Investigate the factors contributing to dinomcmah's success and replicate them.</p>
+                <p>2.  Provide support to lower-performing KOCs to improve their content quality and reach.</p>
+            </div>
+        </div>
+
+       
+        <div class="card">
+            <div class="card-title">Content Impact Distribution</div>
+            <div class="chart-container" id="contentDistributionChart"></div>
+             <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1. A small portion of content (15%) generates a disproportionately large impact.</p>
+                <p>2. The majority of content falls into the regular impact category.</p>
+                 <p class="insights-bold">Recommendations:</p>
+                <p>1. Analyze the characteristics of high-impact content and try to replicate their success.</p>
+                <p>2.  Improve the quality and targeting of regular and low-impact content.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Top 5 Performing Videos</div>
+            <div class="video-table-container">
+              <table class="video-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Views</th>
+                    <th>Engagement</th>
+                    <th>Link</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>dinomcmah Viral TikTok</td>
+                    <td>299,400</td>
+                    <td>1,065</td>
+                    <td><a href="https://www.tiktok.com/@dinomcmah/video/7468306102153727275" target="_blank" rel="noopener noreferrer">View</a></td>
+                  </tr>
+                  <tr>
+                    <td>dinomcmah Trending Post</td>
+                    <td>235,700</td>
+                    <td>1,071</td>
+                    <td><a href="https://www.tiktok.com/@dinomcmah/video/7461991953920429354" target="_blank" rel="noopener noreferrer">View</a></td>
+                  </tr>
+                  <tr>
+                   <td>dinomcmah Featured Content</td>
+                    <td>76,500</td>
+                    <td>205</td>
+                    <td><a href="https://www.tiktok.com/@dinomcmah/video/7462373358634650922" target="_blank" rel="noopener noreferrer">View</a></td>
+                  </tr>
+                  <tr>
+                    <td>YouTube Year End Special</td>
+                    <td>32,000</td>
+                    <td>513</td>
+                    <td><a href="https://www.youtube.com//shorts/lOFugFucvTg" target="_blank" rel="noopener noreferrer">View</a></td>
+                  </tr>
+                  <tr>
+                    <td>dinomcmah Top Performance</td>
+                    <td>24,600</td>
+                    <td>53</td>
+                    <td><a href="https://www.tiktok.com/@dinomcmah/video/7468686290960108843" target="_blank" rel="noopener noreferrer">View</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1.  "dinomcmah" dominates the top-performing videos, indicating strong content strategy or audience alignment.</p>
+                <p>2. TikTok is the primary platform for top-performing content in this dataset.</p>
+                <p class="insights-bold">Recommendations:</p>
+                <p>1.  Further analyze dinomcmah's content to understand key success factors.</p>
+                <p>2.  Focus efforts on optimizing content for TikTok.</p>
+              </div>
         </div>
     </div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            initCharts();
+
+<script>
+    // Performance data
+    const trendData = [
+        {date: '2024-12-30', views: 15501, engagement: 243, posts: 6},
+        {date: '2024-12-31', views: 76383, engagement: 1591, posts: 26},
+        {date: '2025-01-01', views: 36400, engagement: 1205, posts: 48},
+        {date: '2025-01-02', views: 7481, engagement: 155, posts: 11},
+        {date: '2025-01-03', views: 9737, engagement: 335, posts: 12},
+        {date: '2025-01-04', views: 15316, engagement: 615, posts: 18},
+        {date: '2025-01-05', views: 34885, engagement: 653, posts: 21},
+        {date: '2025-01-06', views: 17558, engagement: 834, posts: 45},
+        {date: '2025-01-07', views: 34953, engagement: 838, posts: 55},
+        {date: '2025-01-08', views: 26046, engagement: 1183, posts: 60},
+        {date: '2025-01-09', views: 14970, engagement: 304, posts: 13},
+        {date: '2025-01-10', views: 27574, engagement: 451, posts: 20},
+        {date: '2025-01-12', views: 27086, engagement: 635, posts: 28},
+        {date: '2025-01-13', views: 36000, engagement: 913, posts: 44},
+        {date: '2025-01-14', views: 20927, engagement: 870, posts: 48},
+        {date: '2025-01-15', views: 13664, engagement: 375, posts: 14},
+        {date: '2025-01-16', views: 72729, engagement: 3412, posts: 35},
+        {date: '2025-01-17', views: 6379, engagement: 259, posts: 12},
+        {date: '2025-01-18', views: 17779, engagement: 485, posts: 18},
+        {date: '2025-01-19', views: 26655, engagement: 513, posts: 21},
+        {date: '2025-01-20', views: 263598, engagement: 1353, posts: 16},
+        {date: '2025-01-21', views: 80169, engagement: 294, posts: 12},
+        {date: '2025-01-22', views: 60894, engagement: 785, posts: 29},
+        {date: '2025-01-23', views: 62368, engagement: 667, posts: 33},
+        {date: '2025-01-24', views: 31505, engagement: 276, posts: 14},
+        {date: '2025-01-26', views: 20897, engagement: 295, posts: 12},
+        {date: '2025-01-28', views: 24228, engagement: 310, posts: 12},
+        {date: '2025-01-29', views: 22574, engagement: 219, posts: 8},
+        {date: '2025-01-30', views: 22953, engagement: 187, posts: 4},
+        {date: '2025-02-01', views: 60501, engagement: 911, posts: 23},
+        {date: '2025-02-03', views: 38802, engagement: 432, posts: 21},
+        {date: '2025-02-04', views: 42075, engagement: 404, posts: 23},
+        {date: '2025-02-05', views: 4620, engagement: 134, posts: 8},
+        {date: '2025-02-06', views: 24330, engagement: 558, posts: 21},
+        {date: '2025-02-07', views: 342913, engagement: 1640, posts: 38},
+        {date: '2025-02-08', views: 109566, engagement: 869, posts: 24},
+        {date: '2025-02-09', views: 8694, engagement: 185, posts: 14},
+        {date: '2025-02-10', views: 28723, engagement: 226, posts: 12},
+        {date: '2025-02-11', views: 15779, engagement: 368, posts: 20},
+        {date: '2025-02-12', views: 29272, engagement: 273, posts: 35},
+        {date: '2025-02-13', views: 5560, engagement: 87, posts: 12}
+    ];
+
+    // Initialize charts
+    document.addEventListener('DOMContentLoaded', function() {
+        const platformChart = initPlatformChart();
+        const kocChart = initKocChart();
+        const contentDistributionChart = initContentDistributionChart();
+        const overallTrendsChart = initOverallTrendsChart();
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (platformChart) platformChart.resize();
+            if (kocChart) kocChart.resize();
+            if (contentDistributionChart) contentDistributionChart.resize();
+            if (overallTrendsChart) overallTrendsChart.resize();
+        });
+    });
+
+    // Helper function for number formatting
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num.toString();
+    }
+
+    // Overall Performance Trends Chart
+    function initOverallTrendsChart() {
+        const chart = echarts.init(document.getElementById('overallTrendsChart'));
+        
+        const option = {
+            title: {
+                text: 'Daily Performance Trends',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function(params) {
+                    let result = params[0].name + '<br/>';
+                    params.forEach(param => {
+                        let value = param.value;
+                        if (param.seriesName === 'Views') {
+                            value = formatNumber(value);
+                        }
+                        result += param.marker + param.seriesName + ': ' + value + '<br/>';
+                    });
+                    return result;
+                }
+            },
+            legend: {
+                data: ['Views', 'Engagement', 'Posts'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: trendData.map(item => item.date),
+                axisLabel: {
+                    interval: 2,
+                    rotate: -45
+                }
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Views',
+                    position: 'left',
+                    axisLabel: {
+                        formatter: value => formatNumber(value)
+                    }
+                },
+                {
+                    type: 'value',
+                    name: 'Engagement/Posts',
+                    position: 'right'
+                }
+            ],
+            series: [
+                {
+                    name: 'Views',
+                    type: 'line',
+                    smooth: true,
+                    data: trendData.map(item => item.views)
+                },
+                {
+                    name: 'Engagement',
+                    type: 'line',
+                    smooth: true,
+                    yAxisIndex: 1,
+                    data: trendData.map(item => item.engagement)
+                },
+                {
+                    name: 'Posts',
+                    type: 'line',
+                    smooth: true,
+                    yAxisIndex: 1,
+                    data: trendData.map(item => item.posts)
+                }
+            ]
+        };
+
+        chart.setOption(option);
+        return chart;
+    }
+
+    // Platform Performance Chart (Bar Chart)
+    function initPlatformChart() {
+      const chart = echarts.init(document.getElementById('platformChart'));
+      const platformData = [
+        { name: 'YouTube', views: 745039, posts: 230, engagement: 4004 },
+        { name: 'TikTok', views: 1066058, posts: 286, engagement: 10002 },
+        { name: 'Instagram', views: 582693, posts: 430, engagement: 3323 }
+      ];
+
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'shadow' }
+        },
+        legend: { data: ['Views', 'Engagement'], bottom: 0 },
+        xAxis: { type: 'category', data: platformData.map(item => item.name) },
+        yAxis: { type: 'value' },
+        series: [
+          { name: 'Views', type: 'bar', data: platformData.map(item => item.views), color: '#8884d8' },
+          { name: 'Engagement', type: 'bar', data: platformData.map(item => item.engagement), color: '#82ca9d' }
+        ]
+      };
+      chart.setOption(option);
+      return chart;
+    }
+
+    // KOC Performance Chart (Vertical Bar Chart)
+     function initKocChart() {
+        const chart = echarts.init(document.getElementById('kocChart'));
+        const kocData = [
+          { name: 'dinomcmah', views: 727966, engagement: 3640, posts: 38, url: 'https://www.tiktok.com/@dinomcmah' },
+          { name: 'sonbrantley17', views: 125300, engagement: 1702, posts: 37, url: 'https://www.tiktok.com/@sonbrantley17' },
+          { name: 'lancetorres98', views: 54215, engagement: 718, posts: 38, url: 'https://www.tiktok.com/@lancetorres98' },
+          { name: 'philcone7198', views: 42693, engagement: 594, posts: 36, url: 'https://www.tiktok.com/@philcone7198' },
+          { name: 'cordellkauf', views: 36772, engagement: 1525, posts: 40, url: 'https://www.tiktok.com/@cordellkauf' },
+          { name: 'asteriodzip', views: 30462, engagement: 563, posts: 30, url: 'https://www.tiktok.com/@asteriodzip' },
+          { name: 'enco889', views: 24971, engagement: 616, posts: 31, url: 'https://www.tiktok.com/@enco889' },
+          { name: 'hochamnrp2c', views: 21996, engagement: 608, posts: 29, url: 'https://www.tiktok.com/@hochamnrp2c' }
+        ];
+
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' }
+            },
+            legend: {
+                data: ['Views', 'Engagement'],
+                bottom: 0
+            },
+            xAxis: {
+                type: 'value' // Value axis for horizontal bars
+            },
+            yAxis: {
+                type: 'category', // Category axis for KOC names
+                data: kocData.map(item => item.name),
+                inverse: true, // Invert to have the top performer at the top
+                axisLabel: {
+                    formatter: function (value) {  // Custom formatter for clickable links
+                        const koc = kocData.find(k => k.name === value);
+                        if (koc) {
+                          return `{link|${value}}`; // Use a rich text tag
+                        }
+                        return value; // Fallback
+                    },
+                    rich: {
+                        link: { // Style for the link
+                            color: 'blue',
+                            textDecoration: 'underline',
+                            cursor: 'pointer' // Ensure the cursor indicates it's clickable
+                        }
+                    }
+                }
+            },
+            series: [
+                {
+                    name: 'Views',
+                    type: 'bar',
+                    data: kocData.map(item => item.views),
+                    color: '#8884d8',
+                    label: { // Show data labels
+                        show: true,
+                        position: 'right', // Position labels to the right of the bars
+                        formatter: '{c}' // Display the value ('c' represents the data value)
+                    }
+                },
+                {
+                    name: 'Engagement',
+                    type: 'bar',
+                    data: kocData.map(item => item.engagement),
+                    color: '#82ca9d',
+                    label: { // Show data labels
+                        show: true,
+                        position: 'right',
+                        formatter: '{c}'
+                    }
+                }
+            ]
+        };
+
+        chart.setOption(option);
+
+        // Add click event listener
+        chart.on('click', function (params) {
+          if (params.componentType === 'yAxis' && params.value) {
+            // Find the corresponding KOC data
+            const koc = kocData.find(k => k.name === params.value);
+            if (koc && koc.url) {
+              window.open(koc.url, '_blank'); // Open URL in a new tab
+            }
+          }
         });
 
-        function initCharts() {
-            // KOL Performance Chart
-            const kolChart = echarts.init(document.getElementById('kolChart'));
-            kolChart.setOption({
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: { type: 'shadow' }
-                },
-                legend: {
-                    data: ['Views', 'Engagement Rate']
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['sprinklesweep', 'floradelavanilla', 'lisamots5', 'itschelseahope', 'undercovertabbies'],
-                    axisLabel: { rotate: 45 }
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'Views',
-                        position: 'left'
-                    },
-                    {
-                        type: 'value',
-                        name: 'Engagement Rate (%)',
-                        position: 'right'
-                    }
-                ],
-                series: [
-                    {
-                        name: 'Views',
-                        type: 'bar',
-                        data: [6053637, 3872752, 3738430, 2060161, 1154934]
-                    },
-                    {
-                        name: 'Engagement Rate',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        data: [3.87, 4.11, 1.24, 0.91, 3.30]
-                    }
-                ]
-            });
+        return chart;
+    }
 
-            // Engagement Distribution Chart
-            const engagementChart = echarts.init(document.getElementById('engagementChart'));
-            engagementChart.setOption({
-                tooltip: {
-                    trigger: 'item',
-                    formatter: '{b}: {c} ({d}%)'
-                },
-                legend: {
-                    orient: 'vertical',
-                    left: 'left'
-                },
-                series: [
-                    {
-                        type: 'pie',
-                        radius: '70%',
-                        data: [
-                            { value: 186564, name: 'Likes' },
-                            { value: 21711, name: 'Saves' },
-                            { value: 1045, name: 'Comments' }
-                        ]
-                    }
-                ]
-            });
+    // Content Distribution Chart (Pie Chart)
+    function initContentDistributionChart() {
+      const chart = echarts.init(document.getElementById('contentDistributionChart'));
+       const contentDistribution = [
+          { name: 'High Impact (>10k views)', value: 15 },
+          { name: 'Medium Impact (5k-10k)', value: 25 },
+          { name: 'Regular Impact (1k-5k)', value: 40 },
+          { name: 'Low Impact (<1k)', value: 20 }
+        ];
+      const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-            // Sales Performance Chart
-            const salesChart = echarts.init(document.getElementById('salesChart'));
-            salesChart.setOption({
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data: ['Sales Amount', 'Units Sold']
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['Product A', 'Product B', 'Product C', 'Product D'],
-                    axisLabel: { rotate: 45 }
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'Sales Amount ($)'
-                    },
-                    {
-                        type: 'value',
-                        name: 'Units'
-                    }
-                ],
-                series: [
-                    {
-                        name: 'Sales Amount',
-                        type: 'bar',
-                        data: [40756.41, 619800.48, 678383.29, 2557801.50]
-                    },
-                    {
-                        name: 'Units Sold',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        data: [1359, 10848, 26489, 9421]
-                    }
-                ]
-            });
+      const option = {
+        tooltip: {
+          trigger: 'item',
+            formatter: '{b}: {d}%'
+        },
+        legend: {
+          orient: 'horizontal',
+          bottom: 0,
+          data: contentDistribution.map(item => item.name)
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: ['40%', '70%'], // Use inner and outer radius for a donut chart
+            center: ['50%', '50%'],
+            data: contentDistribution.map((item, index) => ({
+              value: item.value,
+              name: item.name,
+              itemStyle: { color: COLORS[index % COLORS.length] }
+            })),
+            label: { show: false }, // Hide labels, use legend+tooltip
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      chart.setOption(option);
+      return chart;
+    }
 
-            // Duration vs Engagement Chart
-            const durationChart = echarts.init(document.getElementById('durationChart'));
-            durationChart.setOption({
-                tooltip: {
-                    trigger: 'axis'
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['6s', '34s', '35s', '20s', '44s', '60s']
-                },
-                yAxis: {
-                    type: 'value',
-                    name: 'Engagement Rate (%)'
-                },
-                series: [
-                    {
-                        type: 'scatter',
-                        symbolSize: function(data) {
-                            return Math.sqrt(data[1]) * 20;
-                        },
-                        data: [
-                            [0, 3.87],
-                            [1, 4.11],
-                            [2, 1.24],
-                            [3, 0.91],
-                            [4, 3.30],
-                            [5, 0.81]
-                        ]
-                    }
-                ]
-            });
-
-            // Content Trend Chart
-            const contentTrendChart = echarts.init(document.getElementById('contentTrendChart'));
-            contentTrendChart.setOption({
-                title: {
-                    text: 'Content Performance Trends',
-                    left: 'center'
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross'
-                    }
-                },
-                legend: {
-                    data: ['Views', 'Engagement Rate', 'Conversion Rate'],
-                    bottom: 10
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-                    axisLabel: {
-                        rotate: 45
-                    }
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'Views',
-                        position: 'left',
-                        axisLabel: {
-                            formatter: function(value) {
-                                return (value / 1000000).toFixed(1) + 'M';
-                            }
-                        }
-                    },
-                    {
-                        type: 'value',
-                        name: 'Rate (%)',
-                        position: 'right',
-                        axisLabel: {
-                            formatter: '{value}%'
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        name: 'Views',
-                        type: 'bar',
-                        data: [3.2, 4.1, 3.8, 4.5, 5.2, 4.9]
-                    },
-                    {
-                        name: 'Engagement Rate',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        data: [2.8, 3.2, 2.9, 3.5, 3.8, 3.6]
-                    },
-                    {
-                        name: 'Conversion Rate',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        data: [1.2, 1.5, 1.4, 1.8, 2.1, 1.9]
-                    }
-                ]
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                kolChart.resize();
-                engagementChart.resize();
-                salesChart.resize();
-                durationChart.resize();
-                contentTrendChart.resize();
-            });
-        }
-    </script>
+</script>
 </body>
-</html> 
+</html>

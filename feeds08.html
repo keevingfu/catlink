@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Amazon SBV Campaign Performance</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .chart-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart {
+            width: 100%;
+            height: 400px;
+        }
+        .metrics {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 200px;
+            margin: 10px;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            color: #666;
+        }
+        .insights {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .insights h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .insights ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .insights li {
+            margin-bottom: 5px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Amazon SBV Campaign Performance</h1>
+    </div>
+    
+    <div class="metrics">
+        <div class="metric-card">
+            <div class="metric-value">82,093</div>
+            <div class="metric-label">Total Impressions</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">638</div>
+            <div class="metric-label">Total Clicks</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">$1,449.24</div>
+            <div class="metric-label">Total Spend</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">$2,245.95</div>
+            <div class="metric-label">Total Sales</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chart-row">
+            <div class="chart-container">
+                <div id="campaignPerformance" class="chart"></div>
+                <div class="insights">
+                    <h4>Campaign Performance Insights</h4>
+                    <ul>
+                        <li>High-end campaign has highest ROAS (2.40)</li>
+                        <li>New User campaign gets most clicks</li>
+                        <li>High-end campaign has best CPC</li>
+                    </ul>
+                    <h4>Optimization Suggestions</h4>
+                    <ul>
+                        <li>Increase budget for high-end campaign</li>
+                        <li>Optimize new user campaign conversion rate</li>
+                        <li>Adjust low-performing campaign strategy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div id="conversionMetrics" class="chart"></div>
+                <div class="insights">
+                    <h4>Conversion Metrics Insights</h4>
+                    <ul>
+                        <li>Overall CTR is 0.81%, below 1% target</li>
+                        <li>ACOS is 41.59%, above 35% target</li>
+                        <li>CPC averages $2.39, above $2.00 target</li>
+                    </ul>
+                    <h4>Optimization Suggestions</h4>
+                    <ul>
+                        <li>Optimize ad creative and targeting</li>
+                        <li>Adjust bidding strategy</li>
+                        <li>Improve ad material quality</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <div id="trendAnalysis" class="chart"></div>
+                <div class="insights">
+                    <h4>Trend Insights</h4>
+                    <ul>
+                        <li>August performance peaks in sales</li>
+                        <li>Mid-week conversion rates generally higher</li>
+                        <li>Holiday periods show significant impact</li>
+                    </ul>
+                    <h4>Optimization Suggestions</h4>
+                    <ul>
+                        <li>Capitalize on seasonal opportunities</li>
+                        <li>Optimize delivery time allocation</li>
+                        <li>Strengthen holiday marketing efforts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div id="customerAnalysis" class="chart"></div>
+                <div class="insights">
+                    <h4>Customer Insights</h4>
+                    <ul>
+                        <li>New customers: 72.7%</li>
+                        <li>New customer sales: 75.3%</li>
+                        <li>New customer ROAS: 2.01</li>
+                    </ul>
+                    <h4>Optimization Suggestions</h4>
+                    <ul>
+                        <li>Optimize new customer acquisition cost</li>
+                        <li>Increase repeat purchase rate</li>
+                        <li>Improve customer lifecycle management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize all charts
+        const charts = {
+            campaignPerformance: echarts.init(document.getElementById('campaignPerformance')),
+            conversionMetrics: echarts.init(document.getElementById('conversionMetrics')),
+            trendAnalysis: echarts.init(document.getElementById('trendAnalysis')),
+            customerAnalysis: echarts.init(document.getElementById('customerAnalysis'))
+        };
+
+        // Campaign Performance Chart
+        const campaignOption = {
+            title: {
+                text: 'Campaign Performance Comparison'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Clicks', 'ROAS'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['High-end-SBV', 'New User', 'New User SBV-2', 'High-end 3', 'New User Video 4']
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Clicks'
+                },
+                {
+                    type: 'value',
+                    name: 'ROAS',
+                    position: 'right'
+                }
+            ],
+            series: [
+                {
+                    name: 'Clicks',
+                    type: 'bar',
+                    data: [223, 224, 84, 67, 40]
+                },
+                {
+                    name: 'ROAS',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [2.40, 1.43, 1.86, 0, 0]
+                }
+            ]
+        };
+
+        // Conversion Metrics Chart
+        const metricsOption = {
+            title: {
+                text: 'Conversion Metrics Analysis'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Actual', 'Target'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['CTR(%)', 'ACOS(%)', 'ROAS', 'CPC($)']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'Actual',
+                    type: 'bar',
+                    data: [0.81, 41.59, 2.40, 2.39]
+                },
+                {
+                    name: 'Target',
+                    type: 'bar',
+                    data: [1.00, 35.00, 2.50, 2.00]
+                }
+            ]
+        };
+
+        // Trend Analysis Chart
+        const trendOption = {
+            title: {
+                text: 'Sales Trend Analysis'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Sales', 'Clicks'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Sales'
+                },
+                {
+                    type: 'value',
+                    name: 'Clicks',
+                    position: 'right'
+                }
+            ],
+            series: [
+                {
+                    name: 'Sales',
+                    type: 'line',
+                    data: [10065, 82726, 32902, 14301, 20757, 34839, 26091]
+                },
+                {
+                    name: 'Clicks',
+                    type: 'bar',
+                    yAxisIndex: 1,
+                    data: [158, 89, 84, 97, 65, 61, 61]
+                }
+            ]
+        };
+
+        // Customer Analysis Chart
+        const customerOption = {
+            title: {
+                text: 'Customer Analysis'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                bottom: 0
+            },
+            series: [
+                {
+                    name: 'Customer Composition',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 72.7, name: 'New Customers' },
+                        { value: 27.3, name: 'Returning Customers' }
+                    ]
+                }
+            ]
+        };
+
+        // Set chart options
+        charts.campaignPerformance.setOption(campaignOption);
+        charts.conversionMetrics.setOption(metricsOption);
+        charts.trendAnalysis.setOption(trendOption);
+        charts.customerAnalysis.setOption(customerOption);
+
+        // Responsive adjustment
+        window.addEventListener('resize', () => {
+            Object.values(charts).forEach(chart => chart.resize());
+        });
+    </script>
+</body>
+</html>

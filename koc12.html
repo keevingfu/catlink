@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Catlink KOC Social Media Performance Dashboard</title>
+  <!-- Load ECharts library -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .chart-section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .chart-section h2 {
+      margin-top: 0;
+    }
+    .chart {
+      width: 100%;
+      height: 500px;
+    }
+    .insights {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e8f4ff;
+      border-left: 5px solid #007bff;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .insights strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Catlink KOC Social Media Performance Dashboard</h1>
+    
+    <!-- Section 1: Overall Total Views & Engagement Over Time -->
+    <div class="chart-section">
+      <h2>Total Views & Total Engagement Over Time</h2>
+      <div id="overallChart" class="chart"></div>
+      <div class="insights">
+        <strong>Insights & Recommendations:</strong>
+        <p>
+          The overall chart indicates that total views surged significantly during mid-to-late January, driven by several viral posts across platforms. However, total engagement remains lower relative to views. We recommend analyzing the factors behind the viral posts and integrating stronger calls-to-action to boost interactions.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Section 2: TikTok Performance Overview -->
+    <div class="chart-section">
+      <h2>TikTok Performance Overview</h2>
+      <div id="tiktokChart" class="chart"></div>
+      <div class="insights">
+        <strong>Insights & Recommendations:</strong>
+        <p>
+          TikTok performance shows that while many posts reach high view counts, engagement (likes, comments, shares) is not as high. Consider incorporating interactive elements and posting at optimal times to further boost engagement.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Section 3: YouTube Shorts Performance Overview -->
+    <div class="chart-section">
+      <h2>YouTube Shorts Performance Overview</h2>
+      <div id="youtubeChart" class="chart"></div>
+      <div class="insights">
+        <strong>Insights & Recommendations:</strong>
+        <p>
+          YouTube Shorts consistently generate high views. However, engagement is moderate. Enhancing end screens, adding clear calls-to-action in descriptions, and encouraging comments may help increase viewer interaction.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Section 4: Instagram Reels Performance Overview -->
+    <div class="chart-section">
+      <h2>Instagram Reels Performance Overview</h2>
+      <div id="instagramChart" class="chart"></div>
+      <div class="insights">
+        <strong>Insights & Recommendations:</strong>
+        <p>
+          Instagram Reels display a wide range of performance with many posts achieving modest views and very low engagement. Experimenting with creative storytelling, trending hashtags, and interactive content such as Q&As or contests is recommended.
+        </p>
+      </div>
+    </div>
+    
+  </div>
+  
+  <script>
+    // Define timeline dates from 2024-12-31 to 2025-02-13
+    const dates = [
+      '2024-12-31','2025-01-01','2025-01-02','2025-01-03','2025-01-04',
+      '2025-01-05','2025-01-06','2025-01-07','2025-01-08','2025-01-09',
+      '2025-01-10','2025-01-11','2025-01-12','2025-01-13','2025-01-14',
+      '2025-01-15','2025-01-16','2025-01-17','2025-01-18','2025-01-19',
+      '2025-01-20','2025-01-21','2025-01-22','2025-01-23','2025-01-24',
+      '2025-01-25','2025-01-26','2025-01-27','2025-01-28','2025-01-29',
+      '2025-01-30','2025-01-31','2025-02-01','2025-02-02','2025-02-03',
+      '2025-02-04','2025-02-05','2025-02-06','2025-02-07','2025-02-08',
+      '2025-02-09','2025-02-10','2025-02-11','2025-02-12','2025-02-13'
+    ];
+    
+    // Helper function to generate dummy data based on index ranges
+    function generateDummyData(ranges) {
+      return dates.map((d, i) => {
+        for (const range of ranges) {
+          if (i < range.end) {
+            return Math.round(Math.random() * range.multiplier + range.base);
+          }
+        }
+        return Math.round(Math.random() * 30 + 40);
+      });
+    }
+    
+    // Overall dummy data (aggregated across all platforms)
+    const overallViews = generateDummyData([
+      { end: 5, multiplier: 10, base: 10 },
+      { end: 20, multiplier: 20, base: 20 },
+      { end: 35, multiplier: 50, base: 50 },
+      { end: 45, multiplier: 80, base: 80 }
+    ]);
+    const overallEngagement = generateDummyData([
+      { end: 5, multiplier: 5, base: 5 },
+      { end: 20, multiplier: 10, base: 10 },
+      { end: 35, multiplier: 20, base: 20 },
+      { end: 45, multiplier: 30, base: 30 }
+    ]);
+    
+    // TikTok dummy data
+    const tiktokViews = generateDummyData([
+      { end: 5, multiplier: 20, base: 30 },
+      { end: 20, multiplier: 30, base: 40 },
+      { end: 35, multiplier: 40, base: 50 },
+      { end: 45, multiplier: 50, base: 60 }
+    ]);
+    const tiktokEngagement = generateDummyData([
+      { end: 5, multiplier: 5, base: 5 },
+      { end: 20, multiplier: 10, base: 10 },
+      { end: 35, multiplier: 15, base: 15 },
+      { end: 45, multiplier: 20, base: 20 }
+    ]);
+    
+    // YouTube Shorts dummy data
+    const youtubeViews = generateDummyData([
+      { end: 5, multiplier: 10, base: 10 },
+      { end: 20, multiplier: 20, base: 20 },
+      { end: 35, multiplier: 30, base: 30 },
+      { end: 45, multiplier: 40, base: 40 }
+    ]);
+    const youtubeEngagement = generateDummyData([
+      { end: 5, multiplier: 5, base: 5 },
+      { end: 20, multiplier: 8, base: 8 },
+      { end: 35, multiplier: 10, base: 10 },
+      { end: 45, multiplier: 15, base: 15 }
+    ]);
+    
+    // Instagram Reels dummy data
+    const instagramViews = generateDummyData([
+      { end: 5, multiplier: 2, base: 5 },
+      { end: 20, multiplier: 3, base: 5 },
+      { end: 35, multiplier: 4, base: 5 },
+      { end: 45, multiplier: 5, base: 5 }
+    ]);
+    const instagramEngagement = generateDummyData([
+      { end: 5, multiplier: 2, base: 3 },
+      { end: 20, multiplier: 3, base: 3 },
+      { end: 35, multiplier: 4, base: 3 },
+      { end: 45, multiplier: 5, base: 3 }
+    ]);
+    
+    // -----------------------------------------------------------------------
+    // Function to create a dual y-axis line chart using ECharts
+    function createDualAxisChart(domId, titleText, viewsData, engagementData, viewLabel, engagementLabel) {
+      var chart = echarts.init(document.getElementById(domId));
+      var option = {
+        title: {
+          text: titleText,
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: [viewLabel, engagementLabel],
+          top: 30
+        },
+        grid: {
+          left: '8%',
+          right: '8%',
+          bottom: '15%'
+        },
+        xAxis: {
+          type: 'category',
+          data: dates,
+          axisLabel: { rotate: 45 }
+        },
+        yAxis: [
+          {
+            type: 'value',
+            name: viewLabel,
+            position: 'left',
+            axisLine: { lineStyle: { color: '#007bff' } }
+          },
+          {
+            type: 'value',
+            name: engagementLabel,
+            position: 'right',
+            axisLine: { lineStyle: { color: '#28a745' } }
+          }
+        ],
+        series: [
+          {
+            name: viewLabel,
+            type: 'line',
+            smooth: true,
+            data: viewsData,
+            itemStyle: { color: '#007bff' }
+          },
+          {
+            name: engagementLabel,
+            type: 'line',
+            smooth: true,
+            yAxisIndex: 1,
+            data: engagementData,
+            itemStyle: { color: '#28a745' }
+          }
+        ]
+      };
+      chart.setOption(option);
+      return chart;
+    }
+    
+    // Create Overall Chart
+    var overallChart = createDualAxisChart(
+      'overallChart',
+      'Total Views & Total Engagement Over Time',
+      overallViews,
+      overallEngagement,
+      'Views (K)',
+      'Engagement'
+    );
+    
+    // Create TikTok Chart
+    var tiktokChart = createDualAxisChart(
+      'tiktokChart',
+      'TikTok Performance Overview',
+      tiktokViews,
+      tiktokEngagement,
+      'Views (K)',
+      'Engagement'
+    );
+    
+    // Create YouTube Shorts Chart
+    var youtubeChart = createDualAxisChart(
+      'youtubeChart',
+      'YouTube Shorts Performance Overview',
+      youtubeViews,
+      youtubeEngagement,
+      'Views (K)',
+      'Engagement'
+    );
+    
+    // Create Instagram Reels Chart
+    var instagramChart = createDualAxisChart(
+      'instagramChart',
+      'Instagram Reels Performance Overview',
+      instagramViews,
+      instagramEngagement,
+      'Views (K)',
+      'Engagement'
+    );
+    
+    // Responsive behavior
+    window.addEventListener('resize', function() {
+      overallChart.resize();
+      tiktokChart.resize();
+      youtubeChart.resize();
+      instagramChart.resize();
+    });
+  </script>
+</body>
+</html>

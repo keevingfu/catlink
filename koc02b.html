@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catlink Paid Instagram KOL Performance</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 992px) {
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .metric-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #222;
+        }
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Tabs Styling */
+        .tabs {
+            margin-bottom: 20px;
+        }
+
+        .tabs-list {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .tabs-trigger {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1em;
+            color: #555;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tabs-trigger.active {
+            border-bottom-color: #007bff; /* Highlight color */
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .tabs-content {
+            display: none;  /* Hide all content by default */
+            padding: 15px 0;
+        }
+
+        .tabs-content.active {
+            display: block; /* Show active content */
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px; /* Fixed height for charts */
+        }
+
+        .insights {
+            margin-top: 1rem;
+        }
+        .insights h3 { /* Changed from h4 to h3 */
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .insights ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+        }
+        .insights-blue { color: #007bff; }
+        .insights-green { color: #28a745; }
+        .insights-purple { color: #6f42c1; }
+        .insights-orange { color: #fd7e14; }
+        .insights-teal { color: #20c997; } /* Added teal */
+        .insights-indigo { color: #6610f2; } /* Added indigo */
+
+        /* Add new style for audience analysis grid */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .audience-grid .demographic-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .audience-grid .insights-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Catlink Paid Instagram KOL Performance</h1>
+
+    <div class="metrics">
+        <div class="metric-card">
+            <div class="metric-value">221,681</div>
+            <div class="metric-label">Total Views</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">1,257</div>
+            <div class="metric-label">Interactions</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">1,231</div>
+            <div class="metric-label">Link Clicks</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">615</div>
+            <div class="metric-label">New Followers</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tabs-list">
+            <button class="tabs-trigger active" data-tab="summary">Overview</button>
+            <button class="tabs-trigger" data-tab="audience">Audience Analysis</button>
+            <button class="tabs-trigger" data-tab="content">Content Performance</button>
+        </div>
+
+        <div class="tabs-content active" id="summary">
+            <div class="grid-container">
+                <div class="card">
+                    <div class="card-title">Monthly Performance Trends</div>
+                    <div class="chart-container" id="performanceChart"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Geographic Distribution</div>
+                    <div class="chart-container" id="geoChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-content" id="audience">
+            <div class="audience-grid">
+                <div class="demographic-section">
+                    <div class="card">
+                        <div class="card-title">Demographic Distribution</div>
+                        <div class="chart-container" id="demographicChart"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Geographic Distribution</div>
+                        <div class="chart-container" id="audienceGeoChart"></div>
+                    </div>
+                </div>
+                <div class="insights-section">
+                    <div class="card">
+                        <div class="card-title">Key Audience Characteristics</div>
+                        <div class="insights">
+                            <h3 class="insights-blue">Demographics</h3>
+                            <ul>
+                                <li>25-34 year old women are the main group</li>
+                                <li>Women make up 78.8% of users</li>
+                                <li>Primarily young middle-class families</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3 class="insights-green">Consumer Characteristics</h3>
+                            <ul>
+                                <li>High purchasing power group</li>
+                                <li>Concerned about pet quality of life</li>
+                                <li>Focus on product experience</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Geographic Insights</div>
+                        <div class="insights">
+                            <h3 class="insights-purple">Main Markets</h3>
+                            <ul>
+                                <li>US market accounts for 50.6%</li>
+                                <li>Canadian market accounts for 4.5%</li>
+                                <li>Asian market is growing rapidly</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3 class="insights-orange">Recommendations</h3>
+                            <ul>
+                                <li>Deepen penetration in North American markets</li>
+                                <li>Expand into emerging Asian markets</li>
+                                <li>Strengthen localized content</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-content" id="content">
+            <div class="grid-container">
+                <div class="card">
+                    <div class="card-title">Top Content Types</div>
+                    <div class="insights">
+                        <h3 class="insights-blue">Content Categories</h3>
+                        <ul>
+                            <li>Product tutorial videos</li>
+                            <li>Usage tips sharing</li>
+                            <li>Holiday themed content</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Interaction Peaks</div>
+                    <div class="insights">
+                        <h3 class="insights-green">Peak Performance</h3>
+                        <ul>
+                            <li>Highest interaction rate during weekdays</li>
+                            <li>Most active at 9 PM</li>
+                            <li>More interactions during holidays</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Optimization Suggestions</div>
+                    <div class="insights">
+                        <h3 class="insights-purple">Strategic Actions</h3>
+                        <ul>
+                            <li>Increase tutorial content</li>
+                            <li>Optimize posting times</li>
+                            <li>Enhance interactive design</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Conversion Metrics</div>
+                    <div class="insights">
+                        <h3 class="insights-orange">Key Metrics</h3>
+                        <ul>
+                            <li>Average interaction rate: 0.57%</li>
+                            <li>Click conversion rate: 0.56%</li>
+                            <li>Follow conversion rate: 0.28%</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Optimization Areas</div>
+                    <div class="insights">
+                        <h3 class="insights-teal">Focus Points</h3>
+                        <ul>
+                            <li>Optimize CTA design</li>
+                            <li>Improve conversion funnel</li>
+                            <li>Strengthen user incentives</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab Switching Logic
+    const tabsTriggers = document.querySelectorAll('.tabs-trigger');
+    const tabsContents = document.querySelectorAll('.tabs-content');
+
+    tabsTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            // Remove 'active' class from all triggers and content
+            tabsTriggers.forEach(t => t.classList.remove('active'));
+            tabsContents.forEach(c => c.classList.remove('active'));
+
+            // Add 'active' class to clicked trigger
+            trigger.classList.add('active');
+
+            // Show corresponding content
+            const tabId = trigger.dataset.tab;
+            document.getElementById(tabId).classList.add('active');
+
+            // Initialize charts based on active tab
+            if (tabId === 'summary') {
+                initPerformanceChart();
+                initGeoChart('geoChart');
+            } else if (tabId === 'audience') {
+                initDemographicChart();
+                initGeoChart('audienceGeoChart');
+            }
+        });
+    });
+
+    // Performance Chart (Line Chart)
+    function initPerformanceChart() {
+        const performanceChart = echarts.init(document.getElementById('performanceChart'));
+        const performanceData = [
+          { month: 'Jul', views: 10065, interactions: 72, linkClicks: 280, follows: 158 },
+          { month: 'Aug', views: 82726, interactions: 397, linkClicks: 259, follows: 89 },
+          { month: 'Sep', views: 32902, interactions: 230, linkClicks: 132, follows: 84 },
+          { month: 'Oct', views: 14301, interactions: 127, linkClicks: 121, follows: 97 },
+          { month: 'Nov', views: 20757, interactions: 199, linkClicks: 148, follows: 65 },
+          { month: 'Dec', views: 34839, interactions: 151, linkClicks: 158, follows: 61 },
+          { month: 'Jan', views: 26091, interactions: 81, linkClicks: 133, follows: 61 }
+        ];
+
+        const performanceOption = {
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['Views', 'Interactions'], bottom: 0 },
+            xAxis: { type: 'category', data: performanceData.map(item => item.month) },
+            yAxis: { type: 'value' },
+            series: [
+                { name: 'Views', type: 'line', data: performanceData.map(item => item.views), color: '#8884d8' },
+                { name: 'Interactions', type: 'line', data: performanceData.map(item => item.interactions), color: '#82ca9d' }
+            ]
+        };
+        performanceChart.setOption(performanceOption);
+    }
+
+    // Demographic Chart
+    function initDemographicChart() {
+        const demographicChart = echarts.init(document.getElementById('demographicChart'));
+        const demographicData = [
+            { age: '18-24', female: 6.0, male: 2.4 },
+            { age: '25-34', female: 29.2, male: 9.1 },
+            { age: '35-44', female: 22.1, male: 6.5 },
+            { age: '45-54', female: 12.9, male: 2.3 },
+            { age: '55-64', female: 5.9, male: 0.9 },
+            { age: '65+', female: 2.1, male: 0.6 }
+        ];
+
+        const demographicOption = {
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            legend: { data: ['Female', 'Male'], bottom: 0 },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: [{ 
+                type: 'category', 
+                data: demographicData.map(item => item.age),
+                axisLabel: { interval: 0 }
+            }],
+            yAxis: [{ 
+                type: 'value',
+                name: 'Percentage(%)',
+                axisLabel: { formatter: '{value}%' }
+            }],
+            series: [
+                { 
+                    name: 'Female', 
+                    type: 'bar', 
+                    data: demographicData.map(item => item.female),
+                    color: '#FF69B4',
+                    label: { show: true, position: 'top', formatter: '{c}%' },
+                    barMaxWidth: 35
+                },
+                { 
+                    name: 'Male', 
+                    type: 'bar', 
+                    data: demographicData.map(item => item.male),
+                    color: '#4169E1',
+                    label: { show: true, position: 'top', formatter: '{c}%' },
+                    barMaxWidth: 35
+                }
+            ]
+        };
+        demographicChart.setOption(demographicOption);
+    }
+
+    // Geographic Chart
+    function initGeoChart(containerId) {
+        const geoChart = echarts.init(document.getElementById(containerId));
+        const geoData = [
+            { country: 'United States', value: 50.6 },
+            { country: 'Canada', value: 4.5 },
+            { country: 'China', value: 3.4 },
+            { country: 'UK', value: 3.1 },
+            { country: 'Others', value: 38.4 }
+        ];
+        const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+        const geoOption = {
+            tooltip: { 
+                trigger: 'item',
+                formatter: '{b}: {c}% ({d}%)'
+            },
+            legend: {
+                bottom: 0,
+                data: geoData.map(item => item.country)
+            },
+            series: [
+                {
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
+                    data: geoData.map((item, index) => ({
+                        value: item.value,
+                        name: item.country,
+                        itemStyle: { color: COLORS[index % COLORS.length] }
+                    })),
+                    label: {
+                        show: true,
+                        formatter: '{b}\n{d}%',
+                        position: 'outside'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        geoChart.setOption(geoOption);
+    }
+
+    // Initial chart setup
+    const activeTab = document.querySelector('.tabs-trigger.active').dataset.tab;
+    if (activeTab === 'summary') {
+        initPerformanceChart();
+        initGeoChart('geoChart');
+    } else if (activeTab === 'audience') {
+        initDemographicChart();
+        initGeoChart('audienceGeoChart');
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        const activeTab = document.querySelector('.tabs-trigger.active').dataset.tab;
+        if (activeTab === 'summary') {
+            echarts.getInstanceByDom(document.getElementById('performanceChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('geoChart'))?.resize();
+        } else if (activeTab === 'audience') {
+            echarts.getInstanceByDom(document.getElementById('demographicChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('audienceGeoChart'))?.resize();
+        }
+    });
+</script>
+</body>
+</html>

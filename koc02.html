@@ -1,462 +1,540 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>KOL Popular Video</title>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        .container { width: 95%; max-width: 1600px; margin: 20px auto; background-color: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h1 { text-align: center; color: #333; }
-        h2 { color: #444; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        .table-container { overflow-x: auto; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f8f8f8; font-weight: bold; }
-        .chart-container { width: 100%; height: 400px; margin-bottom: 30px; min-height: 400px; }
-        .video-thumbnail { max-width: 100px; height: auto; }
-        .kol-avatar { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
-        .kol-name { font-weight: bold; }
-         .insights-recommendations {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catlink Paid KOL Performance</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
 
-        .insights-recommendations strong {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .data-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust minmax as needed */
-        gap: 20px;
-        margin-bottom: 30px;
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
-    .data-card {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        padding: 15px;
-        border-radius: 5px;
-        text-align: center;
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
     }
-    .data-card h3 {
-        margin-top: 0;
-        color: #555;
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Four columns */
+      gap: 20px;
+      margin-bottom: 20px;
     }
-    .data-card p {
-        font-size: 24px;
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #fff;
+    }
+
+    .card-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    .metric-value {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #222;
+    }
+    .metric-label {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    /* Tabs Styling */
+    .tabs {
+      margin-bottom: 20px;
+    }
+
+    .tabs-list {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
+
+    .tabs-trigger {
+      padding: 10px 15px;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      font-size: 1em;
+      color: #555;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tabs-trigger.active {
+      border-bottom-color: #007bff; /* Highlight color */
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .tabs-content {
+        display: none;  /* Hide all content by default */
+        padding: 15px 0;
+    }
+
+    .tabs-content.active {
+        display: block; /* Show active content */
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 300px; /* Fixed height for charts */
+    }
+
+    .insights {
+        margin-top: 1rem;
+    }
+    .insights h4 {
         font-weight: bold;
-        color: #333;
+        margin-bottom: 0.5rem;
     }
-    .data-card .unit {
-        font-size: 14px;
-        color: #777;
+    .insights ul {
+        list-style: disc;
+        margin-left: 1.5rem;
     }
-    </style>
+    .insights-blue { color: #007bff; }  /* Example color, adjust as needed */
+    .insights-green { color: #28a745; }
+    .insights-purple { color: #6f42c1; }
+    .insights-orange { color: #fd7e14; }
+
+    /* Add responsive layout */
+    @media (max-width: 992px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+      }
+    }
+
+    @media (max-width: 576px) {
+      .grid-container {
+        grid-template-columns: 1fr; /* One column on small screens */
+      }
+    }
+
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>KOL Popular Video</h1>
 
-        <h2>Overall Performance Metrics</h2>
-          <div class="data-grid">
-            <div class="data-card">
-                <h3>Total Likes</h3>
-                <p><span id="total-likes"></span></p>
-            </div>
-            <div class="data-card">
-                <h3>Total Views</h3>
-                <p><span id="total-views"></span></p>
-            </div>
-            <div class="data-card">
-                <h3>Total Comments</h3>
-                <p><span id="total-comments"></span></p>
-             </div>
-            <div class="data-card">
-                <h3>Total Sales</h3>
-                <p>$<span id="total-sales"></span></p>
-            </div>
-            <div class="data-card">
-                <h3>Average Engagement Rate</h3>
-                <p><span id="avg-engagement"></span><span class="unit">%</span></p>
-            </div>
-             <div class="data-card">
-                <h3>Conversion Rate</h3>
-                <p><span id="conversion-rate"></span> <span class="unit">%</span></p>
-             </div>
-        </div>
-          <div class="insights-recommendations">
-            <strong>Insights:</strong> These metrics provide a high-level overview of campaign performance.  Tracking these over time reveals trends in engagement and sales conversion.  Low engagement or conversion rates might indicate issues with content, targeting, or the product itself.
-            <br><strong>Recommendations:</strong>
-            <ul>
-              <li>Set benchmarks for each metric based on industry averages and past campaign performance.</li>
-              <li>Identify underperforming videos and analyze their content, posting time, and targeting to determine why they are not resonating with the audience.</li>
-              <li>Experiment with different content formats and styles to improve engagement.</li>
-              <li>If sales conversion is low, examine the entire sales funnel (from video view to purchase) to identify bottlenecks.</li>
-              <li>Consider A/B testing different calls to action (CTAs) in the videos.</li>
-            </ul>
-          </div>
+<div class="container">
+  <h1>Catlink Paid KOL Performance</h1>
 
+  <div class="grid-container">
+    <div class="card">
+      <div class="metric-value">2,415</div>
+      <div class="metric-label">Total Followers(K)</div>
+    </div>
+    <div class="card">
+      <div class="metric-value">5.4%</div>
+      <div class="metric-label">Average Engagement Rate</div>
+    </div>
+    <div class="card">
+      <div class="metric-value">$2,245.95</div>
+      <div class="metric-label">Total Sales</div>
+    </div>
+    <div class="card">
+      <div class="metric-value">2.3</div>
+      <div class="metric-label">ROI</div>
+    </div>
+  </div>
 
-      <h2>KOL Performance by Platform</h2>
-      <div id="platform-performance-chart" class="chart-container"></div>
-        <div class="insights-recommendations">
-            <strong>Insights:</strong> This chart allows for a comparison of performance across different platforms (YouTube, Instagram, TikTok). It helps identify which platforms are most effective for reaching the target audience and driving engagement/sales.
-            <br><strong>Recommendations:</strong>
-            <ul>
-                <li>Allocate marketing resources based on platform performance.  If TikTok is significantly outperforming other platforms, focus more effort there.</li>
-                <li>Adapt content strategies for each platform. What works on YouTube may not work on TikTok, and vice versa.</li>
-                <li>If a platform is consistently underperforming, re-evaluate the strategy for that platform or consider discontinuing efforts there.</li>
-            </ul>
-        </div>
-
-        <h2>Individual KOL Performance</h2>
-        <div id="kol-performance-chart" class="chart-container"></div>
-        <div class="insights-recommendations">
-          <strong>Insights:</strong> This chart highlights the top-performing and underperforming KOLs.  Significant differences in performance may indicate variations in audience engagement, content quality, or audience alignment.
-          <br><strong>Recommendations:</strong>
-          <ul>
-              <li>Continue working with high-performing KOLs and explore opportunities for longer-term partnerships.</li>
-              <li>Analyze the content of top-performing KOLs to identify best practices and replicate successful strategies.</li>
-              <li>Provide feedback and guidance to underperforming KOLs to help them improve their content.</li>
-              <li>Consider replacing underperforming KOLs if their performance does not improve.</li>
-              <li>Diversify KOL partnerships to reduce reliance on any single individual.</li>
-          </ul>
-      </div>
-
-
-        <h2>Video Performance Table</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Thumbnail</th>
-                        <th>Category</th>
-                        <th>Video Title</th>
-                        <th>KOL Name</th>
-                        <th>KOL Account</th>
-                        <th>Likes</th>
-                        <th>Views</th>
-                        <th>Comments</th>
-                        <th>Saves</th>
-                        <th>Engagement Rate (%)</th>
-                        <th>Duration (s)</th>
-                        <th>Publish Date</th>
-                        <th>Sales</th>
-                        <th>Sales Amount</th>
-                        <th>Product</th>
-                    </tr>
-                </thead>
-                <tbody id="video-data">
-                    </tbody>
-            </table>
-        </div>
-        <div class="insights-recommendations">
-          <strong>Insights:</strong>
-          <ul>
-              <li>Identify top-performing videos by various metrics (views, engagement, sales).</li>
-              <li>Analyze content themes, video length, and posting times of successful videos.</li>
-              <li>Identify underperforming videos and determine potential reasons for low engagement.</li>
-              <li>Look for correlations between video content and sales.</li>
-              <li>Compare performance across different product categories.</li>
-          </ul>
-          <br><strong>Recommendations:</strong>
-            <ul>
-                <li>Create more content similar to top-performing videos.</li>
-                <li>Experiment with different video lengths and formats.</li>
-                <li>Optimize video titles and descriptions for search and discoverability.</li>
-                <li>Consider removing or revising underperforming videos.</li>
-                <li>Test different calls to action to improve sales conversion.</li>
-            </ul>
-      </div>
-
+  <div class="tabs">
+    <div class="tabs-list">
+      <button class="tabs-trigger active" data-tab="platform">Platform Performance</button>
+      <button class="tabs-trigger" data-tab="audience">Audience Analysis</button>
+      <button class="tabs-trigger" data-tab="content">Content Effectiveness</button>
+      <button class="tabs-trigger" data-tab="roi">ROI Analysis</button>
     </div>
 
-    <script>
-      // Sample Data (Replace with your actual data)
-      const videoData = [
-  {
-    thumbnail: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/acd90e2a-c3d2-43ab-b7a2-06661594fb8f.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@sprinklesweep/video/7265915440424160555",
-    videoTitle: "🐱 Calling all cat parents!! Cleaning up the litter box is low on the favorites things to do list, but now you can seriously cut down the scoop time with our new Cat Litter Speed Sifter 😻 Experience the speed for yourself now #litterboxhack #catparent #welovecats #sifter #oddlysatisfyingvideos",
-    kolName: "Sprinkle & Sweep",
-    kolAccount: "sprinklesweep",
-    kolHomepage: "https://www.tiktok.com/@sprinklesweep",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/8915cfca-aaac-4449-a7f7-7033dcaa141f.jpeg",
-    likes: 186564,
-    views: 6053637,
-    comments: 1045,
-    saves: 21711,
-    engagementRate: 3.87,
-    duration: 6,
-    publishDate: "2023-08-11 12:22:57",
-    sales: 0,
-    salesAmount: 0,
-    commodityId: 1729388511215063866,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/2aeb50f1-f570-460a-8d7f-26f76eba0167.jpeg",
-    productName: "Sprinkle & Sweep 5X Faster Cat Litter Speed Sifter with Holder - Premium Scoop for Effortless Cleaning",
-    productPrice: 29.99,
-    productRating: 4.7,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 1359,
-    productSalesAmount: 40756.41
-  },
-  {
-    thumbnail: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/c92fbbff-f104-4c1a-b0f6-671d4aaf424f.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@floradelavanilla/video/7356743549406170410",
-    videoTitle: "Replying to @Victoria Rose BEAUTY CREATOR a litter restock to show you exactly how much fits in our new stainless steel litter box! 🫶 #stainlesssteellitterbox #restockwithme #tiktokshopcat #aestheticcat #tiktokmademebuyit #springreset #catessentials #catlitterbox #catowner #ttsacl #creatorsearchinsights #vanillagirlaesthetic #cataesthetic #aestheticvideos #catmomlife #refillandrestock #refillday #restocking OGs know this is Winnifred's SECOND stainless steel litter box! Jackson Galaxy's advice of 'one box per cat +1' finally pushed us to get another, and it couldn't have come at a better time. Turns out, Winnifred has a penchant for kicking litter everywhere, hence trying a taller box! This new stainless steel litter box stands at a total height of about 13 inches with its lid securely snapped on. Speaking of the lid, it's not just functional; it's also aesthetically pleasing in a crisp white color. Easy on the eyes and easy to handle! What's more, this litter box comes with a handy scooper and a cat litter trapping footboard. The real star here, though, is the stainless steel material of the box. It's a breeze to clean, incredibly durable, and best of all, non-porous, so we're not worried about lingering odors. Making the switch to stainless steel has truly been one of my top decisions as a cat mom! Here's to a cleaner, fresher-smelling home for both Winnifred and me!",
-    kolName: "floradelavanilla",
-    kolAccount: "floradelavanilla",
-    kolHomepage: "https://www.tiktok.com/@floradelavanilla",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/f332a09b-1c2a-4ee7-a1c6-ae0c5ae42b0b.jpeg",
-    likes: 131563,
-    views: 3872752,
-    comments: 975,
-    saves: 19655,
-    engagementRate: 4.11,
-    duration: 34,
-    publishDate: "2024-04-12 06:42:35",
-    sales: 2,
-    salesAmount: 114.27,
-    commodityId: 1729438357222953575,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/b259aef4-c7f1-4077-9f76-41fe53999573.jpeg",
-    productName: "Petterm Stainless Steel Cat Litter Box with Scoop & Mat, Large Enclosed Litter Box with Lid, Non-Sticky, Anti-Leak, Easy to Clean, High-Walled Design",
-    productPrice: 66.66,
-    productRating: 4.7,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 10848,
-    productSalesAmount: 619800.48
-  },
-  {
-    thumbnail: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/34614555-0219-4da1-b071-d2882512dea2.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@lisamots5/video/7406521636335193387",
-    videoTitle: "Why settle for less when you can have the best? This stainless steel cat litter box is durable, easy to clean, and keeps odors at bay. Is it time for an upgrade in your cat's routine? #cat #catlitterbox #litterbox #catsoftiktok #stainlesssteellitterbox",
-    kolName: "allforfamilydeals",
-    kolAccount: "lisamots5",
-    kolHomepage: "https://www.tiktok.com/@lisamots5",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/e747b9a2-e077-4b3c-8076-7e64ac7abdce.jpeg",
-    likes: 28852,
-    views: 3738430,
-    comments: 773,
-    saves: 5641,
-    engagementRate: 1.24,
-    duration: 35,
-    publishDate: "2024-08-24 10:06:45",
-    sales: 52,
-    salesAmount: 1331.72,
-    commodityId: 1729443594276081880,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/1d6c877c-9e39-4e81-ad7d-e8480f68b9a3.jpeg",
-    productName: "PTLOM Stainless Steel Cat Litter Box High Side Cat Toilet Metal Kitten Litter Box, No Lid Large Space, Suitable for Big Cats, Kittens, Rabbits, Splash-proof Non-stick Cat Litter Box Odorless cat litter box",
-    productPrice: 36.99,
-    productRating: 4.8,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 26489,
-    productSalesAmount: 678383.29
-  },
-  {
-    thumbnail: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/d6b0fb1d-d64a-4df8-8bdc-85a13cd0b8a6.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@itschelseahope/video/7355618560212765995",
-    videoTitle: "For cat parents who hate cleaning the litter box 👏🏼👏🏼 #litterbox #ttshop",
-    kolName: "chels",
-    kolAccount: "itschelseahope",
-    kolHomepage: "https://www.tiktok.com/@itschelseahope",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/956c3bdb-9b79-4227-a0c6-cb8c36633a51.jpeg",
-    likes: 13645,
-    views: 2060161,
-    comments: 149,
-    saves: 2451,
-    engagementRate: 0.91,
-    duration: 20,
-    publishDate: "2024-04-09 05:57:04",
-    sales: 0,
-    salesAmount: 0,
-    commodityId: 1729406142818128367,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/197350fa-23b9-4adb-8032-1e9aeccf43e1.jpeg",
-    productName: "Meowant SC01 Self-Cleaning Cat Litter Box, Extra Large/Odor Removal/APP Control Smart Cat Litter Box with Mat & Liner - Best Seller",
-    productPrice: 279.00,
-    productRating: 4.6,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 9421,
-    productSalesAmount: 2557801.5
-  },
-  {
-    thumbnail: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/6993d62d-abca-46c2-b359-b379d52bc541.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@undercovertabbies/video/7342313786814041387",
-    videoTitle: "Unboxing our new stainless steel cat litter box from Tiktok Shop. It's so pretty!! #catsoftiktok #cattok #tiktokmademebuyit #catlitterbox #litterbox #litterboxtips #CapCut",
-    kolName: "Aji, Ginza & Marshmellow",
-    kolAccount: "undercovertabbies",
-    kolHomepage: "https://www.tiktok.com/@undercovertabbies",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/72bba046-fce3-46c3-8b71-a270df24e940.jpeg",
-    likes: 29339,
-    views: 1154934,
-    comments: 296,
-    saves: 6113,
-    engagementRate: 3.3,
-    duration: 44,
-    publishDate: "2024-03-04 09:27:52",
-    sales: 0,
-    salesAmount: 0,
-    commodityId: 1729441884087357661,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/0803506b-5cfa-4ee3-8af1-a6a159302012.jpeg",
-    productName: "AIPERRO Enclosed Cat Litter Box Stainless Steel with Lid, XL Extra Large Litter Box for Big Cats, Metal Litter Box High Sided, Anti-Urine Leakage, Include Cat Mat and All-Metal Litter Scoop",
-    productPrice: 68.98,
-    productRating: 4.6,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 14545,
-    productSalesAmount: 1003314.1
-  },
-  {
-    thumbnail: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/da6eb046-989f-47e3-8f48-0c1b6b835d5f.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@lexiandtrixie/video/7399694398071508255",
-    videoTitle: "This cat stainless steel litter box is extra large for big cats and includes a cat litter mat, litter scoop, and a partially closed lid. The sides snap on tightly so no urine leakage! @Geoorood pet #geoorood #catlitterbox #stainlesssteellitterbox #litterbox #catbox #catsoftiktok #kitty #catmusthaves #catcare #tabbycatsoftiktok #tiktokshopbacktoschool #TikTokCreatorSearchInsightsIncentive",
-    kolName: "lexi 🌸",
-    kolAccount: "lexiandtrixie",
-    kolHomepage: "https://www.tiktok.com/@lexiandtrixie",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/41896a56-b17a-4f62-bbf6-9fa1b2a69e67.jpeg",
-    likes: 6771,
-    views: 1151681,
-    comments: 133,
-    saves: 1519,
-    engagementRate: 0.81,
-    duration: 60,
-    publishDate: "2024-08-06 00:33:47",
-    sales: 101,
-    salesAmount: 4390.98,
-    commodityId: 1729471606942700286,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/1d148f21-6d38-4560-937b-1859d630c14d.jpeg",
-    productName: "【Holiday Haul】Enclosed Cat Litter Box Stainless Steel with Lid, XL Large Metal Litter Box High Sided, Anti-Urine Leakage, Include Cat Mat & Litter Scoop,Never Absorbs Odors, Anti-Urine Leakage, Easy Cleaning, Non-Sticky, TikTokShop Flash Sale,Cat Soft",
-    productPrice: 46.97,
-    productRating: 4.9,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 2581,
-    productSalesAmount: 112208.98
-  },
-  {
-    thumbnail: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/781d2828-ce10-4929-a0c8-2323fe989978.jpeg",
-    category: "Pet Supplies",
-    videoLink: "https://www.tiktok.com/@gembosells/video/7419117406888463659",
-    videoTitle: "Automatic cat litter box that replaces all 5 of our old litter boxes. #creatorsearchinsights #cattok #automaticlitterbox #litterbox #litterrobot #litter #catlitter #selfcleaninglitterbox #TikTokShop #TikTokMadeMeBuyIt #Home #homeimprovement",
-    kolName: "Unique Items & Products",
-    kolAccount: "gembosells",
-    kolHomepage: "https://www.tiktok.com/@gembosells",
-    kolAvatar: "https://microdata-spiders-media.oss-cn-shanghai.aliyuncs.com/image/5ec15073-7c59-4835-b4e4-3e3a1233a8d0.jpeg",
-    likes: 33887,
-    views: 1030157,
-    comments: 190,
-    saves: 2106,
-    engagementRate: 3.59,
-    duration: 119,
-    publishDate: "2024-09-27 08:44:47",
-    sales: 0,
-    salesAmount: 0,
-    commodityId: 1729492848884224495,
-    productImage: "http://microdata-static-hk.oss-cn-hongkong.aliyuncs.com/pro-api/tt/image/d27c9f00-6a23-4dcc-8d90-048d56980c19.jpeg",
-    productName: "MeoWant SC02 75L Extra Large Self-Cleaning Cat Litter Box with APP Control, Safety Protection, Odor Removal, and Included Mat & Liner for Multiple Cats",
-    productPrice: 289.00,
-    productRating: 4.4,
-    productCategory: "Pet Supplies",
-    productCategoryCn: "宠物用品",
-    productSales: 13246,
-    productSalesAmount: 3828094
+    <div class="tabs-content active" id="platform">
+       <div class="grid-container">
+            <div class="card">
+                <div class="card-title">Cross-Platform Performance Comparison</div>
+                <div id="platformChart" class="chart-container"></div>
+                <div class="insights">
+                    <h4 class="insights-blue">Platform Insights</h4>
+                    <ul>
+                        <li>YouTube has best traffic conversion</li>
+                        <li>TikTok has highest engagement rate</li>
+                        <li>Instagram has stable conversion</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Cross-Platform Performance Comparison</div>
+                <div id="platformComparisonChart" class="chart-container"></div>
+                <div class="insights">
+                    <h4 class="insights-green">Optimization Suggestions</h4>
+                    <ul>
+                        <li>Enhance cross-platform content synergy</li>
+                        <li>Optimize TikTok conversion path</li>
+                        <li>Improve Instagram engagement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs-content" id="audience">
+      <div class="grid-container">
+        <div class="card">
+          <div class="card-title">Age and Gender Analysis</div>
+          <div id="demographicChart" class="chart-container"></div>
+          <div class="insights">
+              <h4 class="insights-purple">Demographic Insights</h4>
+              <ul>
+                  <li>25-34 year old females are the main group</li>
+                  <li>Female users show higher engagement</li>
+                  <li>Young adults are primary audience</li>
+              </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Regional Market Analysis</div>
+          <div id="geoChart" class="chart-container"></div>
+          <div class="insights">
+              <h4 class="insights-orange">Market Distribution Insights</h4>
+              <ul>
+                  <li>US market leads with over 50% share</li>
+                  <li>Strong potential in Canadian market</li>
+                  <li>Growing presence in Asian markets</li>
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="tabs-content" id="content">
+        <div class="grid-container">
+            <div class="card">
+                <div class="card-title">Best Performing Content</div>
+                <div class="insights">
+                  <ul>
+                    <li>Product usage tutorials</li>
+                    <li>Unboxing review videos</li>
+                    <li>User experience sharing</li>
+                  </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Engagement Performance</div>
+                <div class="insights">
+                    <ul>
+                        <li>High comment conversion rate</li>
+                        <li>Good sharing performance</li>
+                        <li>Stable click-through rate</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Short-term Optimization</div>
+                <div class="insights">
+                    <ul>
+                        <li>Increase video interaction</li>
+                        <li>Optimize content pacing</li>
+                        <li>Strengthen product highlights</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Long-term Strategy</div>
+                 <div class="insights">
+                    <ul>
+                        <li>Build content matrix</li>
+                        <li>Develop unique positioning</li>
+                        <li>Cultivate IP characteristics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabs-content" id="roi">
+          <div class="grid-container">
+              <div class="card">
+                <div class="card-title">Investment Performance</div>
+                <div class="insights">
+                  <ul>
+                    <li>Overall ROI: 2.3</li>
+                    <li>YouTube has highest ROI</li>
+                    <li>Conversion rate improving</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Optimization Direction</div>
+                <div class="insights">
+                  <ul>
+                    <li>Optimize placement strategy</li>
+                    <li>Improve conversion efficiency</li>
+                    <li>Control customer acquisition cost</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Resource Allocation</div>
+                <div class="insights">
+                    <ul>
+                        <li>Increase YouTube investment</li>
+                        <li>Optimize TikTok strategy</li>
+                        <li>Maintain Instagram stability</li>
+                    </ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Performance Enhancement</div>
+                <div class="insights">
+                  <ul>
+                    <li>Improve tracking system</li>
+                    <li>Optimize attribution model</li>
+                    <li>Establish evaluation criteria</li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  // Tab Switching Logic
+  const tabsTriggers = document.querySelectorAll('.tabs-trigger');
+  const tabsContents = document.querySelectorAll('.tabs-content');
+
+  tabsTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      // Remove 'active' class from all triggers and content
+      tabsTriggers.forEach(t => t.classList.remove('active'));
+      tabsContents.forEach(c => c.classList.remove('active'));
+
+      // Add 'active' class to the clicked trigger
+      trigger.classList.add('active');
+
+      // Show the corresponding content
+      const tabId = trigger.dataset.tab;
+      document.getElementById(tabId).classList.add('active');
+
+        // Re-initialize charts if necessary (for ECharts)
+        if (tabId === 'platform') {
+          initPlatformChart();
+          initPlatformComparisonChart();
+        } else if (tabId === 'audience') {
+          initDemographicChart();
+          initGeoChart();
+        }
+    });
+  });
+
+
+
+    // --- ECharts Initialization ---
+
+    // Platform Performance Chart
+    function initPlatformChart() {
+        const platformChart = echarts.init(document.getElementById('platformChart'));
+        const platformData = [
+            { platform: 'YouTube', followers: 1280, engagement: 5.2, sales: 890.95 },
+            { platform: 'Instagram', followers: 615, engagement: 4.8, sales: 817.00 },
+            { platform: 'TikTok', followers: 520, engagement: 6.1, sales: 538.00 }
+        ];
+
+        const platformOption = {
+          title: { text: 'Platform Performance Overview' },
+          tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+          legend: { data: ['Followers(K)', 'Engagement Rate(%)', 'Sales($)'], bottom: 0 },
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '15%',
+              containLabel: true
+          },
+          xAxis: [{ type: 'category', data: platformData.map(item => item.platform) }],
+          yAxis: [
+            { type: 'value', name: 'Followers/Engagement', axisLabel: { formatter: '{value}'} },
+            { type: 'value', name: 'Sales', axisLabel: { formatter: '${value}' } }
+          ],
+          series: [
+            { name: 'Followers(K)', type: 'bar', data: platformData.map(item => item.followers), color: '#8884d8' },
+            { name: 'Engagement Rate(%)', type: 'bar', data: platformData.map(item => item.engagement), color: '#82ca9d' },
+            { name: 'Sales($)', type: 'bar', yAxisIndex: 1, data: platformData.map(item => item.sales), color: '#ffc658' }
+          ]
+        };
+        platformChart.setOption(platformOption);
     }
-];
 
-      // Populate the table
-      const tableBody = document.getElementById('video-data');
-      videoData.forEach(video => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-              <td><img src="${video.thumbnail}" alt="Video Thumbnail" class="video-thumbnail"></td>
-              <td>${video.category}</td>
-              <td><a href="${video.videoLink}" target="_blank">${video.videoTitle}</a></td>
-              <td><img src="${video.kolAvatar}" alt="KOL Avatar" class="kol-avatar"><span class="kol-name">${video.kolName}</span></td>
-              <td>${video.kolAccount}</td>
-              <td>${video.likes}</td>
-              <td>${video.views}</td>
-              <td>${video.comments}</td>
-              <td>${video.saves}</td>
-              <td>${video.engagementRate}</td>
-              <td>${video.duration}</td>
-              <td>${video.publishDate}</td>
-              <td>${video.sales}</td>
-              <td>$${video.salesAmount.toFixed(2)}</td>
-              <td><img src="${video.productImage}" alt="Product Image" class="video-thumbnail"><br>${video.productName}</td>
+    // Platform Comparison Chart
+    function initPlatformComparisonChart() {
+        const comparisonChart = echarts.init(document.getElementById('platformComparisonChart'));
+        const comparisonData = [
+            { platform: 'YouTube', growth: 28, conversion: 3.2 },
+            { platform: 'Instagram', growth: 15, conversion: 2.8 },
+            { platform: 'TikTok', growth: 42, conversion: 2.1 }
+        ];
 
-          `;
-          tableBody.appendChild(row);
-      });
-
-      function calculateTotals(data, property) {
-        return data.reduce((sum, item) => sum + item[property], 0);
+        const comparisonOption = {
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            legend: { data: ['Growth Rate(%)', 'Conversion Rate(%)'], bottom: 0 },
+            xAxis: [{ type: 'category', data: comparisonData.map(item => item.platform) }],
+            yAxis: [{ type: 'value', name: 'Rate(%)', axisLabel: { formatter: '{value}%' } }],
+            series: [
+                { 
+                    name: 'Growth Rate(%)', 
+                    type: 'bar',
+                    data: comparisonData.map(item => item.growth),
+                    color: '#FF9F43'
+                },
+                { 
+                    name: 'Conversion Rate(%)', 
+                    type: 'bar',
+                    data: comparisonData.map(item => item.conversion),
+                    color: '#28C76F'
+                }
+            ]
+        };
+        comparisonChart.setOption(comparisonOption);
     }
-      // Calculate total metrics
-    const totalLikes = calculateTotals(videoData, "likes");
-    const totalViews = calculateTotals(videoData, "views");
-    const totalComments = calculateTotals(videoData, "comments");
-    const totalSales = videoData.reduce((sum, video) => sum + video.salesAmount, 0);
-    const totalEngagement = videoData.reduce((sum, video) => sum + (video.likes + video.comments + video.saves), 0);
-    const avgEngagementRate = videoData.length > 0 ? (totalEngagement / totalViews) * 100 : 0;
-    const totalPaidViews = videoData.reduce((sum, video) => sum + (video.sales > 0 ? video.views : 0),0);
-    const conversionRate = totalPaidViews > 0? (videoData.reduce((sum, video) => sum + video.sales, 0)/videoData.length)*100 : 0;
 
-    document.getElementById('total-likes').textContent = totalLikes.toLocaleString();
-    document.getElementById('total-views').textContent = totalViews.toLocaleString();
-    document.getElementById('total-comments').textContent = totalComments.toLocaleString();
-    document.getElementById('total-sales').textContent = totalSales.toFixed(2);
-    document.getElementById('avg-engagement').textContent = avgEngagementRate.toFixed(2);
-    document.getElementById('conversion-rate').textContent = conversionRate.toFixed(2);
-      // Platform Performance Chart (Example - you'll need to adapt this)
-        const platformCounts = videoData.reduce((counts, video) => {
-            const platform = new URL(video.kolHomepage).hostname.replace('www.', '').replace('.com','').replace('.tiktok','TikTok');
-            counts[platform] = (counts[platform] || 0) + 1;
-            return counts;
-        }, {});
+    // Demographic Chart
+    function initDemographicChart() {
+        const demographicChart = echarts.init(document.getElementById('demographicChart'));
+        const demographicData = [
+        { age: '18-24', female: 6.0, male: 2.4 },
+        { age: '25-34', female: 29.2, male: 9.1 },
+        { age: '35-44', female: 22.1, male: 6.5 },
+        { age: '45-54', female: 12.9, male: 2.3 },
+        { age: '55-64', female: 5.9, male: 0.9 },
+        { age: '65+', female: 2.1, male: 0.6 }
+        ];
 
-        const platformLabels = Object.keys(platformCounts);
-        const platformData = Object.values(platformCounts);
-
-        var platformPerformanceChart = echarts.init(document.getElementById('platform-performance-chart'));
-        var platformPerformanceOption = {
-            title: {
-                text: 'KOL Videos by Platform',
-                left: 'center'
+        const demographicOption = {
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            legend: { data: ['Female', 'Male'], bottom: 0 },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
             },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}: {c} ({d}%)'
+            xAxis: [{ 
+                type: 'category', 
+                data: demographicData.map(item => item.age),
+                axisLabel: { interval: 0 }
+            }],
+            yAxis: [{ 
+                type: 'value', 
+                name: 'Percentage(%)', 
+                axisLabel: { formatter: '{value}%' },
+                max: function(value) {
+                    return Math.ceil(value.max * 1.2);
+                }
+            }],
+            series: [
+                { 
+                    name: 'Female', 
+                    type: 'bar', 
+                    data: demographicData.map(item => item.female), 
+                    color: '#FF69B4',
+                    label: { show: true, position: 'top', formatter: '{c}%' },
+                    barMaxWidth: 35
+                },
+                { 
+                    name: 'Male', 
+                    type: 'bar', 
+                    data: demographicData.map(item => item.male), 
+                    color: '#4169E1',
+                    label: { show: true, position: 'top', formatter: '{c}%' },
+                    barMaxWidth: 35
+                }
+            ]
+        };
+        demographicChart.setOption(demographicOption);
+    }
+
+    // Geographic Chart
+    function initGeoChart() {
+        const geoChart = echarts.init(document.getElementById('geoChart'));
+        const geoData = [
+        { country: 'United States', value: 50.6 },
+        { country: 'Canada', value: 4.5 },
+        { country: 'China', value: 3.4 },
+        { country: 'UK', value: 3.1 },
+        { country: 'Others', value: 38.4 }
+        ];
+        const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+        const geoOption = {
+            tooltip: { 
+                trigger: 'item', 
+                formatter: '{b}: {c}% ({d}%)' 
             },
             legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: platformLabels
+                bottom: 0,
+                data: geoData.map(item => item.country),
+                type: 'scroll',
+                pageIconSize: 12,
+                pageTextStyle: {
+                    color: '#333'
+                }
             },
             series: [
                 {
-                    name: 'Platform',
                     type: 'pie',
-                    radius: '70%',
-                    data: platformLabels.map((platform, index) => ({
-                        value: platformData[index],
-                        name: platform
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
+                    avoidLabelOverlap: true,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    data: geoData.map((item, index) => ({
+                        value: item.value,
+                        name: item.country,
+                        itemStyle: { color: COLORS[index % COLORS.length] }
                     })),
-                  emphasis: {
+                    label: {
+                        show: true,
+                        formatter: '{b}\n{d}%',
+                        position: 'outside',
+                        alignTo: 'edge',
+                        minMargin: 5,
+                        edgeDistance: 10,
+                        lineHeight: 15,
+                        rich: {
+                            time: {
+                                fontSize: 10,
+                                color: '#999'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        length: 15,
+                        length2: 0,
+                        maxSurfaceAngle: 80
+                    },
+                    emphasis: {
                         itemStyle: {
                             shadowBlur: 10,
                             shadowOffsetX: 0,
@@ -466,76 +544,35 @@
                 }
             ]
         };
-        platformPerformanceChart.setOption(platformPerformanceOption);
+        geoChart.setOption(geoOption);
+    }
 
-        //KOL Performance Chart
-        const kolCounts = videoData.reduce((counts, video) => {
-          counts[video.kolName] = (counts[video.kolName] || 0) + 1;
-          return counts;
-        }, {});
+    // Initial chart setup
+    initPlatformChart();
+    initPlatformComparisonChart();
+    
+    // Initialize charts for active tab
+    const activeTab = document.querySelector('.tabs-trigger.active').dataset.tab;
+    if (activeTab === 'platform') {
+        initPlatformChart();
+        initPlatformComparisonChart();
+    } else if (activeTab === 'audience') {
+        initDemographicChart();
+        initGeoChart();
+    }
 
-        const kolLabels = Object.keys(kolCounts);
-        const kolData = Object.values(kolCounts);
+    // Handle window resize (important for responsiveness)
+    window.addEventListener('resize', () => {
+        const activeTab = document.querySelector('.tabs-trigger.active').dataset.tab;
+        if (activeTab === 'platform') {
+            echarts.getInstanceByDom(document.getElementById('platformChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('platformComparisonChart'))?.resize();
+        } else if (activeTab === 'audience') {
+            echarts.getInstanceByDom(document.getElementById('demographicChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('geoChart'))?.resize();
+        }
+    });
 
-
-        var kolPerformanceChart = echarts.init(document.getElementById('kol-performance-chart'));
-        var kolPerformanceOption = {
-          title:{
-            text: 'KOL Performance by Videos',
-            left: 'center'
-          },
-          tooltip: {
-                trigger: 'item',
-                formatter: '{b}: {c} ({d}%)'
-            },
-            legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: kolLabels,
-            },
-            series: [{
-                name: 'KOL Performance',
-                type: 'pie',
-                radius: '55%',
-                center: ['50%', '60%'],
-                data: kolLabels.map((kol, index) => ({
-                    value: kolData[index],
-                    name: kol
-                })),
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }]
-        };
-      kolPerformanceChart.setOption(kolPerformanceOption);
-
-
-        // Responsive handling
-        window.addEventListener('resize', function() {
-           platformPerformanceChart.resize();
-           kolPerformanceChart.resize();
-        });
-
-    window.onload = function() {
-        // 初始化平台性能图表
-        var platformPerformanceChart = echarts.init(document.getElementById('platform-performance-chart'));
-        platformPerformanceChart.setOption(platformPerformanceOption);
-
-        // 初始化KOL性能图表
-        var kolPerformanceChart = echarts.init(document.getElementById('kol-performance-chart'));
-        kolPerformanceChart.setOption(kolPerformanceOption);
-
-        // 响应式处理
-        window.addEventListener('resize', function() {
-            platformPerformanceChart.resize();
-            kolPerformanceChart.resize();
-        });
-    };
-
-    </script>
+</script>
 </body>
 </html>

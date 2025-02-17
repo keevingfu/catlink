@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Catlink Paid Youtube KOL Performance</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 15px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+        }
+        .metric-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            color: #666;
+        }
+        .insights {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .insights h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .insights ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .insights li {
+            margin-bottom: 5px;
+            color: #666;
+        }
+        @media (max-width: 992px) {
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 576px) {
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Catlink Paid Youtube KOL Performance</h1>
+    </div>
+    
+    <div class="metrics">
+        <div class="metric-card">
+            <div class="metric-value">364,509</div>
+            <div class="metric-label">Total Views</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">1,280</div>
+            <div class="metric-label">Subscriber Growth</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">6.42%</div>
+            <div class="metric-label">Click Rate</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">$2,245.95</div>
+            <div class="metric-label">Total Sales</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chart-container">
+            <div id="contentPerformance" class="chart"></div>
+            <div class="insights">
+                <h4>Content Performance Insights</h4>
+                <ul>
+                    <li>Tutorial content performs best</li>
+                    <li>Unboxing videos gain more subscribers</li>
+                    <li>Product reviews have high conversion</li>
+                </ul>
+                <h4>Optimization Suggestions</h4>
+                <ul>
+                    <li>Increase tutorial video ratio</li>
+                    <li>Optimize review content depth</li>
+                    <li>Enhance user interaction design</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div id="geographicDistribution" class="chart"></div>
+            <div class="insights">
+                <h4>Geographic Distribution Insights</h4>
+                <ul>
+                    <li>US market share: 50.6%</li>
+                    <li>Canada market share: 4.5%</li>
+                    <li>Rapid growth in Asian market</li>
+                </ul>
+                <h4>Optimization Suggestions</h4>
+                <ul>
+                    <li>Strengthen key market investment</li>
+                    <li>Expand emerging markets</li>
+                    <li>Localize content strategy</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div id="subscriptionSource" class="chart"></div>
+            <div class="insights">
+                <h4>Subscription Source Insights</h4>
+                <ul>
+                    <li>Video page has highest conversion</li>
+                    <li>Short videos bring new growth</li>
+                    <li>Stable search result traffic</li>
+                </ul>
+                <h4>Optimization Suggestions</h4>
+                <ul>
+                    <li>Optimize video page guidance</li>
+                    <li>Strengthen short video strategy</li>
+                    <li>Improve search rankings</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div id="trafficSource" class="chart"></div>
+            <div class="insights">
+                <h4>Traffic Source Insights</h4>
+                <ul>
+                    <li>Search traffic share: 26.4%</li>
+                    <li>External referral effective</li>
+                    <li>High ad placement efficiency</li>
+                </ul>
+                <h4>Optimization Suggestions</h4>
+                <ul>
+                    <li>Optimize SEO strategy</li>
+                    <li>Expand partnership channels</li>
+                    <li>Improve ad efficiency</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize all charts
+        const charts = {
+            contentPerformance: echarts.init(document.getElementById('contentPerformance')),
+            geographicDistribution: echarts.init(document.getElementById('geographicDistribution')),
+            subscriptionSource: echarts.init(document.getElementById('subscriptionSource')),
+            trafficSource: echarts.init(document.getElementById('trafficSource'))
+        };
+
+        // Content Performance Chart
+        const contentOption = {
+            title: {
+                text: 'Content Type Performance Analysis'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Views', 'Subscriber Growth', 'Engagement Rate'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Tutorial', 'Unboxing', 'Review', 'Lifestyle', 'Announcement']
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Count'
+                },
+                {
+                    type: 'value',
+                    name: 'Rate',
+                    position: 'right'
+                }
+            ],
+            series: [
+                {
+                    name: 'Views',
+                    type: 'bar',
+                    data: [4256.7, 5516.7, 1744.7, 2436.2, 2103.6]
+                },
+                {
+                    name: 'Subscriber Growth',
+                    type: 'bar',
+                    data: [6.33, 10.17, 2.58, 3.75, 1.80]
+                },
+                {
+                    name: 'Engagement Rate',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [6.98, 6.13, 6.17, 3.15, 3.31]
+                }
+            ]
+        };
+
+        // Geographic Distribution Chart
+        const geoOption = {
+            title: {
+                text: 'Geographic Distribution Analysis'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                bottom: 0
+            },
+            series: [
+                {
+                    name: 'Regional Distribution',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 50.6, name: 'USA' },
+                        { value: 4.5, name: 'Canada' },
+                        { value: 3.4, name: 'China' },
+                        { value: 3.1, name: 'UK' },
+                        { value: 38.4, name: 'Others' }
+                    ]
+                }
+            ]
+        };
+
+        // Subscription Source Chart
+        const subscriptionOption = {
+            title: {
+                text: 'Subscription Source Analysis'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Subscribers', 'Conversion Rate'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Video Page', 'Channel Page', 'Short Video', 'Search', 'Others']
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Subscribers'
+                },
+                {
+                    type: 'value',
+                    name: 'Conversion Rate',
+                    position: 'right'
+                }
+            ],
+            series: [
+                {
+                    name: 'Subscribers',
+                    type: 'bar',
+                    data: [575, 533, 159, 33, 18]
+                },
+                {
+                    name: 'Conversion Rate',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [9.93, 9.43, 9.24, 6.75, 3.15]
+                }
+            ]
+        };
+
+        // Traffic Source Chart
+        const trafficOption = {
+            title: {
+                text: 'Traffic Source Analysis'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                bottom: 0
+            },
+            series: [
+                {
+                    name: 'Traffic Source',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 26.4, name: 'Search' },
+                        { value: 25.6, name: 'External' },
+                        { value: 12.7, name: 'Short Video' },
+                        { value: 10.9, name: 'Ads' },
+                        { value: 24.4, name: 'Others' }
+                    ]
+                }
+            ]
+        };
+
+        // Set chart options
+        charts.contentPerformance.setOption(contentOption);
+        charts.geographicDistribution.setOption(geoOption);
+        charts.subscriptionSource.setOption(subscriptionOption);
+        charts.trafficSource.setOption(trafficOption);
+
+        // Responsive adjustment
+        window.addEventListener('resize', () => {
+            Object.values(charts).forEach(chart => chart.resize());
+        });
+    </script>
+</body>
+</html>

@@ -3,408 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Performance Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <title>Catlink Ad Creative & Targeting Effectiveness</title>
     <style>
         body {
+            font-family: sans-serif;
             margin: 0;
             padding: 20px;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background-color: #f4f4f4;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header {
-            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
+            text-align: center;
             color: #333;
-            margin: 0 0 10px 0;
         }
 
-        .description {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
+        h2, h3 {
+            color: #444;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
         }
 
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+        .section {
+            margin-bottom: 2em;
         }
 
-        select {
-            padding: 8px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+
+        th, td {
             border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
         }
 
         .chart-container {
-            height: 700px;
-            margin-top: 20px;
+            width: 100%; /* Full width initially */
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        /* Responsive adjustments */
+        @media (min-width: 768px) { /* For tablets and larger */
+            .chart-row {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .chart-container {
+                width: 48%; /* Two charts per row on larger screens */
+            }
         }
 
-        .legend {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 4px;
+         .recommendations {
+           list-style-type: disc;
+           padding-left: 20px;
+        }
+        .recommendations li {
+            margin-bottom: 0.5em;
+        }
+        .ranking-cell {
+          text-align: center;
+        }
+        .ranking-below-average {
+            color: red;
+            font-weight: bold;
         }
 
-        .legend h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-            font-size: 16px;
+        .ranking-average {
+            color: orange;
+            font-weight: bold;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #666;
+        .ranking-above-average {
+            color: green;
+            font-weight: bold;
         }
 
-        .bubble-preview {
-            position: absolute;
-            display: none;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-            padding: 10px;
-            z-index: 1000;
-            width: 200px;
-        }
 
-        .bubble-preview img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .bubble-preview .title {
-            margin-top: 8px;
-            font-size: 12px;
-            color: #333;
-            line-height: 1.4;
-        }
-
-        .bubble-preview .stats {
-            margin-top: 5px;
-            font-size: 11px;
-            color: #666;
-        }
-
-        .thumbnail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .thumbnail-item {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .thumbnail-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 4px;
-            transition: transform 0.2s;
-        }
-
-        .thumbnail-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .thumbnail-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 8px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            font-size: 12px;
-            border-radius: 0 0 4px 4px;
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Content Performance Analysis</h1>
-            <div class="description">
-                Analyzing Neakasa content performance across various platforms, focusing on Ad Spend and ROAS distribution.
-            </div>
-        </div>
 
-        <div class="filters">
-            <select id="timeRange" aria-label="Select time range">
-                <option value="7d">Last 7 Days</option>
-                <option value="30d">Last 30 Days</option>
-                <option value="90d">Last 90 Days</option>
-            </select>
-            <select id="platform" aria-label="Select platform">
-                <option value="all">All Platforms</option>
-                <option value="tiktok">Amazon SBV</option>
-                <option value="instagram">Meta</option>
-                <option value="youtube">TikTok</option>
-                <option value="amazon">YouTube</option>
-            </select>
-        </div>
+<div class="container">
+    <h1>Catlink Ad Creative & Targeting Effectiveness</h1>
 
-        <div id="bubbleChart" class="chart-container"></div>
-
-        <div class="legend">
-            <h3>Content Performance Guide</h3>
-            <div class="legend-item">• Bubble Size: Indicates user engagement with Neakasa product features</div>
-            <div class="legend-item">• Color Intensity: Shows content effectiveness for product promotion</div>
-            <div class="legend-item">• X-Axis: Ad spend allocation for each feature/content</div>
-            <div class="legend-item">• Y-Axis: Return on ad spend (ROAS) performance</div>
-        </div>
-
-        <div class="thumbnail-grid" id="thumbnailGrid"></div>
+    <div class="section">
+        <h2>Executive Summary</h2>
+        <p>
+            This dashboard analyzes the creative and targeting effectiveness of Catlink's "SE Testing R2 Ad set" Facebook Ad campaign (Feb 9-15, 2025).  The focus is on identifying strengths and weaknesses in ad creative and audience targeting.  Key findings indicate a critical need to improve ad creative quality across all variations, despite average engagement and conversion rankings.
+        </p>
     </div>
 
-    <script>
-        const chart = echarts.init(document.getElementById('bubbleChart'));
+    <div class="section">
+        <h2>Key Performance Indicators (KPIs)</h2>
+         <div class="chart-row">
+            <div id="ctr-chart" class="chart-container"></div>
+            <div id="cpc-chart" class="chart-container"></div>
+        </div>
+         <div class="chart-row">
+             <div id="reach-impressions-chart" class="chart-container"></div>
+              <div id="quality-ranking-chart" class="chart-container"></div>
+         </div>
 
-        const videoData = {
-            'Cat litter box': {
-                title: 'Smart Self-Cleaning Litter Box Overview',
-                image: 'https://source.unsplash.com/random/400x300/?cat,litterbox',
-                views: '60.5K',
-                likes: '8.2K'
-            },
-            'Cat litter': {
-                title: 'Best Cat Litter for Automatic Litter Box',
-                image: 'https://source.unsplash.com/random/400x300/?cat,litter',
-                views: '74K',
-                likes: '9.5K'
-            },
-            'Automatic litter box': {
-                title: 'Automatic Litter Box Features Demo',
-                image: 'https://source.unsplash.com/random/400x300/?automatic,cat',
-                views: '45K',
-                likes: '6.5K'
-            },
-            'Self-cleaning': {
-                title: 'Self-Cleaning Technology Explained',
-                image: 'https://source.unsplash.com/random/400x300/?technology,clean',
-                views: '42K',
-                likes: '5.8K'
-            },
-            'Health monitoring': {
-                title: 'Health Monitoring System Overview',
-                image: 'https://source.unsplash.com/random/400x300/?health,monitor',
-                views: '38K',
-                likes: '4.9K'
-            }
-        };
 
-        function generateData() {
-            const data = [];
-            const keywordData = [
-                { name: 'Cat litter', search: 74000, cpc: 7.34, competition: 95 },
-                { name: 'Cat litter box', search: 60500, cpc: 6.35, competition: 90 },
-                { name: 'Best litter for cats', search: 33100, cpc: 6.44, competition: 85 },
-                { name: 'Automatic litter box', search: 45000, cpc: 5.89, competition: 80 },
-                { name: 'Self-cleaning litter box', search: 42000, cpc: 5.75, competition: 75 },
-                { name: 'Smart litter box', search: 38000, cpc: 5.45, competition: 70 },
-                { name: 'Multi cat litter box', search: 35000, cpc: 4.89, competition: 65 },
-                { name: 'Health monitoring', search: 32000, cpc: 4.65, competition: 60 },
-                { name: 'Odor control', search: 30000, cpc: 4.45, competition: 55 },
-                { name: 'Easy clean', search: 28000, cpc: 4.25, competition: 50 }
-            ];
+        <table>
+            <thead>
+            <tr>
+                <th>Ad Name</th>
+                <th>Quality Ranking</th>
+                <th>Engagement Rate Ranking</th>
+                <th>Conversion Rate Ranking</th>
+                <th>CTR (all)</th>
+                <th>CPC (all)</th>
+                <th>Reach</th>
+                <th>Impressions</th>
+                 <th>Results</th>
+                <th>Cost per Result</th>
+                <th>Purchase ROAS</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>T1</td><td class="ranking-cell ranking-below-average">Below average (Bottom 35%)</td><td class="ranking-cell ranking-average">Average</td><td class="ranking-cell ranking-average">Average</td><td>1.96%</td><td>$1.04</td><td>1063</td><td>3066</td> <td>2</td><td>31.23</td><td>8.53</td>
+            </tr>
+            <tr>
+                <td>T2</td><td class="ranking-cell ranking-below-average">Below average (Bottom 35%)</td><td class="ranking-cell ranking-average">Average</td><td class="ranking-cell ranking-average">Average</td><td>1.79%</td><td>$1.31</td><td>446</td><td>1006</td><td>1</td><td>23.64</td><td>8.76</td>
+            </tr>
+            <tr>
+                <td>T3</td><td class="ranking-cell ranking-below-average">Below average (Bottom 35%)</td><td class="ranking-cell ranking-average">Average</td><td class="ranking-cell ranking-average">Average</td><td>1.89%</td><td>$1.01</td><td>569</td><td>1902</td> <td>1</td><td>36.52</td><td>12.57</td>
+            </tr>
+            <tr>
+                <td>T4</td><td class="ranking-cell ranking-below-average">Below average (Bottom 35%)</td><td class="ranking-cell ranking-average">Average</td><td class="ranking-cell ranking-average">Average</td><td>1.27%</td><td>$1.31</td><td>411</td><td>1022</td><td> 2</td><td>8.51</td><td>29.92</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            keywordData.forEach(keyword => {
-                const engagementScore = (keyword.search / 74000) * 100; // Normalize to 100 based on highest search volume
-                data.push({
-                    name: keyword.name,
-                    value: [
-                        keyword.search,    // X axis: Search Volume
-                        keyword.cpc,       // Y axis: CPC
-                        engagementScore,   // Bubble size
-                        keyword.competition, // Color intensity
-                        keyword.name,
-                        Math.round(keyword.search / 1000) // Monthly trend
-                    ],
-                    videoData: videoData[keyword.name] || {
-                        title: `${keyword.name} Feature Highlight`,
-                        image: `https://source.unsplash.com/random/400x300/?${keyword.name.replace(' ', ',')}`,
-                        views: `${Math.round(keyword.search/1000)}K`,
-                        likes: `${Math.round(engagementScore * 100)}`
-                    }
-                });
-            });
+    <div class="section">
+        <h2>Key Findings and Analysis</h2>
+        <ul>
+            <li><strong>Universally Low Quality Rankings:</strong> All ads received a "Below average" Quality Ranking, a major concern indicating poor ad creative relevance.</li>
+            <li><strong>Average Engagement/Conversion Rankings:</strong> Targeting is potentially effective, but ads fail to fully capture attention and drive conversions efficiently.</li>
+             <li><strong>CTR Variability:</strong> T1 has the highest CTR (1.96%), while T4 has the lowest (1.27%).</li>
+            <li><strong>CPC Differences:</strong>  T2 and T4 have higher CPCs ($1.31) than the others, possibly due to the low Quality Ranking.</li>
+            <li><strong>Ad T4 Paradox:</strong> Lower CTR and higher CPC, *but* significantly better conversion rate, higher ROAS, and lower Cost per Result. This suggests better targeting and *much* better post-click experience for T4.</li>
 
-            return data;
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Recommendations</h2>
+          <ul class="recommendations">
+              <li><strong>Prioritize Ad Creative Overhaul:</strong> Address the low Quality Rankings with clear messaging, strong visuals, compelling CTAs, and extensive A/B testing.</li>
+            <li><strong>Investigate T4's Post-Click Experience:</strong> Analyze T4's landing page and checkout to replicate its high conversion rate.</li>
+            <li><strong>Refine Targeting (Potentially):</strong>  After creative improvements, explore more specific targeting.</li>
+            <li><strong>Consider Audience Size and Frequency:</strong> Monitor reach for T4, it is converting best, but reaching the least users.</li>
+         </ul>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+// Data (ideally, this would come from an API)
+const adData = [
+    { name: 'T1', quality: 'Below average', engagement: 'Average', conversion: 'Average', ctr: 0.0196, cpc: 1.04, reach: 1063, impressions: 3066, results: 2, costPerResult: 31.23, roas: 8.53 },
+    { name: 'T2', quality: 'Below average', engagement: 'Average', conversion: 'Average', ctr: 0.0179, cpc: 1.31, reach: 446, impressions: 1006, results: 1, costPerResult: 23.64, roas: 8.76 },
+    { name: 'T3', quality: 'Below average', engagement: 'Average', conversion: 'Average', ctr: 0.0189, cpc: 1.01, reach: 569, impressions: 1902, results: 1, costPerResult: 36.52, roas: 12.57 },
+    { name: 'T4', quality: 'Below average', engagement: 'Average', conversion: 'Average', ctr: 0.0127, cpc: 1.31, reach: 411, impressions: 1022, results: 2, costPerResult: 8.51, roas: 29.92 }
+];
+
+// CTR Chart
+const ctrChart = echarts.init(document.getElementById('ctr-chart'));
+const ctrOption = {
+    title: { text: 'Click-Through Rate (CTR) by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: {
+        bottom: 0,
+        data: ['CTR']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: { type: 'value', axisLabel: {formatter: '{value} %'} },
+    series: [{
+        name: 'CTR',
+        data: adData.map(item => (item.ctr * 100).toFixed(2)),
+        type: 'bar',
+        label: { show: true, position: 'top', formatter: '{c}%' }
+    }]
+};
+ctrChart.setOption(ctrOption);
+
+// CPC Chart
+const cpcChart = echarts.init(document.getElementById('cpc-chart'));
+const cpcOption = {
+    title: { text: 'Cost Per Click (CPC) by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: {
+        bottom: 0,
+        data: ['CPC']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: { type: 'value', axisLabel: {formatter: '${value}'} },
+    series: [{
+        name: 'CPC',
+        data: adData.map(item => item.cpc),
+        type: 'bar',
+        label: { show: true, position: 'top', formatter: '${c}' }
+    }]
+};
+cpcChart.setOption(cpcOption);
+
+// Reach and Impressions Chart (Combined)
+const reachImpressionsChart = echarts.init(document.getElementById('reach-impressions-chart'));
+const reachImpressionsOption = {
+    title: { text: 'Reach and Impressions by Ad' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { 
+        data: ['Reach', 'Impressions'],
+        bottom: 0
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: { type: 'category', data: adData.map(item => item.name) },
+    yAxis: { type: 'value' },
+    series: [
+        { name: 'Reach', data: adData.map(item => item.reach), type: 'bar', label: {show: true, position: 'top'}},
+        { name: 'Impressions', data: adData.map(item => item.impressions), type: 'bar', label: {show: true, position: 'top'}}
+    ]
+};
+reachImpressionsChart.setOption(reachImpressionsOption);
+
+// Quality Ranking Chart (Simple Bar Chart)
+const qualityRankingChart = echarts.init(document.getElementById('quality-ranking-chart'));
+
+// Prepare data for Quality Ranking chart
+const qualityData = adData.map(item => {
+  let value;
+  switch (item.quality) {
+    case 'Below average': value = 1; break;
+    case 'Average': value = 2; break;
+    case 'Above average': value = 3; break;
+    default: value = 0;
+  }
+  return {
+      name: item.name,
+      value: value,
+  };
+});
+const qualityRankingOption = {
+    title: { text: 'Quality Ranking by Ad' },
+    tooltip: {
+        trigger: 'item',
+        formatter: function(params) {
+           let adName = params.name;
+           let originalData = adData.find(item => item.name === adName);
+           return `${params.name} <br/> Quality: ${originalData.quality}`;
         }
-
-        function updateChart() {
-            const option = {
-                title: {
-                    text: 'Keyword Performance Analysis',
-                    left: 'center',
-                    top: 20
-                },
-                tooltip: {
-                    formatter: function(params) {
-                        const data = params.data;
-                        return `
-                            <div style="padding: 5px;">
-                                <h4 style="margin: 0;">${data.name}</h4>
-                                <p style="margin: 5px 0;">Search Volume: ${data.value[0].toLocaleString()}</p>
-                                <p style="margin: 5px 0;">CPC: $${data.value[1].toFixed(2)}</p>
-                                <p style="margin: 5px 0;">Engagement Score: ${data.value[2].toFixed(1)}%</p>
-                                <p style="margin: 5px 0;">Competition Level: ${data.value[3]}%</p>
-                                <p style="margin: 5px 0;">Monthly Trend: ${data.value[5]}K searches</p>
-                            </div>
-                        `;
-                    }
-                },
-                xAxis: {
-                    type: 'value',
-                    name: 'Monthly Search Volume',
-                    nameLocation: 'middle',
-                    nameGap: 30,
-                    axisLabel: {
-                        formatter: value => `${value/1000}K`
-                    }
-                },
-                yAxis: {
-                    type: 'value',
-                    name: 'CPC ($)',
-                    nameLocation: 'middle',
-                    nameGap: 30
-                },
-                visualMap: [{
-                    show: false,
-                    dimension: 3,
-                    min: 0,
-                    max: 100,
-                    inRange: {
-                        color: ['#B4E4FF', '#95BDFF', '#7B66FF', '#5800FF']
-                    }
-                }],
-                series: [{
-                    type: 'scatter',
-                    data: generateData(),
-                    symbolSize: function(data) {
-                        return data[2] / 2;  // Scale down the bubble size for better visualization
-                    },
-                    label: {
-                        show: true,
-                        formatter: function(param) {
-                            return param.data.name;
-                        },
-                        position: 'top',
-                        fontSize: 12,
-                        color: '#666'
-                    },
-                    emphasis: {
-                        focus: 'series',
-                        label: {
-                            show: true
-                        }
-                    }
-                }]
-            };
-
-            chart.setOption(option);
-            updateThumbnailGrid(generateData());
-        }
-
-        function updateThumbnailGrid(data) {
-            const grid = document.getElementById('thumbnailGrid');
-            grid.innerHTML = '';
-
-            data.forEach(item => {
-                const video = item.videoData;
-                const div = document.createElement('div');
-                div.className = 'thumbnail-item';
-                div.innerHTML = `
-                    <a href="${video.image}" data-fancybox="gallery" 
-                       data-caption="${video.title}<br>Views: ${video.views} • Likes: ${video.likes}">
-                        <img src="${video.image}" alt="${item.name}">
-                        <div class="thumbnail-info">
-                            <div>${item.name}</div>
-                            <div>${video.views} views</div>
-                        </div>
-                    </a>
-                `;
-                grid.appendChild(div);
-            });
-
-            Fancybox.bind("[data-fancybox]", {});
-        }
-
-        updateChart();
-
-        document.getElementById('timeRange').addEventListener('change', updateChart);
-        document.getElementById('platform').addEventListener('change', updateChart);
-        window.addEventListener('resize', function() {
-            chart.resize();
-        });
-
-        chart.on('mouseover', function(params) {
-            if (params.componentType === 'series') {
-                const video = params.data.videoData;
-                if (video) {
-                    showPreview(params.event.offsetX, params.event.offsetY, video);
+    },
+    legend: {
+        bottom: 0,
+        data: ['Quality Ranking']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: adData.map(item => item.name)
+    },
+    yAxis: {
+       type: 'value',
+       min: 0,
+       max: 3,
+       interval: 1,
+       axisLabel: {
+           formatter: function(value) {
+               switch (value) {
+                   case 1: return 'Below Avg';
+                   case 2: return 'Average';
+                   case 3: return 'Above Avg';
+                   default: return '';
+               }
+           }
+       }
+    },
+    series: [{
+        name: 'Quality Ranking',
+        data: qualityData,
+        type: 'bar',
+        label: {
+            show: true,
+            position: 'inside',
+            formatter: function(params) {
+                switch (params.value) {
+                    case 1: return 'Below Avg';
+                    case 2: return 'Average';
+                    case 3: return 'Above Avg';
+                    default: return '';
                 }
             }
-        });
-
-        chart.on('mouseout', function() {
-            hidePreview();
-        });
-
-        function showPreview(x, y, video) {
-            let preview = document.querySelector('.bubble-preview');
-            if (!preview) {
-                preview = document.createElement('div');
-                preview.className = 'bubble-preview';
-                document.body.appendChild(preview);
-            }
-
-            preview.innerHTML = `
-                <img src="${video.image}" alt="${video.title}">
-                <div class="title">${video.title}</div>
-                <div class="stats">Views: ${video.views} • Likes: ${video.likes}</div>
-            `;
-
-            preview.style.left = `${x + 10}px`;
-            preview.style.top = `${y + 10}px`;
-            preview.style.display = 'block';
         }
+    }]
+};
+qualityRankingChart.setOption(qualityRankingOption);
 
-        function hidePreview() {
-            const preview = document.querySelector('.bubble-preview');
-            if (preview) {
-                preview.style.display = 'none';
-            }
-        }
-    </script>
+// Resize charts on window resize
+window.addEventListener('resize', () => {
+    ctrChart.resize();
+    cpcChart.resize();
+    reachImpressionsChart.resize();
+    qualityRankingChart.resize();
+});
+
+</script>
+
 </body>
 </html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Pet Influencer Videos Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .grid-container-kpi {
+            grid-template-columns: repeat(3, 1fr); /* For the KPI row, use 3 */
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #222;
+        }
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .metric-sublabel {
+          font-size: 0.8em;
+          color: #999;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px; /* Fixed height for charts */
+        }
+
+        .insights {
+            margin-top: 1rem;
+        }
+        .insights p {
+            margin-bottom: 0.5rem;
+        }
+
+        .insights-bold {
+            font-weight: bold;
+        }
+
+        /* Table styles */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Instagram Pet Influencer Videos Analysis</h1>
+
+    <div class="grid-container grid-container-kpi">
+        <div class="card">
+            <div class="card-title">Highest Engagement</div>
+            <div class="metric-value">5,000+</div>
+            <div class="metric-label">Creator: @thelitterrobot</div>
+            <div class="metric-sublabel">100+ comments</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Top Following</div>
+            <div class="metric-value">178K</div>
+            <div class="metric-label">Creator: @rudeunicorns</div>
+            <div class="metric-sublabel">followers</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Best Interaction Rate</div>
+            <div class="metric-value">2.19%</div>
+            <div class="metric-label">Creator: @chelseehood</div>
+            <div class="metric-sublabel">engagement rate</div>
+        </div>
+    </div>
+
+
+
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-title">Followers vs Engagement by Creator</div>
+            <div class="chart-container" id="followersEngagementChart"></div>
+            <div class="insights">
+              <p class="insights-bold">Insights:</p>
+              <p>1. The number of followers is not perfectly correlated with engagement rate.</p>
+              <p>2. Medium-sized accounts (100K-200K followers) have higher engagement rates.</p>
+              <p class="insights-bold">Recommendations:</p>
+              <p>1. Focus on engagement rate rather than just the number of followers.</p>
+              <p>2. Focus on developing partnerships with medium-sized accounts with high engagement.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Content Type Distribution</div>
+            <div class="chart-container" id="contentTypeChart"></div>
+             <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1. Product demonstration content accounts for the highest proportion.</p>
+                <p>2. Lifestyle and home decor content is popular.</p>
+                <p class="insights-bold">Recommendations:</p>
+                <p>1. Combine product demonstrations with home decor scenarios.</p>
+                <p>2. Increase the proportion of lifestyle content.</p>
+            </div>
+        </div>
+
+        <div class="card">
+             <div class="card-title">Instagram Pet Influencer Videos Detail</div>
+                <div>
+                  <table>
+                    <thead>
+                        <tr>
+                            <th>Creator</th>
+                            <th>Followers</th>
+                            <th>Content</th>
+                            <th>Likes</th>
+                            <th>Comments</th>
+                            <th>Audience</th>
+                            <th>Posted</th>
+                            <th>Ad?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sarah Whittle (@rudeunicorns)</td>
+                            <td>178K</td>
+                            <td>#ad The ScoopFree Self-Cleaning Litter Box</td>
+                            <td>2,740</td>
+                            <td>60</td>
+                            <td>NYC cat moms & DIYers (25-35, US)</td>
+                            <td>Jun 30, 2023</td>
+                            <td>Yes (paid partnership)</td>
+                        </tr>
+                        <tr>
+                          <td>Chelsee Hood (@chelseehood)</td>
+                          <td>137K</td>
+                          <td>You NEED the Leo's Loo Too!</td>
+                          <td>~3,000</td>
+                          <td>~50</td>
+                          <td>Home & pet lifestyle fans (25-40, US)</td>
+                          <td>Jun 14, 2024</td>
+                          <td>Yes (sponsored)</td>
+                      </tr>
+                      <tr>
+                          <td>Jada Carballo (@pretty_kitty_cattery)</td>
+                          <td>15K</td>
+                          <td>My First Litter Box Review</td>
+                          <td>~1,500</td>
+                          <td>~30</td>
+                          <td>Cat owners (20-45, US)</td>
+                          <td>Aug 2024</td>
+                          <td>No (personal review)</td>
+                      </tr>
+                        <tr>
+                          <td>Litter-Robot (@thelitterrobot)</td>
+                          <td>170K</td>
+                          <td>Product Features Reel</td>
+                          <td>5,000+</td>
+                          <td>100+</td>
+                          <td>Brand followers (global)</td>
+                          <td>Ongoing</td>
+                          <td>N/A (brand content)</td>
+                      </tr>
+                      <tr>
+                          <td>Charlotte (@purrfectinfluencer)</td>
+                          <td>182K</td>
+                          <td>Cats' Bathroom Tour</td>
+                          <td>~4,500</td>
+                          <td>80</td>
+                          <td>Multi-cat owners (US/EU)</td>
+                          <td>2024</td>
+                          <td>No (UGC)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1. Content from the brand's official account receives high engagement.</p>
+                <p>2. The engagement rate of sponsored content is generally lower than that of original content.</p>
+                <p>3. The audience is mainly concentrated in the 25-40 age group.</p>
+                <p class="insights-bold">Recommendations:</p>
+                <p>1. Improve the creativity and authenticity of sponsored content.</p>
+                <p>2. Strengthen emotional connection with users in the target age group.</p>
+                <p>3. Encourage the production of more high-quality UGC content.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+
+        <div class="card">
+            <div class="card-title">Organic vs Sponsored Engagement Rate</div>
+            <div class="chart-container" id="engagementRateChart"></div>
+             <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1. Organic content generally has a higher engagement rate than advertising content.</p>
+                <p>2. Lifestyle content has the best advertising effect.</p>
+                <p class="insights-bold">Recommendations:</p>
+                <p>1. Improve the naturalness of advertising content.</p>
+                <p>2. Optimize the placement strategy for different types of content.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Comments Trend Analysis</div>
+            <div class="chart-container" id="commentsTrendChart"></div>
+             <div class="insights">
+                <p class="insights-bold">Insights:</p>
+                <p>1. Official account comment interaction is the most active.</p>
+                <p>2. The number of comments is highly correlated with content quality.</p>
+                <p class="insights-bold">Recommendations:</p>
+                <p>1. Strengthen comment section operations.</p>
+                <p>2. Improve content quality to promote discussion.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+  // --- ECharts Initialization ---
+
+  // Followers vs Engagement Chart
+  function initFollowersEngagementChart() {
+    const followersEngagementChart = echarts.init(document.getElementById('followersEngagementChart'));
+    const influencerData = [
+      { name: "@rudeunicorns", followers: 178, likes: 2.74, comments: 60 },
+      { name: "@chelseehood", followers: 137, likes: 3.0, comments: 50 },
+      { name: "@thelitterrobot", followers: 170, likes: 5.0, comments: 100 },
+      { name: "@pretty_kitty_cattery", followers: 15, likes: 1.5, comments: 30 },
+      { name: "@purrfectinfluencer", followers: 182, likes: 4.5, comments: 80 }
+    ];
+
+    const followersEngagementOption = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+      },
+      legend: {
+        data: ['Followers (K)', 'Likes (K)'],
+        bottom: 0
+      },
+      xAxis: {
+        type: 'category',
+        data: influencerData.map(item => item.name),
+        axisLabel: { rotate: -45, interval: 0 }
+      },
+      yAxis: [
+        { type: 'value', name: 'Followers', axisLabel: { formatter: '{value}K' } },
+        { type: 'value', name: 'Likes', axisLabel: { formatter: '{value}K' }, inverse: false }
+      ],
+      series: [
+        { name: 'Followers (K)', type: 'bar', yAxisIndex: 0, data: influencerData.map(item => item.followers), color: '#8884d8' },
+        { name: 'Likes (K)', type: 'bar', yAxisIndex: 1, data: influencerData.map(item => item.likes), color: '#82ca9d' }
+      ]
+    };
+    followersEngagementChart.setOption(followersEngagementOption);
+  }
+
+  // Content Type Distribution Chart
+  function initContentTypeChart() {
+        const contentTypeChart = echarts.init(document.getElementById('contentTypeChart'));
+         const contentTypes = [
+          { name: "Product Demo", value: 35 },
+          { name: "Home Decor", value: 25 },
+          { name: "Lifestyle", value: 20 },
+          { name: "Tips & Tricks", value: 20 }
+        ];
+        const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+        const contentTypeOption = {
+          tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {d}%'
+          },
+          legend: {
+            orient: 'horizontal',
+            bottom: 0,
+            data: contentTypes.map(item => item.name)
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: '55%',
+              center: ['50%', '50%'],
+              data: contentTypes.map((item, index) => ({
+                value: item.value,
+                name: item.name,
+                itemStyle: { color: COLORS[index % COLORS.length] }
+              })),
+              label: { show: false }, // Use legend + tooltip
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        };
+        contentTypeChart.setOption(contentTypeOption);
+  }
+
+  // Organic vs Sponsored Engagement Rate Chart
+  function initEngagementRateChart() {
+    const engagementRateChart = echarts.init(document.getElementById('engagementRateChart'));
+     const engagementData = [
+          { type: "Product Demo", organic: 2.1, sponsored: 1.8 },
+          { type: "Home Decor", organic: 2.5, sponsored: 2.0 },
+          { type: "Lifestyle", organic: 2.8, sponsored: 2.2 },
+          { type: "Tips & Tricks", organic: 2.3, sponsored: 1.9 }
+        ];
+
+    const engagementRateOption = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+      },
+      legend: {
+        data: ['Organic ER%', 'Sponsored ER%'],
+        bottom: 0
+      },
+      xAxis: {
+        type: 'category',
+        data: engagementData.map(item => item.type),
+        axisLabel: { rotate: -45, interval: 0 }
+      },
+      yAxis: { type: 'value' },
+      series: [
+        { name: 'Organic ER%', type: 'bar', data: engagementData.map(item => item.organic), color: '#8884d8' },
+        { name: 'Sponsored ER%', type: 'bar', data: engagementData.map(item => item.sponsored), color: '#82ca9d' }
+      ]
+    };
+    engagementRateChart.setOption(engagementRateOption);
+  }
+
+  // Comments Trend Analysis Chart
+  function initCommentsTrendChart() {
+    const commentsTrendChart = echarts.init(document.getElementById('commentsTrendChart'));
+    const influencerData = [  // Reuse this data
+      { name: "@rudeunicorns", followers: 178, likes: 2.74, comments: 60 },
+      { name: "@chelseehood", followers: 137, likes: 3.0, comments: 50 },
+      { name: "@thelitterrobot", followers: 170, likes: 5.0, comments: 100 },
+      { name: "@pretty_kitty_cattery", followers: 15, likes: 1.5, comments: 30 },
+      { name: "@purrfectinfluencer", followers: 182, likes: 4.5, comments: 80 }
+    ];
+
+    const commentsTrendOption = {
+      tooltip: { trigger: 'axis' },
+      legend: { data: ['Comments'], bottom: 0 },
+      xAxis: {
+        type: 'category',
+        data: influencerData.map(item => item.name),
+        axisLabel: { rotate: -45, interval: 0 }
+      },
+      yAxis: { type: 'value' },
+      series: [{
+        name: 'Comments',
+        type: 'line',
+        data: influencerData.map(item => item.comments),
+        color: '#8884d8'
+      }]
+    };
+    commentsTrendChart.setOption(commentsTrendOption);
+  }
+
+
+
+    // Initial chart setup (on page load)
+    initFollowersEngagementChart();
+    initContentTypeChart();
+    initEngagementRateChart();
+    initCommentsTrendChart();
+
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        echarts.getInstanceByDom(document.getElementById('followersEngagementChart'))?.resize();
+        echarts.getInstanceByDom(document.getElementById('contentTypeChart'))?.resize();
+        echarts.getInstanceByDom(document.getElementById('engagementRateChart'))?.resize();
+        echarts.getInstanceByDom(document.getElementById('commentsTrendChart'))?.resize();
+    });
+
+</script>
+</body>
+</html>

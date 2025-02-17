@@ -1,767 +1,331 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>KOC Social Performance</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Pet Influencer Videos Analysis</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
         body {
-            background-color: #f5f5f5;
+            font-family: sans-serif;
+            margin: 0;
             padding: 20px;
+            background-color: #f7f7f7;
         }
 
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: white;
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .title {
-            font-size: 24px;
+        h1 {
+            text-align: center;
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
         }
 
-        .subtitle {
-            font-size: 14px;
-            color: #666;
+        h2 {
+            color: #444;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
         }
 
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+        .section {
+            margin-bottom: 2em;
         }
 
-        .metric-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
         }
 
-        .metric-title {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
 
-        .metric-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .metric-change {
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        .positive {
-            color: #4caf50;
-        }
-
-        .negative {
-            color: #f44336;
-        }
-
-        .chart-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+        th {
+            background-color: #f0f0f0;
         }
 
         .chart-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%; /* Start with full width */
+            height: 300px; /* Fixed height for charts */
+            margin-bottom: 20px;
+
         }
 
-        .chart {
-            width: 100%;
-            height: 350px;
-        }
-
-        .platform-label {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-
-        .youtube {
-            background: #ff000020;
-            color: #ff0000;
-        }
-
-        .tiktok {
-            background: #00f2ea20;
-            color: #00b4b0;
-        }
-
-        .instagram {
-            background: #e1306c20;
-            color: #e1306c;
-        }
-
-        @media (max-width: 1024px) {
-            .chart-grid {
-                grid-template-columns: 1fr;
+        @media (min-width: 768px) { /* Tablets and larger */
+            .chart-row {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 20px;
+            }
+            .chart-section {
+                flex: 1;
+                min-width: 48%;  /* Two sections per row */
+            }
+            .chart-container {
+                width: 100%;  /* Full width within its section */
+                margin-bottom: 15px;
             }
         }
 
-        .insights-recommendations {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            font-size: 14px;
+        .insights-container {
+          border: 1px solid #ddd;
+          padding: 15px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+        .insights-title {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .insights-list {
+            list-style: disc;
+            padding-left: 20px;
+            font-size: 0.9rem;
         }
 
-        .insights-recommendations strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .insights-recommendations ul {
-            margin: 0 0 15px 20px;
-            padding: 0;
-        }
-
-        .insights-recommendations li {
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .platform-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .top-performers-container {
+            display: flex;
+            flex-wrap: nowrap; /* 防止卡片换行 */
+            justify-content: space-between;
             gap: 20px;
-            margin: 20px 0;
+            margin-bottom: 20px;
+            width: 100%;
         }
 
-        .platform-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .top-performer-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1; /* 让每个卡片占据相等的空间 */
+            min-width: 0; /* 防止内容溢出 */
         }
 
-        .platform-card h3 {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+        @media (max-width: 768px) {
+            .top-performers-container {
+                flex-wrap: wrap;
+            }
+            .top-performer-card {
+                width: 100%;
+            }
         }
 
-        .stat-item {
-            display: grid;
-            gap: 10px;
+        .top-performer-title {
+          font-size: 1.1rem;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
         }
-
-        .stat-item span {
-            font-size: 14px;
+         .top-performer-metric {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #007bff; /* Or your preferred color */
+            margin-bottom: 0.25rem;
+        }
+        .top-performer-creator {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+         .top-performer-engagement {
+            font-size: 0.9rem;
             color: #666;
         }
+
+        .chart-section {
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <div class="header">
-            <h1 class="title">KOC Social Performance</h1>
-            <p class="subtitle">Last Updated: February 10, 2025</p>
-        </div>
 
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-title">Total Posts</div>
-                <div class="metric-value">621</div>
-                <div class="metric-change positive">↑ 12.5% vs last period</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">Total Views</div>
-                <div class="metric-value">974.1K</div>
-                <div class="metric-change positive">↑ 8.3% vs last period</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">Total Engagements</div>
-                <div class="metric-value">16.8K</div>
-                <div class="metric-change positive">↑ 15.2% vs last period</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">Avg. Engagement Rate</div>
-                <div class="metric-value">1.73%</div>
-                <div class="metric-change positive">↑ 0.2%</div>
-            </div>
-        </div>
+<div class="container">
+    <h1>Global Pet Influencer Videos Analysis</h1>
 
-        <div class="platform-stats-grid">
-            <div class="platform-card youtube">
-                <h3>YouTube</h3>
-                <div class="stat-item">
-                    <span>Posts: 141</span>
-                    <span>Views: 344.9K</span>
-                    <span>Engagements: 8.7K</span>
-                    <span>Engagement Rate: 2.51%</span>
-                </div>
-            </div>
-            <div class="platform-card tiktok">
-                <h3>TikTok</h3>
-                <div class="stat-item">
-                    <span>Posts: 159</span>
-                    <span>Views: 390.8K</span>
-                    <span>Engagements: 5.4K</span>
-                    <span>Engagement Rate: 1.39%</span>
-                </div>
-            </div>
-            <div class="platform-card instagram">
-                <h3>Instagram</h3>
-                <div class="stat-item">
-                    <span>Posts: 321</span>
-                    <span>Views: 238.3K</span>
-                    <span>Engagements: 2.7K</span>
-                    <span>Engagement Rate: 1.14%</span>
-                </div>
-            </div>
-        </div>
+    <div class="section">
+      <h2>Top Performing Videos</h2>
+      <div class="top-performers-container">
+          <div class="top-performer-card">
+            <h3 class="top-performer-title">YouTube Top Video</h3>
+              <p class="top-performer-metric">3.0M views</p>
+              <p class="top-performer-creator">Creator: penguinz0</p>
+              <p class="top-performer-engagement">Engagement: 100K+ likes</p>
+          </div>
+            <div class="top-performer-card">
+              <h3 class="top-performer-title">TikTok Top Video</h3>
+              <p class="top-performer-metric">294.2K likes</p>
+              <p class="top-performer-creator">Creator: Hannah & John</p>
+              <p class="top-performer-engagement">Engagement: 2,091 comments</p>
+          </div>
+          <div class="top-performer-card">
+            <h3 class="top-performer-title">Instagram Top Video</h3>
+            <p class="top-performer-metric">5,000+ likes</p>
+            <p class="top-performer-creator">Creator: @thelitterrobot</p>
+            <p class="top-performer-engagement">Engagement: 100+ comments</p>
+          </div>
+      </div>
+    </div>
 
-        <div class="insights-recommendations">
-            <strong>Platform Analysis:</strong>
-            <ul>
-                <li>Post Distribution:
-                    <ul>
-                        <li>Instagram leads with 51.7% of total posts (321)</li>
-                        <li>TikTok follows with 25.6% (159 posts)</li>
-                        <li>YouTube accounts for 22.7% (141 posts)</li>
-                    </ul>
-                </li>
-                <li>Performance Metrics:
-                    <ul>
-                        <li>TikTok dominates views with 40.1% of total views</li>
-                        <li>YouTube leads engagement with 51.6% of total engagements</li>
-                        <li>Instagram shows high posting frequency but lower engagement rates</li>
-                    </ul>
-                </li>
-                <li>Top KOC Performance:
-                    <ul>
-                        <li>YouTube creators maintain highest consistent engagement (2.51%)</li>
-                        <li>dinomcmah excels in TikTok with highest views per post (9,959)</li>
-                        <li>moorebenjaminu24do leads Instagram with steady performance</li>
-                    </ul>
-                </li>
-            </ul>
-            <strong>Strategic Recommendations:</strong>
-            <ul>
-                <li>Focus on YouTube for stable engagement and quality content</li>
-                <li>Leverage TikTok for viral potential and reach</li>
-                <li>Optimize Instagram posting strategy for better engagement</li>
-                <li>Study and replicate success patterns of top performers</li>
-            </ul>
-        </div>
-
-        <div class="chart-grid">
-            <div class="chart-container">
-                <h3 class="metric-title">Platform Performance Comparison</h3>
-                <div id="platformComparison" class="chart"></div>
-                <div class="insights-recommendations">
-                    <strong>Insights:</strong>
-                    <ul>
-                        <li>YouTube leads in views with highest engagement rate (2.14%)</li>
-                        <li>TikTok shows strong performance in views but moderate engagement</li>
-                        <li>Instagram has lower overall performance but potential for growth</li>
-                    </ul>
-                    <strong>Recommendations:</strong>
-                    <ul>
-                        <li>Leverage YouTube's high engagement for detailed product demonstrations</li>
-                        <li>Optimize TikTok content for viral potential and short-form engagement</li>
-                        <li>Develop Instagram-specific content strategy to improve performance</li>
+    <div class="section">
+        <h2>Global Analysis</h2>
+        <div class="chart-row">
+            <div class="chart-section">
+                <div id="platform-distribution-chart" class="chart-container"></div>
+                <div class="insights-container">
+                    <h3 class="insights-title">Content Distribution Insights:</h3>
+                    <ul class="insights-list">
+                        <li>TikTok is the primary content distribution platform.</li>
+                        <li>YouTube provides the highest watch time.</li>
+                        <li>Instagram demonstrates the highest conversion rate.</li>
                     </ul>
                 </div>
             </div>
-            <div class="chart-container">
-                <h3 class="metric-title">Views Trend by Platform</h3>
-                <div id="viewsTrend" class="chart"></div>
-                <div class="insights-recommendations">
-                    <strong>Insights:</strong>
-                    <ul>
-                        <li>TikTok shows highest volatility in views</li>
-                        <li>YouTube maintains more consistent view counts</li>
-                        <li>Instagram shows steady growth potential</li>
-                    </ul>
-                    <strong>Recommendations:</strong>
-                    <ul>
-                        <li>Analyze high-performing TikTok content for replication</li>
-                        <li>Maintain consistent YouTube posting schedule</li>
-                        <li>Increase Instagram content frequency during peak engagement periods</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="chart-container">
-                <h3 class="metric-title">Engagement Distribution</h3>
-                <div id="engagementDist" class="chart"></div>
-                <div class="insights-recommendations">
-                    <strong>Insights:</strong>
-                    <ul>
-                        <li>Likes dominate engagement across all platforms</li>
-                        <li>Comments represent smaller but valuable engagement</li>
-                        <li>Platform-specific engagement patterns emerge</li>
-                    </ul>
-                    <strong>Recommendations:</strong>
-                    <ul>
-                        <li>Create more content that encourages comments and discussion</li>
-                        <li>Implement call-to-action strategies for increased engagement</li>
-                        <li>Focus on building community through active response to comments</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="chart-container">
-                <h3 class="metric-title">Content Performance Heatmap</h3>
-                <div id="contentHeatmap" class="chart"></div>
-                <div class="insights-recommendations">
-                    <strong>Insights:</strong>
-                    <ul>
-                        <li>User Reviews generate highest overall engagement</li>
-                        <li>Product Demos perform well for views and likes</li>
-                        <li>Educational content shows balanced performance</li>
-                    </ul>
-                    <strong>Recommendations:</strong>
-                    <ul>
-                        <li>Prioritize user-generated content and reviews</li>
-                        <li>Enhance product demo quality with clear value propositions</li>
-                        <li>Develop more educational content with engaging formats</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="chart-container">
-                <h3 class="metric-title">Engagement Trends by Platform</h3>
-                <div id="engagementTrend" class="chart"></div>
-                <div class="insights-recommendations">
-                    <strong>Insights:</strong>
-                    <ul>
-                        <li>YouTube shows highest engagement spikes during key content releases</li>
-                        <li>TikTok maintains consistent engagement levels with occasional viral peaks</li>
-                        <li>Instagram shows steady but lower engagement numbers</li>
-                    </ul>
-                    <strong>Recommendations:</strong>
-                    <ul>
-                        <li>Analyze high-engagement YouTube content for replication</li>
-                        <li>Optimize TikTok posting timing based on engagement patterns</li>
-                        <li>Develop strategies to increase Instagram engagement</li>
+            <div class="chart-section">
+                <div id="engagement-chart" class="chart-container"></div>
+                <div class="insights-container">
+                    <h3 class="insights-title">Content Type Insights:</h3>
+                    <ul class="insights-list">
+                        <li>Different platforms show varied proportions of organic content.</li>
+                        <li>Instagram has the highest proportion of sponsored content.</li>
+                        <li>YouTube maintains the highest rate of organic content.</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Initialize ECharts instances
-        const platformChart = echarts.init(document.getElementById('platformComparison'));
-        const viewsChart = echarts.init(document.getElementById('viewsTrend'));
-        const engagementChart = echarts.init(document.getElementById('engagementDist'));
-        const heatmapChart = echarts.init(document.getElementById('contentHeatmap'));
-        const engagementTrendChart = echarts.init(document.getElementById('engagementTrend'));
+     <div class="section">
+        <h2>Platform-Specific Performance</h2>
+          <div class="table-container">
+            <h3>YouTube Top Performers</h3>
+            <table class="min-w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-left">Creator</th>
+                        <th class="px-4 py-2 text-left">Followers</th>
+                        <th class="px-4 py-2 text-left">Content</th>
+                        <th class="px-4 py-2 text-left">Views</th>
+                        <th class="px-4 py-2 text-left">Engagement</th>
+                        <th class="px-4 py-2 text-left">Audience</th>
+                        <th class="px-4 py-2 text-left">Posted</th>
+                        <th class="px-4 py-2 text-left">Sponsored</th>
+                    </tr>
+                </thead>
+                 <tbody>
+                 <tr><td>penguinz0</td><td>13M</td><td>This Scam is Killing Cats</td><td>3.0M</td><td>100K+ likes, 10K comments</td><td>General YouTube (18-30)</td><td>2024</td><td>No</td></tr>
+                 <tr><td>Rachel & Jun</td><td>2.5M</td><td>Our cats try a litter tracking prevention box</td><td>2.9M</td><td>50K+ likes, 2K comments</td><td>Cat lovers (18-34)</td><td>2019</td><td>No</td></tr>
+                 <tr><td>Jackson Galaxy</td><td>2.4M</td><td>You're Doing Cat Litter WRONG</td><td>1.6M</td><td>40K likes, 5K comments</td><td>Pet owners (25-54)</td><td>2019</td><td>No</td></tr>
+                </tbody>
 
-        // Platform Comparison Chart
-        const platformOption = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: '10%',
-                data: ['Views', 'Engagement Rate']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '15%',
-                containLabel: true
-            },
-            xAxis: [{
-                type: 'category',
-                data: ['YouTube', 'TikTok', 'Instagram'],
-                axisLabel: {
-                    interval: 0
-                }
-            }],
-            yAxis: [{
-                type: 'value',
-                name: 'Views',
-                position: 'left'
-            }, {
-                type: 'value',
-                name: 'Engagement Rate',
-                position: 'right',
-                axisLabel: {
-                    formatter: '{value}%'
-                }
-            }],
-            series: [{
-                name: 'Views',
-                type: 'bar',
-                data: [344947, 390839, 238281],
-                itemStyle: {
-                    color: function(params) {
-                        const colors = ['#FF0000', '#00f2ea', '#E1306C'];
-                        return colors[params.dataIndex];
-                    }
-                }
-            }, {
-                name: 'Engagements',
-                type: 'bar',
-                yAxisIndex: 1,
-                data: [8672, 5425, 2719],
-                itemStyle: {
-                    color: function(params) {
-                        const colors = ['#FF6666', '#66f2ea', '#E16E9C'];
-                        return colors[params.dataIndex];
-                    }
-                }
-            }]
-        };
+            </table>
+        </div>
 
-        // Views Trend Chart
-        const viewsOption = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: function(params) {
-                    return params[0].axisValue + '<br/>' + 
-                           params.map(param => {
-                               return param.seriesName + ': ' + 
-                                      new Intl.NumberFormat().format(param.value);
-                           }).join('<br/>');
-                }
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: '10%',
-                data: ['YouTube', 'TikTok', 'Instagram']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '15%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: [
-                    '12-31', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', 
-                    '01-07', '01-08', '01-09', '01-10', '01-11', '01-12', '01-13', 
-                    '01-14', '01-15', '01-16', '01-17', '01-18', '01-19', '01-20', 
-                    '01-21', '01-22', '01-23', '01-24', '01-26', '01-28', '01-30', 
-                    '02-01', '02-02', '02-03', '02-04', '02-05'
-                ],
-                axisLabel: {
-                    rotate: -45
-                }
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: function(value) {
-                        if (value >= 1000000) return (value/1000000).toFixed(1) + 'M';
-                        if (value >= 1000) return (value/1000).toFixed(1) + 'K';
-                        return value;
-                    }
-                }
-            },
-            series: [{
-                name: 'YouTube',
-                type: 'line',
-                data: [42481, 32326, 0, 7600, 10948, 28855, 7970, 21897, 17030, 2528, 
-                       17188, 0, 17207, 13026, 9382, 5625, 47182, 3313, 3671, 22328, 
-                       6045, 1816, 4407, 22406, 0, 16992, 21145, 22174, 46002, 0, 
-                       14335, 6245, 0],
-                itemStyle: {color: '#FF0000'},
-                smooth: true
-            }, {
-                name: 'TikTok',
-                type: 'line',
-                data: [23626, 3043, 587, 1882, 4162, 5676, 5594, 10605, 3239, 4278, 
-                       12904, 3350, 3591, 18754, 12055, 7835, 5438, 12029, 9613, 5455, 
-                       14327, 138909, 79800, 17320, 28687, 2967, 3052, 14788, 0, 11293, 
-                       0, 5226, 9157],
-                itemStyle: {color: '#00f2ea'},
-                smooth: true
-            }, {
-                name: 'Instagram',
-                type: 'line',
-                data: [6841, 22331, 8168, 4426, 6791, 4032, 10895, 11850, 24326, 1652, 
-                       8105, 0, 6451, 20780, 33350, 4231, 2819, 8083, 8200, 7587, 11696, 
-                       5443, 2181, 18043, 8571, 2468, 5167, 2688, 0, 10322, 0, 6296, 9434],
-                itemStyle: {color: '#E1306C'},
-                smooth: true
-            }]
-        };
+        <div class="table-container">
+          <h3>TikTok Top Performers</h3>
+          <table class="min-w-full table-auto">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-4 py-2 text-left">Creator</th><th class="px-4 py-2 text-left">Followers</th><th class="px-4 py-2 text-left">Content</th><th class="px-4 py-2 text-left">Engagement</th><th class="px-4 py-2 text-left">Audience</th><th class="px-4 py-2 text-left">Posted</th><th class="px-4 py-2 text-left">Sponsored</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Ivy Bloom</td><td>1.2M</td><td>Effortless Litter Box Maintenance</td><td>263.4K likes, 6,861 comments</td><td>Pet owners (20-35)</td><td>2023</td><td>No</td></tr>
+              <tr><td>Hannah & John</td><td>800K</td><td>DIY Hidden Litter Box Enclosure</td><td>294.2K likes, 2,091 comments</td><td>Home/pet DIY (18-30)</td><td>2023</td><td>No</td></tr>
+              <tr><td>Sven & Robbie</td><td>500K</td><td>Pros and Cons of Auto Litter Box</td><td>286.5K likes, 5K+ comments</td><td>Cat owners (20-40)</td><td>2023</td><td>No</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-        // Engagement Distribution Chart
-        const engagementOption = {
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: '10%',
-            },
-            series: [{
-                name: 'Engagement Type',
-                type: 'pie',
-                radius: ['40%', '70%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    borderWidth: 2
-                },
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '18',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    { value: 239600, name: 'YouTube Likes' },
-                    { value: 15973, name: 'YouTube Comments' },
-                    { value: 186355, name: 'TikTok Likes' },
-                    { value: 26622, name: 'TikTok Comments' },
-                    { value: 52712, name: 'Instagram Likes' },
-                    { value: 11182, name: 'Instagram Comments' }
-                ]
-            }]
-        };
+        <div class="table-container">
+          <h3>Instagram Top Performers</h3>
+          <table class="min-w-full table-auto">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-4 py-2 text-left">Creator</th><th class="px-4 py-2 text-left">Followers</th><th class="px-4 py-2 text-left">Content</th><th class="px-4 py-2 text-left">Engagement</th><th class="px-4 py-2 text-left">Audience</th><th class="px-4 py-2 text-left">Posted</th><th class="px-4 py-2 text-left">Sponsored</th>
+              </tr>
+            </thead>
+            <tbody>
+             <tr><td>@rudeunicorns</td><td>178K</td><td>ScoopFree Self-Cleaning Box</td><td>2,740 likes, 60 comments</td><td>NYC cat moms (25-35)</td><td>2023</td><td>Yes</td></tr>
+            <tr><td>@chelseehood</td><td>137K</td><td>Leo's Loo Too Review</td><td>3,000 likes, 50 comments</td><td>Home & pet (25-40)</td><td>2024</td><td>Yes</td></tr>
+             <tr><td>@thelitterrobot</td><td>170K</td><td>Product Features Reel</td><td>5,000+ likes, 100+ comments</td><td>Brand followers</td><td>Ongoing</td><td>Brand</td></tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+</div>
 
-        // Content Performance Heatmap
-        const heatmapOption = {
-            tooltip: {
-                position: 'top'
-            },
-            grid: {
-                top: '10%',
-                left: '3%',
-                right: '7%',
-                bottom: '10%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                data: ['Views', 'Likes', 'Comments', 'Shares'],
-                splitArea: {
-                    show: true
-                }
-            },
-            yAxis: {
-                type: 'category',
-                data: ['Product Demo', 'User Reviews', 'Lifestyle', 'Educational'],
-                splitArea: {
-                    show: true
-                }
-            },
-            visualMap: {
-                min: 0,
-                max: 10,
-                calculable: true,
-                orient: 'horizontal',
-                left: 'center',
-                bottom: '5%'
-            },
-            series: [{
-                name: 'Performance Score',
-                type: 'heatmap',
-                data: [
-                    [0, 0, 8], [0, 1, 7], [0, 2, 5], [0, 3, 4],
-                    [1, 0, 6], [1, 1, 9], [1, 2, 8], [1, 3, 7],
-                    [2, 0, 7], [2, 1, 8], [2, 2, 6], [2, 3, 5],
-                    [3, 0, 5], [3, 1, 6], [3, 2, 7], [3, 3, 6]
-                ],
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }]
-        };
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+    // Platform Distribution Data
+    const platformData = [
+        { name: 'YouTube', value: 35 },
+        { name: 'TikTok', value: 45 },
+        { name: 'Instagram', value: 20 }
+    ];
 
-        // Engagement Trends Chart
-        const engagementTrendOption = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: function(params) {
-                    return params[0].axisValue + '<br/>' + 
-                           params.map(param => {
-                               return param.seriesName + ': ' + 
-                                      new Intl.NumberFormat().format(param.value);
-                           }).join('<br/>');
-                }
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: '10%',
-                data: ['YouTube Engagements', 'TikTok Engagements', 'Instagram Engagements']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '15%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: [
-                    '12-31', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', 
-                    '01-07', '01-08', '01-09', '01-10', '01-11', '01-12', '01-13', 
-                    '01-14', '01-15', '01-16', '01-17', '01-18', '01-19', '01-20', 
-                    '01-21', '01-22', '01-23', '01-24', '01-26', '01-28', '01-30', 
-                    '02-01', '02-02', '02-03', '02-04', '02-05'
-                ],
-                axisLabel: {
-                    rotate: -45
-                }
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: function(value) {
-                        if (value >= 1000) return (value/1000).toFixed(1) + 'K';
-                        return value;
-                    }
-                }
-            },
-            series: [{
-                name: 'YouTube Engagements',
-                type: 'line',
-                data: [924, 844, 0, 235, 366, 386, 338, 350, 427, 63, 162, 0, 362, 
-                       239, 147, 89, 2799, 79, 68, 277, 99, 42, 45, 268, 0, 237, 223, 
-                       181, 698, 0, 189, 58, 0],
-                itemStyle: {color: '#FF0000'},
-                smooth: true
-            }, {
-                name: 'TikTok Engagements',
-                type: 'line',
-                data: [547, 80, 39, 83, 175, 231, 348, 326, 189, 211, 307, 78, 97, 
-                       401, 381, 195, 159, 233, 143, 161, 83, 421, 414, 148, 211, 46, 
-                       57, 95, 0, 144, 0, 71, 225],
-                itemStyle: {color: '#00f2ea'},
-                smooth: true
-            }, {
-                name: 'Instagram Engagements',
-                type: 'line',
-                data: [92, 284, 116, 17, 70, 35, 147, 162, 341, 29, 54, 0, 41, 265, 
-                       402, 16, 50, 72, 114, 125, 154, 23, 17, 93, 40, 6, 30, 16, 0, 
-                       58, 0, 49, 74],
-                itemStyle: {color: '#E1306C'},
-                smooth: true
-            }]
-        };
+    // Cross-Platform Analysis Data
+    const engagementData = [
+        { platform: 'YouTube', organic: 85, sponsored: 15 },
+        { platform: 'TikTok', organic: 75, sponsored: 25 },
+        { platform: 'Instagram', organic: 60, sponsored: 40 }
+    ];
 
-        // Post Distribution Chart
-        const postDistributionOption = {
-            title: {
-                text: 'Post Distribution by Platform',
-                left: 'center'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}: {c} ({d}%)'
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: '10%'
-            },
-            series: [{
-                type: 'pie',
-                radius: '70%',
-                data: [
-                    { value: 321, name: 'Instagram (51.7%)' },
-                    { value: 159, name: 'TikTok (25.6%)' },
-                    { value: 141, name: 'YouTube (22.7%)' }
-                ]
-            }]
-        };
+    // Platform Distribution Chart (Pie Chart)
+  const platformDistributionChart = echarts.init(document.getElementById('platform-distribution-chart'));
+  const platformDistributionOption = {
+    title: { text: 'Content Distribution Across Platforms', left: 'center' },
+    tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+    legend: { orient: 'horizontal', bottom: 'bottom', data: platformData.map(item => item.name) },
+    series: [{
+      type: 'pie',
+      radius: '55%',
+      center: ['50%', '50%'],
+       label: { // Label configuration
+          show: true,
+          formatter: '{b}: {d}%' // Show name and percentage
+        },
+      data: platformData,
+       emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+    }]
+  };
+  platformDistributionChart.setOption(platformDistributionOption);
 
-        // Top KOC Performance Chart
-        const topKOCPerformanceOption = {
-            title: {
-                text: 'Top KOC Engagement Rates',
-                left: 'center'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            xAxis: {
-                type: 'category',
-                data: ['cordellkauf', 'enco889', 'hochamnrp2c', 'YouTube创作者', 'sonbrantley17'],
-                axisLabel: { rotate: -45 }
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}%'
-                }
-            },
-            series: [{
-                type: 'bar',
-                data: [5.14, 3.61, 2.91, 2.51, 2.17],
-                label: {
-                    show: true,
-                    formatter: '{c}%'
-                }
-            }]
-        };
+    // Cross-Platform Engagement Chart (Bar Chart)
+  const engagementChart = echarts.init(document.getElementById('engagement-chart'));
+  const engagementOption = {
+    title: { text: 'Organic vs Sponsored Content Performance', left: 'center' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { orient: 'horizontal', bottom: 'bottom', data: ['Organic Content %', 'Sponsored Content %'] },
+    xAxis: { type: 'category', data: engagementData.map(item => item.platform) },
+    yAxis: { type: 'value' },
+    series: [
+      { name: 'Organic Content %', data: engagementData.map(item => item.organic), type: 'bar' },
+      { name: 'Sponsored Content %', data: engagementData.map(item => item.sponsored), type: 'bar' }
+    ]
+  };
+  engagementChart.setOption(engagementOption);
+    // Resize charts on window resize
+    window.addEventListener('resize', () => {
+        platformDistributionChart.resize();
+        engagementChart.resize();
+    });
 
-        // Set chart options
-        platformChart.setOption(platformOption);
-        viewsChart.setOption(viewsOption);
-        engagementChart.setOption(engagementOption);
-        heatmapChart.setOption(heatmapOption);
-        engagementTrendChart.setOption(engagementTrendOption);
-        postDistributionChart.setOption(postDistributionOption);
-        topKOCPerformanceChart.setOption(topKOCPerformanceOption);
+</script>
 
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            platformChart.resize();
-            viewsChart.resize();
-            engagementChart.resize();
-            heatmapChart.resize();
-            engagementTrendChart.resize();
-            postDistributionChart.resize();
-            topKOCPerformanceChart.resize();
-        });
-    </script>
 </body>
 </html>
