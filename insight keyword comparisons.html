@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cat Litter Box Comparisons Insights</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #chart-container {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #insights {
+            width: 800px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .comparison-category {
+            font-weight: bold;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Cat Litter Box Comparisons Keyword</h2>
+
+    <div id="chart-container"></div>
+
+    <div id="insights">
+        <h2>Insights & Recommendations</h2>
+        <p>This sunburst chart visualizes comparisons related to cat litter boxes, categorized by the comparison word ("and", "like", "or"). This reveals concerns, preferences, and decision-making factors for cat owners.</p>
+
+        <div class="comparison-category">And (Co-occurrence/Combination)</div>
+        <ul>
+            <li><strong>Health & Placement Concerns:** "And" phrases primarily focus on the relationship between the litter box and other elements in the cat's environment:
+                <ul>
+                    <li><strong>Pregnancy:** "cat litter box and pregnancy" highlights the significant health concern of toxoplasmosis. Pregnant women are often advised to avoid changing litter due to the risk of infection, which can harm the fetus.</li>
+                    <li><strong>Proximity to Food:** "cat litter box and feeding station," "cat litter box and food furniture," and "cat litter box and food station" express concern (or potentially an existing, undesirable situation) about the proximity of the litter box to the cat's food and water. This reflects a desire for hygiene and preventing cross-contamination.</li>
+                    <li><strong>Integration with Furniture/Decor:</strong> "cat litter box and tree" likely refers to cat furniture that incorporates both a litter box and a climbing/scratching structure. This suggests a desire for multi-functional, space-saving solutions.</li>
+                </ul>
+            </li>
+            <li><strong>Recommendations:</strong>
+                <ul>
+                    <li><strong>Pregnancy:** Provide clear and prominent warnings about toxoplasmosis risks for pregnant women.  Recommend having someone else change the litter or using gloves and thorough handwashing.</li>
+                    <li><strong>Food Proximity:** Emphasize the importance of separating food and water from the litter box to maintain hygiene and prevent the cat from associating the two. Offer guidance on appropriate placement distances and strategies for small spaces.</li>
+                    <li><strong>Integrated Furniture:** Offer or showcase cat furniture designs that cleverly incorporate litter boxes while maintaining separation from eating areas.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="comparison-category">Like (Similarity/Sensory Description)</div>
+        <ul>
+            <li><strong>Odor Issues & Disguise:** "Like" phrases address both unpleasant smells and attempts to conceal the litter box:
+                <ul>
+                    <li><strong>Ammonia Smell:** "cat litter box smells like ammonia" is a very common complaint.  Ammonia is a byproduct of urine breakdown, and a strong ammonia smell indicates that the litter box needs cleaning or that the litter isn't effectively controlling odors.</li>
+                    <li><strong>Fishy Smell:</strong> "cat litter box smell like fish" may indicate a bacterial infection in the cat's urinary tract, or could be due to certain types of litter or the cat's diet.</li>
+                    <li><strong>Aesthetic Disguise:**  "cat litter box that looks like a plant" indicates a desire to hide the litter box by making it blend in with home decor. This highlights a concern about the visual impact of the litter box.</li>
+                </ul>
+            </li>
+             <li><strong>Recommendations:</strong>
+                <ul>
+                    <li><strong>Ammonia Odor:** Provide advice on choosing litters with good odor control (activated carbon, baking soda), frequent scooping, and complete litter changes.  Suggest checking for underlying medical issues if the smell persists despite good hygiene.</li>
+                    <li><strong>Fishy Smell:</strong> Recommend a veterinary checkup to rule out a urinary tract infection. Discuss possible dietary changes or litter alternatives.</li>
+                    <li><strong>Disguised Litter Boxes:</strong> Offer a range of litter boxes designed to look like furniture, planters, or other decorative items.</li>
+                </ul>
+             </li>
+        </ul>
+
+        <div class="comparison-category">Or (Alternatives/Choices)</div>
+        <ul>
+            <li><strong>Decision-Making:</strong> "Or" phrases represent choices between different litter box types:
+              <ul>
+                <li><strong>Tray vs. Box:</strong> "cat litter box or tray" shows a decision between a traditional enclosed box and a simpler, open tray. This may be driven by cat preference, ease of cleaning, or space considerations.</li>
+                <li><strong>Open vs. Closed:</strong> "cat litter box open or closed" reflects a choice between an open-top box and a covered box.  This involves weighing factors like odor control, litter scatter, cat preference, and ventilation.</li>
+              </ul>
+            </li>
+            <li><strong>Recommendations:</strong>
+              <ul>
+                <li>Provide clear comparisons of the pros and cons of different litter box types (trays vs. boxes, open vs. closed). Highlight factors like cat preference, ease of cleaning, odor control, and space requirements to help owners make informed choices.</li>
+              </ul>
+            </li>
+        </ul>
+
+        <p><strong>Overall Recommendation:</strong> Cat owners have diverse concerns, from health and hygiene to aesthetics and practicality. Providing clear information, a variety of product options, and helpful guidance will address these varied needs and help owners make informed decisions about litter box selection and management.</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        var myChart = echarts.init(document.getElementById('chart-container'));
+
+        var data = [
+          {
+            name: 'And',
+            children: [
+                { name: 'cat litter box and pregnancy', value: 1 },
+                { name: 'cat litter box and feeding station', value: 1 },
+                { name: 'cat litter box and tree', value: 1 },
+                { name: 'cat litter box and food furniture', value: 1 },
+                { name: 'cat litter box and food station', value: 1 },
+            ],
+          },
+            {
+                name: 'Like',
+                children: [
+                    {name: 'cat litter box smells like ammonia', value: 1},
+                    {name: 'cat litter box smell like fish', value: 1},
+                    {name: 'cat litter box that looks like a plant', value: 1},
+                ]
+            },
+             {
+                name: 'Or',
+                children: [
+                  {name: 'cat litter box or tray', value: 1},
+                  {name: 'cat litter box open or closed', value: 1},
+                ]
+            },
+        ];
+
+        var option = {
+            series: {
+                type: 'sunburst',
+                data: data,
+                radius: [0, '90%'],
+                label: {
+                    rotate: 'radial'
+                }
+            }
+        };
+
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

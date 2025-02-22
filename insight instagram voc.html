@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram VOC Insights</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --instagram-purple: #C13584;
+            --instagram-red: #E1306C;
+            --instagram-orange: #F56040;
+            --instagram-yellow: #F77737;
+            --instagram-light: #FFFFFF;
+            --instagram-dark: #262626;
+            --instagram-bg: #FAFAFA;
+            --instagram-border: #DBDBDB;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--instagram-bg);
+            color: var(--instagram-dark);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 16px 24px;
+            background: var(--instagram-light);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--instagram-dark);
+            margin: 0;
+        }
+
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: var(--instagram-light);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .kpi-icon {
+            font-size: 24px;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--instagram-gradient);
+            color: white;
+        }
+
+        .kpi-content {
+            flex-grow: 1;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            background: var(--instagram-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .kpi-label {
+            color: var(--instagram-dark);
+            font-size: 14px;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            background: var(--instagram-light);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--instagram-border);
+            color: var(--instagram-dark);
+        }
+
+        .insights {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid var(--instagram-border);
+            font-size: 14px;
+        }
+
+        .insights strong {
+            color: var(--instagram-purple);
+        }
+
+        @media (max-width: 1024px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kpi-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .kpi-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="logo-container">
+            <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" 
+                 alt="Instagram Logo" 
+                 class="logo">
+            <h1 class="title">VOC Insight Dashboard</h1>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="kpi-content">
+                <div class="kpi-value">28</div>
+                <div class="kpi-label">Total Comments</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="kpi-content">
+                <div class="kpi-value">27</div>
+                <div class="kpi-label">Unique Users</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="kpi-content">
+                <div class="kpi-value">0.68</div>
+                <div class="kpi-label">Avg. Likes</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">
+                <i class="fas fa-reply"></i>
+            </div>
+            <div class="kpi-content">
+                <div class="kpi-value">0.43</div>
+                <div class="kpi-label">Avg. Replies</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="chart-grid">
+        <!-- User Type Distribution -->
+        <div class="chart-container">
+            <h3 class="chart-title">User Type Distribution</h3>
+            <div id="userTypeChart" style="height: 300px;"></div>
+            <div class="insights">
+                <strong>Key Insight:</strong> Private accounts show higher engagement
+                <br>
+                <strong>Recommendation:</strong> Focus on building trust with private account users
+            </div>
+        </div>
+
+        <!-- Content Effect Analysis -->
+        <div class="chart-container">
+            <h3 class="chart-title">Content Effect Analysis</h3>
+            <div id="contentEffectChart" style="height: 300px;"></div>
+            <div class="insights">
+                <strong>Key Insight:</strong> Safety-related content generates highest engagement
+                <br>
+                <strong>Recommendation:</strong> Increase focus on safety education content
+            </div>
+        </div>
+
+        <!-- Interaction Analysis -->
+        <div class="chart-container">
+            <h3 class="chart-title">Interaction Analysis</h3>
+            <div id="interactionChart" style="height: 300px;"></div>
+            <div class="insights">
+                <strong>Key Insight:</strong> Like rate leads engagement metrics
+                <br>
+                <strong>Recommendation:</strong> Encourage more sharing and replies
+            </div>
+        </div>
+
+        <!-- User Behavior Analysis -->
+        <div class="chart-container">
+            <h3 class="chart-title">User Behavior Analysis</h3>
+            <div id="userBehaviorChart" style="height: 300px;"></div>
+            <div class="insights">
+                <strong>Key Insight:</strong> Active commenting dominates user behavior
+                <br>
+                <strong>Recommendation:</strong> Create more interactive content
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all charts with the data from your React component
+            const userTypeChart = echarts.init(document.getElementById('userTypeChart'));
+            
+            // Chart configurations similar to your React components
+            userTypeChart.setOption({
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    bottom: 0,
+                    left: 'center'
+                },
+                series: [{
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    data: [
+                        { value: 13, name: 'Private Accounts' },
+                        { value: 14, name: 'Public Accounts' },
+                        { value: 22, name: 'Mentionable Accounts' }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            });
+
+            // Data
+            const contentEffectData = [
+                { name: 'Safety Related', engagement: 15 },
+                { name: 'Professional Knowledge', engagement: 12 },
+                { name: 'User Experience', engagement: 10 },
+                { name: 'General Inquiry', engagement: 8 },
+                { name: 'Others', engagement: 5 }
+            ];
+
+            const interactionData = [
+                { name: 'Like Rate', value: 21.4 },
+                { name: 'Reply Rate', value: 17.9 },
+                { name: 'Share Rate', value: 15.2 }
+            ];
+
+            const userBehaviorData = [
+                { name: 'Active Comments', value: 65 },
+                { name: 'Interactive Replies', value: 25 },
+                { name: 'Information Inquiries', value: 10 }
+            ];
+
+            // Initialize charts
+            const contentEffectChart = echarts.init(document.getElementById('contentEffectChart'));
+            const interactionChart = echarts.init(document.getElementById('interactionChart'));
+            const userBehaviorChart = echarts.init(document.getElementById('userBehaviorChart'));
+
+            // Content Effect Chart
+            contentEffectChart.setOption({
+                tooltip: { trigger: 'axis' },
+                legend: { bottom: 0 },
+                xAxis: { 
+                    type: 'category',
+                    data: contentEffectData.map(item => item.name),
+                    axisLabel: { interval: 0, rotate: 30 }
+                },
+                yAxis: { type: 'value' },
+                series: [{
+                    data: contentEffectData.map(item => item.engagement),
+                    type: 'bar',
+                    itemStyle: { color: '#C13584' }
+                }]
+            });
+
+            // Interaction Chart
+            interactionChart.setOption({
+                tooltip: { trigger: 'axis' },
+                legend: { bottom: 0 },
+                xAxis: { type: 'category', data: interactionData.map(item => item.name) },
+                yAxis: { type: 'value' },
+                series: [{
+                    data: interactionData.map(item => item.value),
+                    type: 'bar',
+                    itemStyle: { color: '#E1306C' }
+                }]
+            });
+
+            // User Behavior Chart
+            userBehaviorChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { bottom: 0 },
+                series: [{
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    data: userBehaviorData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            });
+
+            // Responsive handling
+            window.addEventListener('resize', function() {
+                userTypeChart.resize();
+                contentEffectChart.resize();
+                interactionChart.resize();
+                userBehaviorChart.resize();
+            });
+        });
+    </script>
+</body>
+</html> 

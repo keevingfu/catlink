@@ -3,357 +3,949 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Litter Box Content Creation Guide</title>
+    <title>Video Analytics Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Basic Reset and Global Styles */
-        body, h1, h2, h3, h4, p, ul, li, table {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-orange: #FF6B34;
+            --primary-blue: #82AAFF;
+            --primary-green: #C3E88D;
+            --primary-yellow: #FFB86C;
+            --bg-gray: #f4f4f4;
+            --text-dark: #333;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
             padding: 20px;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
         }
 
-        h1, h2, h3 {
-            margin-bottom: 0.5em;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        h2 {
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 0.25em;
-            margin-top: 1.5em;
+        .header {
+            margin-bottom: 30px;
         }
 
-        h3{
-            margin-top: 1.2em;
-        }
-        ul {
-            list-style: disc;
-            margin-left: 20px;
-            margin-bottom: 1em;
+        .header h1 {
+            font-size: 24px;
+            margin: 0 0 10px 0;
         }
 
-        li {
-            margin-bottom: 0.5em;
+        .header p {
+            color: #666;
+            margin: 0;
         }
 
-        .section {
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
+        .tabs {
+            display: flex;
+            background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tab.active {
+            background-color: #f0f0f0;
+        }
+
+        .tab i {
+            font-size: 18px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .chart-container {
-            width: 100%;
-            height: 300px; /* Adjust as needed */
-            margin-bottom: 20px;
+            height: 400px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1em;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
+        .metrics-grid {
+            display: grid;
+            gap: 16px;
         }
 
-        .platform-section {
-            margin-bottom: 1.5em;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            background-color: #fafafa;
-        }
-        .platform-section h3 {
-            color: #0056b3; /* Example color - adjust to your branding */
+        .metric-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-radius: 8px;
         }
 
-        .creative-direction {
-            margin-bottom: 1.5em;
-            padding: 15px;
-            border: 1px dashed #ccc;
-            border-radius: 4px;
-             background-color: #f0f8ff; /* Light blue background */
+        .metric-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .creative-direction h4 {
-            color: #0056b3;
-             margin-bottom: 0.3em;
+
+        .metric-value {
+            font-weight: 600;
         }
-        .toggle-content {
-            display: none; /* Initially hidden */
-            margin-top: 10px;
+
+        /* Metric card colors */
+        .metric-views { background-color: #FFF3E0; }
+        .metric-engagement { background-color: #E3F2FD; }
+        .metric-shares { background-color: #E8F5E9; }
+
+        .activity-list {
+            display: grid;
+            gap: 12px;
         }
-        .toggle-button{
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-orange);
+            border-radius: 50%;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Video Formats Tab Styles */
+        .formats-container {
+            display: none;
+            gap: 32px;
+        }
+        
+        .formats-container.active {
+            display: flex;
+        }
+
+        .format-list {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .semi-circle-progress {
+            width: 200px;
+            height: 100px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .format-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             cursor: pointer;
-            color: #007bff;
-            background-color: transparent;
-            border: none;
-            padding: 5px;
-            margin-bottom: 5px;
-            border-radius: 5px;
+            transition: background-color 0.2s;
         }
-       .toggle-button:hover{
-           background-color:#007bff;
-           color: white;
-       }
+
+        .format-item:hover {
+            background-color: rgba(255, 107, 52, 0.1);
+        }
+
+        .format-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .format-color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .format-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #666;
+        }
+
+        .video-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .video-card {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .video-preview {
+            background: #e0e0e0;
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .video-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .video-tag {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Pain Points Tab Styles */
+        .pain-points-container {
+            display: none;
+            gap: 32px;
+        }
+        
+        .pain-points-container.active {
+            display: flex;
+        }
+
+        .pain-point-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pain-point-item:first-child {
+            background-color: rgba(255, 107, 52, 0.1);
+        }
+
+        .pain-point-item:hover:not(:first-child) {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .pain-point-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .pain-point-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: 16px;
+            flex-shrink: 0;
+        }
+
+        .video-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .tag-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: white;
+            border-radius: 16px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .total-stats {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Trending Creators Tab Styles */
+        .trending-container {
+            display: none;
+            flex-direction: column;
+            gap: 32px;
+        }
+        
+        .trending-container.active {
+            display: flex;
+        }
+
+        .creators-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .creators-table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .creators-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .creators-table tr:hover {
+            background-color: #f8f8f8;
+        }
+
+        .creator-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .creator-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #eee;
+        }
+
+        .creator-username {
+            color: var(--primary-orange);
+        }
+
+        .video-library {
+            margin-top: 32px;
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .video-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
     </style>
 </head>
 <body>
-
-    <h1>Cat Litter Box Content Creation Guide and Creative Output Analysis</h1>
-
-    <div class="section">
-        <h2>Overall Themes and Observations</h2>
-        <ul>
-            <li><b>Problem/Solution:</b> Addressing common litter box problems is a dominant theme.</li>
-            <li><b>Reviews and Comparisons:</b> Consumers seek guidance on product selection.</li>
-            <li><b>"How-To" and Tips:</b> Practical advice is highly valued.</li>
-            <li><b>Cat-Centric Perspective:</b> Showing cats interacting with the litter box is engaging.</li>
-            <li><b>"Best of" Lists:</b>  Popular for quick recommendations.</li>
-            <li><b>Personal Experience:</b> KOLs sharing personal experiences build trust.</li>
-            <li><b>Visual Demonstrations:</b>  Video is essential.</li>
-            <li><b>"Hacks" and Tips:</b> Short, clever tips are popular.</li>
-        </ul>
-    </div>
-<div class="section">
-        <h2>Platform-Specific Analysis and Creative Directions</h2>
-
-    <div class = "platform-section">
-         <button class = "toggle-button" onclick="toggleContent('youtubeContent')">Show/Hide YouTube</button>
-        <h3 id = "youtubeContent-title">YouTube</h3>
-        <div class = "toggle-content" id = "youtubeContent">
-
-            <p><b>Key Insight:</b> Longer-form content allows for in-depth explanations and demonstrations.</p>
-            <ul>
-                <li><b>Jackson Galaxy Style (Cat Behaviorist):</b>
-                    <ul>
-                        <li>"Training Cats to Use Automatic Litter Boxes: A Step-by-Step Guide"</li>
-                        <li>"Solving Litter Box Aversion: How Catlink Can Help"</li>
-                        <li>"Multi-Cat Litter Box Strategies: Best Practices"</li>
-                    </ul>
-                </li>
-                <li><b>Cole and Marmalade / Cat Man Chris Style (Relatable Cat Owners):</b>
-                    <ul>
-                        <li>"A Day in the Life with Catlink: Simplifying Our Routine"</li>
-                        <li>"Our Cats React to the Catlink Self-Cleaning Litter Box"</li>
-                        <li>"Before & After: How Catlink Transformed Our Home"</li>
-                    </ul>
-                </li>
-                 <li><b>The Dodo / AnimalWised Style (Heartwarming/Informative):</b>
-                    <ul>
-                        <li>"How Catlink Improves Cat Health with Smart Monitoring"</li>
-                        <li>"Catlink Litter Boxes: Making a Difference for Shelter Cats"</li>
-
-                    </ul>
-                </li>
-            </ul>
-      </div>
-    </div>
-
-    <div class = "platform-section">
-        <button class = "toggle-button" onclick="toggleContent('instagramContent')">Show/Hide Instagram</button>
-        <h3 id = "instagramContent-title">Instagram</h3>
-        <div class = "toggle-content" id = "instagramContent">
-            <p><b>Key Insight:</b> Visual appeal and lifestyle integration are paramount.</p>
-            <ul>
-                <li><b>@cutecatgang, @sillycats, @whiskerwatchers Style (Humor/Relatability):</b>
-                    <ul>
-                        <li>Short, looping videos of cats using the litter box.</li>
-                        <li>Time-lapse videos of the automatic cleaning process.</li>
-                        <li>Before & after cleaning shots.</li>
-                        <li>User-generated content campaigns with a branded hashtag.</li>
-                    </ul>
-                </li>
-                <li><b>@the_catdaddy Style (Practical Tips/Multi-Cat):</b>
-                    <ul>
-                        <li>"Litter Box Hacks" series (short videos).</li>
-                        <li>Highlighting features beneficial for multiple cats.</li>
-                    </ul>
-                </li>
-                 <li><b>@petco, @the_petcollective Style(Retail/General)</b></li>
-                    <ul>
-                        <li>Partner for in-store demos and promotions.</li>
-                        <li>Run Instagram ads targeting cat owners.</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-  </div>
-
-    <div class = "platform-section">
-         <button class = "toggle-button" onclick="toggleContent('tiktokContent')">Show/Hide TikTok</button>
-        <h3 id = "tiktokContent-title">TikTok</h3>
-        <div class = "toggle-content" id = "tiktokContent">
-            <p><b>Key Insight:</b> Short, attention-grabbing, and often humorous content performs best.</p>
-            <ul>
-                <li><b>@fluffyandpuffy, @kittycatsunday, @whiskerwatchers, @cutecatgang Style (Reactions/Challenges):</b>
-                    <ul>
-                        <li>"Cat Reacts to" videos (automatic cleaning feature).</li>
-                        <li>"Litter Box Challenge" videos (create a fun challenge).</li>
-                        <li>"Day in the Life" snippets.</li>
-                        <li>Duets and stitches with Catlink videos.</li>
-                    </ul>
-                </li>
-                <li><b>@petco, @kittymeowmeow, @petit_miaou Style (Reviews/Problem-Solving):</b>
-                    <ul>
-                        <li>Partner with TikTok creators for honest reviews.</li>
-                        <li>Run TikTok ads targeting cat owners.</li>
-                        <li>"How-To" and "Tip" videos.</li>
-                    </ul>
-                </li>
-            </ul>
-    </div>
-  </div>
-</div>
-    <div class="section">
-        <h2>Creative Directions for Catlink</h2>
-
-        <div class="creative-direction">
-            <h4>"Smart Home, Happy Cat" Campaign</h4>
-            <p><b>Theme:</b> Position Catlink as the ultimate smart home solution for cat owners.</p>
-            <ul>
-                <li><b>YouTube:</b> In-depth reviews, explainer videos, "day in the life" vlogs, cat behaviorist collaborations.</li>
-                <li><b>Instagram:</b> Stylish photos and videos, short "hack" videos, UGC campaigns.</li>
-                <li><b>TikTok:</b> Humorous "cat reacts to" videos, time-lapses, trends, creator collaborations.</li>
-            </ul>
+    <div class="container">
+        <div class="header">
+            <h1>Video Analytics Dashboard</h1>
+            <p>Comprehensive analysis of your video content performance</p>
         </div>
 
-        <div class="creative-direction">
-            <h4>"The Catlink Clean Challenge"</h4>
-            <p><b>Theme:</b> User-generated content campaign showcasing cleanliness and ease of use.</p>
-            <ul>
-                <li><b>YouTube:</b> Launch video, compilation videos of entries.</li>
-                <li><b>Instagram:</b> Dedicated hashtag, user-submitted photos/videos, before & after shots.</li>
-                <li><b>TikTok:</b> Duets and stitches, humorous skits.</li>
-            </ul>
+        <div class="tabs">
+            <button class="tab active" data-tab="selling-points">
+                <i class="fas fa-fire"></i>
+                <span>Selling Points</span>
+            </button>
+            <button class="tab" data-tab="video-formats">
+                <i class="fas fa-video"></i>
+                <span>Video Formats</span>
+            </button>
+            <button class="tab" data-tab="pain-points">
+                <i class="fas fa-heart-broken"></i>
+                <span>Pain Points</span>
+            </button>
+            <button class="tab" data-tab="trending">
+                <i class="fas fa-users"></i>
+                <span>Trending Creators</span>
+            </button>
         </div>
 
-        <div class="creative-direction">
-          <h4>"Behind the Scenes at Catlink"</h4>
-          <ul>
-            <li><b>YouTube:</b>Longer videos explaining the design process.</li>
-            <li><b>Instagram:</b> Employee Spotlights.</li>
-            <li><b>TikTok:</b> Quick looks into the office, or manufacturing.</li>
-          </ul>
+        <!-- Video Formats Tab Content -->
+        <div class="formats-container" id="videoFormatsTab">
+            <div class="format-list">
+                <div class="semi-circle-progress">
+                    <div id="progressChart"></div>
+                    <div class="progress-text">
+                        <div class="text-2xl font-bold">11/30</div>
+                        <div class="text-orange-500">37%</div>
+                        <div class="text-gray-500">videos</div>
+                    </div>
+                </div>
+                <div id="formatsList"></div>
+            </div>
+            <div class="video-grid" id="videoGrid"></div>
         </div>
-    </div>
-<div class="section">
-        <h2>Example Data Visualization (ECharts)</h2>
-    <p>Below are example charts demonstrating how you could visualize data related to content performance. *These use placeholder data.*</p>
-    <div class = "chart-container" id="kol-themes-chart"></div>
-    <div class = "chart-container" id="platform-engagement-chart"></div>
 
+        <!-- Pain Points Tab Content -->
+        <div class="pain-points-container" id="painPointsTab">
+            <div class="format-list">
+                <div class="semi-circle-progress">
+                    <div id="painPointsProgress"></div>
+                    <div class="progress-text">
+                        <div class="text-2xl font-bold">10/41</div>
+                        <div class="text-orange-500">24%</div>
+                        <div class="text-gray-500">videos</div>
+                    </div>
+                </div>
+                <div id="painPointsList"></div>
+            </div>
+            <div class="video-grid" id="painPointsVideoGrid"></div>
+        </div>
+
+        <!-- Trending Creators Tab Content -->
+        <div class="trending-container" id="trendingTab">
+            <table class="creators-table">
+                <tbody id="creatorsList"></tbody>
+            </table>
+            
+            <div class="video-library">
+                <div class="library-header">
+                    <h2 class="text-xl font-semibold">Video Library</h2>
+                    <div class="flex items-center gap-2">
+                        <span class="text-gray-500">Order by</span>
+                        <select class="px-4 py-2 border rounded-lg">
+                            <option value="most-viewed">Most Viewed</option>
+                            <option value="newest">Newest</option>
+                            <option value="oldest">Oldest</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="video-grid-4" id="trendingVideoGrid"></div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid" id="mainDashboard">
+            <div class="main-content">
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Performance Overview
+                    </h2>
+                    <div id="performanceChart" class="chart-container"></div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Content Distribution</h2>
+                    <div id="distributionChart" class="chart-container"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <h2 class="card-title">Key Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card metric-views">
+                            <div class="metric-info">
+                                <i class="fas fa-eye"></i>
+                                <span>Total Views</span>
+                            </div>
+                            <span class="metric-value">1.2M</span>
+                        </div>
+                        <div class="metric-card metric-engagement">
+                            <div class="metric-info">
+                                <i class="fas fa-heart"></i>
+                                <span>Engagement</span>
+                            </div>
+                            <span class="metric-value">85.4K</span>
+                        </div>
+                        <div class="metric-card metric-shares">
+                            <div class="metric-info">
+                                <i class="fas fa-share"></i>
+                                <span>Shares</span>
+                            </div>
+                            <span class="metric-value">12.3K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Recent Activity</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-content">
+                                <div>New video published</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-content">
+                                <div>Reached 1M views</div>
+                                <div class="activity-time">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-content">
+                                <div>New subscriber milestone</div>
+                                <div class="activity-time">1 day ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-    // --- Placeholder Data (Replace with your actual data) ---
-    const kolThemesData = {
-      themes: ['Problem/Solution', 'Reviews', 'How-To', 'Cat Reactions', 'Best Of'],
-      videoCounts: [45, 30, 35, 50, 20] // Hypothetical number of videos for each theme
-    };
+        // Video Formats Data
+        const videoFormats = [
+            { name: 'Pet Experience Showcase', percentage: 37, count: 11, color: '#ff6b34' },
+            { name: 'Interactive Call-to-Action', percentage: 20, count: 6, color: '#ffd700' },
+            { name: 'Product Discovery Highlight', percentage: 13, count: 4, color: '#90EE90' },
+            { name: 'Creative POV Hook', percentage: 10, count: 3, color: '#32CD32' },
+            { name: 'Ease-of-Use Demonstration', percentage: 7, count: 2, color: '#00CED1' },
+            { name: 'Personal Testimonial', percentage: 7, count: 2, color: '#1E90FF' },
+            { name: "Do's and Don'ts Tutorial", percentage: 3, count: 1, color: '#4169E1' },
+            { name: 'Daily Life Integration', percentage: 3, count: 1, color: '#8A2BE2' }
+        ];
 
-    const platformEngagementData = {
-      platforms: ['YouTube', 'Instagram', 'TikTok'],
-      engagementRates: [4.5, 6.2, 8.1] // Hypothetical engagement rates
-    };
-    // --- ECharts Chart Creation ---
-        function createKOLThemesChart(data) {
-            const myChart = echarts.init(document.getElementById('kol-themes-chart'));
+        // Pain Points Data
+        const painPoints = [
+            { name: 'Pet owners facing inefficiency in managing cat litter', percentage: 24, count: 10, color: '#ff6b34' },
+            { name: 'Challenges in maintaining a clean environment for pets', percentage: 22, count: 9, color: '#ffd700' },
+            { name: 'Traditional litter boxes fail to maintain cleanliness and hygiene', percentage: 10, count: 4, color: '#90EE90' },
+            { name: 'Frequent need to monitor and clean litter boxes manually', percentage: 10, count: 4, color: '#32CD32' },
+            { name: 'Litter boxes that are not aesthetically integrated into homes', percentage: 10, count: 4, color: '#00CED1' },
+            { name: 'Manual cleaning of litter boxes is time-consuming and messy', percentage: 7, count: 3, color: '#1E90FF' }
+        ];
 
-            const option = {
-                title: {
-                    text: 'Distribution of KOL Video Themes'
-                },
+        const painPointVideos = [
+            {
+                title: 'Get a catlink litter box for your feline...',
+                tags: ['catlink', 'catproducts'],
+                views: '1.1K',
+                likes: 8,
+                date: 'Feb 7, 2025',
+                author: '@philcone7198'
+            },
+            {
+                title: 'I found my new item for my cat! Catlink...',
+                tags: ['catlink', 'catproducts'],
+                views: '411',
+                likes: 5,
+                date: 'Jan 28, 2025',
+                author: '@philcone7198'
+            }
+        ];
+
+        // Trending Creators Data
+        const creators = [
+            { 
+                username: 'novemberjane26',
+                videoCount: 5,
+                views: '1.5K',
+                interactions: '--'
+            },
+            {
+                username: 'philcone7198',
+                videoCount: 4,
+                views: '4.6K',
+                interactions: '2'
+            },
+            {
+                username: 'cordellkauf',
+                videoCount: 2,
+                views: '2.3K',
+                interactions: '--'
+            },
+            {
+                username: 'fourgatitos',
+                videoCount: 1,
+                views: '518K',
+                interactions: '6.1K'
+            },
+            {
+                username: 'crochetcopia',
+                videoCount: 1,
+                views: '279K',
+                interactions: '9.9K'
+            }
+        ];
+
+        const trendingVideos = [
+            {
+                title: 'Ranqueando piores e melhor...',
+                author: '@fourgatitos',
+                date: 'Feb 12, 2025',
+                views: '518K',
+                likes: '38K',
+                shares: '6.1K'
+            },
+            // ... add other videos data
+        ];
+
+        // Tab Switching Logic
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabId = tab.dataset.tab;
+                document.getElementById('mainDashboard').style.display = 'none';
+                document.getElementById('videoFormatsTab').classList.remove('active');
+                document.getElementById('painPointsTab').classList.remove('active');
+                document.getElementById('trendingTab').classList.remove('active');
+
+                if (tabId === 'video-formats') {
+                    document.getElementById('videoFormatsTab').classList.add('active');
+                } else if (tabId === 'pain-points') {
+                    document.getElementById('painPointsTab').classList.add('active');
+                } else if (tabId === 'trending') {
+                    document.getElementById('trendingTab').classList.add('active');
+                } else {
+                    document.getElementById('mainDashboard').style.display = 'grid';
+                }
+            });
+        });
+
+        // Initialize Video Formats
+        function initVideoFormats() {
+            // Progress Chart
+            const progressChart = echarts.init(document.getElementById('progressChart'));
+            progressChart.setOption({
+                series: [{
+                    type: 'gauge',
+                    startAngle: 180,
+                    endAngle: 0,
+                    min: 0,
+                    max: 100,
+                    progress: {
+                        show: true,
+                        width: 18
+                    },
+                    pointer: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 18
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        show: false
+                    },
+                    detail: {
+                        show: false
+                    },
+                    data: [{
+                        value: 37,
+                        itemStyle: {
+                            color: '#FF6B34'
+                        }
+                    }]
+                }]
+            });
+
+            // Render Format List
+            const formatsList = document.getElementById('formatsList');
+            formatsList.innerHTML = videoFormats.map(format => `
+                <div class="format-item">
+                    <div class="format-name">
+                        <span class="format-color-dot" style="background-color: ${format.color}"></span>
+                        <span>${format.name}</span>
+                    </div>
+                    <div class="format-stats">
+                        <span>${format.percentage}%</span>
+                        <span><i class="fas fa-video"></i> ${format.count}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize Pain Points
+        function initPainPoints() {
+            // Progress Chart
+            const progressChart = echarts.init(document.getElementById('painPointsProgress'));
+            progressChart.setOption({
+                series: [{
+                    type: 'gauge',
+                    startAngle: 180,
+                    endAngle: 0,
+                    min: 0,
+                    max: 100,
+                    progress: {
+                        show: true,
+                        width: 18
+                    },
+                    pointer: { show: false },
+                    axisLine: { lineStyle: { width: 18 } },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    detail: { show: false },
+                    data: [{
+                        value: 24,
+                        itemStyle: { color: '#FF6B34' }
+                    }]
+                }]
+            });
+
+            // Render Pain Points List
+            const painPointsList = document.getElementById('painPointsList');
+            painPointsList.innerHTML = painPoints.map(point => `
+                <div class="pain-point-item">
+                    <div class="pain-point-name">
+                        <span class="format-color-dot" style="background-color: ${point.color}"></span>
+                        <span>${point.name}</span>
+                    </div>
+                    <div class="pain-point-stats">
+                        <span>${point.percentage}%</span>
+                        <span><i class="fas fa-video"></i> ${point.count}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Video Grid
+            const videoGrid = document.getElementById('painPointsVideoGrid');
+            videoGrid.innerHTML = painPointVideos.map(video => `
+                <div class="video-card">
+                    <div class="video-preview">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <h3 class="video-title">${video.title}</h3>
+                    <div class="tag-container">
+                        ${video.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    </div>
+                    <div class="video-stats">
+                        <div class="stat-group">
+                            <span class="stat-item"><i class="fas fa-eye"></i> ${video.views}</span>
+                            <span class="stat-item"><i class="fas fa-heart"></i> ${video.likes}</span>
+                        </div>
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="video-meta">
+                        <span>${video.author}</span>
+                        <span>${video.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize Trending Creators
+        function initTrendingCreators() {
+            // Render Creators List
+            const creatorsList = document.getElementById('creatorsList');
+            creatorsList.innerHTML = creators.map(creator => `
+                <tr>
+                    <td>
+                        <div class="creator-info">
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                            <div class="creator-avatar"></div>
+                            <span class="creator-username">@${creator.username}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">${creator.videoCount}</td>
+                    <td class="text-center">${creator.views}</td>
+                    <td class="text-center">${creator.interactions}</td>
+                </tr>
+            `).join('');
+
+            // Render Video Grid
+            const videoGrid = document.getElementById('trendingVideoGrid');
+            videoGrid.innerHTML = trendingVideos.map(video => `
+                <div class="video-card">
+                    <div class="video-preview">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="video-stats">
+                            <span><i class="fas fa-eye"></i> ${video.views}</span>
+                            <span><i class="fas fa-heart"></i> ${video.likes}</span>
+                        </div>
+                    </div>
+                    <h3 class="video-title">${video.title}</h3>
+                    <div class="video-meta">
+                        <span>${video.author}</span>
+                        <span>${video.date}</span>
+                    </div>
+                    <div class="video-actions">
+                        <span><i class="fas fa-share"></i> ${video.shares}</span>
+                        <i class="fas fa-download"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initVideoFormats();
+            initPainPoints();
+            initTrendingCreators();
+            // 初始化图表
+            const performanceChart = echarts.init(document.getElementById('performanceChart'));
+            const performanceOption = {
                 tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
-                    }
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Views', 'Engagement'],
+                    bottom: 0
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '10%',
+                    containLabel: true
                 },
                 xAxis: {
                     type: 'category',
-                    data: data.themes,
-                     axisLabel: {         //  rotation
-                        interval: 0,
-                        rotate: 30
-                     }
-
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
                 },
                 yAxis: {
-                    type: 'value',
-                    name: 'Number of Videos'
+                    type: 'value'
                 },
-                series: [{
-                    data: data.videoCounts,
-                    type: 'bar',
-                    label: {
-                        show: true,
-                        position: 'top'
+                series: [
+                    {
+                        name: 'Views',
+                        type: 'line',
+                        areaStyle: {
+                            opacity: 0.2
+                        },
+                        data: [2400, 1398, 9800, 3908, 4800, 3800],
+                        itemStyle: {
+                            color: '#FF6B34'
+                        }
+                    },
+                    {
+                        name: 'Engagement',
+                        type: 'line',
+                        areaStyle: {
+                            opacity: 0.2
+                        },
+                        data: [1400, 2210, 2290, 2000, 2181, 2500],
+                        itemStyle: {
+                            color: '#82AAFF'
+                        }
                     }
-                }]
+                ]
             };
-            myChart.setOption(option);
-        }
+            performanceChart.setOption(performanceOption);
 
-        function createPlatformEngagementChart(data) {
-          const myChart = echarts.init(document.getElementById('platform-engagement-chart'));
-          const option = {
-            title: {
-              text: 'Average Engagement Rate by Platform'
-            },
-            tooltip: {},
-            xAxis: {
-              type: 'category',
-              data: data.platforms
-            },
-            yAxis: {
-              type: 'value',
-              name: 'Engagement Rate (%)'
-            },
-            series: [{
-              data: data.engagementRates,
-              type: 'line' // Line chart for engagement rates
-            }]
-          };
-          myChart.setOption(option);
+            // Distribution Chart
+            const distributionChart = echarts.init(document.getElementById('distributionChart'));
+            const distributionOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    bottom: 0
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        data: [
+                            { value: 35, name: 'Video Tutorials' },
+                            { value: 25, name: 'Product Reviews' },
+                            { value: 20, name: 'User Stories' },
+                            { value: 20, name: 'Tips & Tricks' }
+                        ],
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b}: {d}%'
+                        }
+                    }
+                ]
+            };
+            distributionChart.setOption(distributionOption);
 
-        }
-      function toggleContent(id){
-        var content = document.getElementById(id);
-        var title = document.getElementById(id + "-title");
-        if(content.style.display === "none"){
-          content.style.display = "block";
-          title.style.display = "block";
-        } else {
-          content.style.display = "none";
-          title.style.display = "none";
-
-        }
-      }
-
-    // --- Initialization ---
-
-    document.addEventListener('DOMContentLoaded', () => {
-      createKOLThemesChart(kolThemesData);
-      createPlatformEngagementChart(platformEngagementData);
-        // Add more chart initializations here as needed
-    });
-
+            // 响应式处理
+            window.addEventListener('resize', function() {
+                performanceChart.resize();
+                distributionChart.resize();
+            });
+        });
     </script>
 </body>
-</html>
+</html> 

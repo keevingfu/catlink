@@ -15,6 +15,7 @@
             font-family: Arial, sans-serif;
             display: flex;
             min-height: 100vh;
+            overflow: hidden;
         }
 
         .sidebar {
@@ -22,6 +23,7 @@
             background: #f8f9fa;
             padding: 2rem 0;
             border-right: 1px solid #ddd;
+            overflow: hidden;
         }
 
         .sidebar h2 {
@@ -55,12 +57,14 @@
         .content {
             flex: 1;
             padding: 2rem;
+            overflow: hidden;
         }
 
         iframe {
             width: 100%;
             height: calc(100vh - 4rem);
             border: none;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -68,9 +72,10 @@
     <nav class="sidebar">
         <h2>Insight</h2>
         <ul class="nav-menu">
-            <li><a href="#" class="active" data-page="insight01">Market Research</a></li>
-            <li><a href="#" data-page="insight02">Competitor Analysis</a></li>
-            <li><a href="#" data-page="insight03">Creation Guide</a></li>
+            <li><a href="#" class="active" data-page="insight01">Search Insight</a></li>
+            <li><a href="#" data-page="insight02">VOC Insight</a></li>
+            <li><a href="#" data-page="insight03">Viral Video Insight</a></li>
+            <li><a href="#" data-page="insight04">Viral Factor</a></li>
         </ul>
     </nav>
 

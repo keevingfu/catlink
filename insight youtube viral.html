@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Viral Factors</title>
+    <style>
+        /* YouTube Brand Colors */
+        :root {
+            --youtube-primary: #FF0000; /* YouTube Red */
+            --youtube-dark: #282828;  /* Dark Gray (almost black) */
+            --youtube-light: #FFFFFF; /* White */
+            --youtube-gray: #F1F1F1; /* Light Gray */
+            --youtube-text: #030303; /* Very Dark Gray (for text)*/
+            --positive-green: #28a745;
+            --negative-red: #dc3545;
+            --table-header-bg:#e0e0e0;
+
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif; /* YouTube's primary font */
+            margin: 0;
+            padding: 0;
+            background-color: var(--youtube-gray);
+            color: var(--youtube-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--youtube-dark);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 500; /* YouTube uses a slightly lighter weight */
+            margin: 0;
+            color: var(--youtube-primary);
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px; /* Slightly larger for YouTube logo */
+            height: auto;
+        }
+
+        /* KPI Card Styles */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            background-color: var(--youtube-light);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth hover effect */
+
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); /* More pronounced shadow on hover */
+        }
+          .kpi-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: var(--youtube-primary); /* Use YouTube Red for icons */
+        }
+
+        .kpi-title {
+            font-size: 1em;
+            color: #606060; /* Darker gray for subtext */
+            margin-bottom: 5px;
+            font-weight: 400;
+        }
+
+        .kpi-value {
+            font-size: 1.8em;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .kpi-trend-icon {
+            font-size: 1.2em;
+             margin-right: 4px;
+            color: var(--positive-green);
+        }
+
+        .kpi-trend-value {
+             font-size: 0.9em;
+            margin-right: 4px;
+            color: var(--positive-green);
+        }
+        .kpi-trend-text {
+           font-size: 0.9em;
+           color: #606060; /* Darker gray */
+        }
+        .kpi-trend-icon.negative { color: var(--negative-red); }
+        .kpi-trend-value.negative {color: var(--negative-red);}
+
+        /* Chart Styles */
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                grid-template-columns: 1fr; /* Single column on smaller screens */
+            }
+            .kpi-container{
+                justify-content: center; /* Center the KPI cards */
+            }
+            .kpi-card {
+                width: auto;  /* Allow cards to take full width */
+                max-width: 300px; /* But limit the maximum width */
+            }
+        }
+
+        .chart-card {
+            background-color: var(--youtube-light);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            padding: 20px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        }
+
+        .chart-title {
+            font-size: 1.4em; /* Slightly larger title */
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--youtube-text);
+        }
+
+        .chart-wrapper {
+            height: 300px;
+            width: 100%;
+        }
+
+          /* Section Styles */
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 1.6em; /* Slightly smaller than main title */
+            font-weight: 500;
+            color: var(--youtube-text);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--youtube-dark);
+            padding-bottom: 10px;
+        }
+
+        .insight {
+            margin-top: 15px;
+            padding: 15px; /* More padding */
+            border-radius: 8px;
+            background-color: var(--youtube-gray);
+            font-size: 1em; /* Larger font size for insights */
+            color: var(--youtube-text);
+            line-height: 1.5;
+        }
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--youtube-dark);
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+            font-weight: 500;
+        }
+         td {
+            vertical-align: top; /* Align cell content to the top */
+        }
+        .matrix-table th {
+            text-align: center; /* Center-align matrix header cells */
+        }
+        .matrix-table td {
+             vertical-align: middle; /* Vertically center content in matrix */
+              text-align: center;
+        }
+
+        /* Recommendations */
+        .recommendations {
+            margin-top: 40px;
+            border-top: 1px solid var(--youtube-dark);
+            padding-top: 20px;
+        }
+        .recommendations-title {
+             font-size: 1.5em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--youtube-text);
+        }
+        .recommendations-text {
+            font-size: 1em;
+            line-height: 1.7;
+            color: var(--youtube-text);
+        }
+        .recommendations-list{
+            list-style-type: disc; /* Use disc bullets for the list */
+            margin-left: 20px;
+            padding-left: 0;
+        }
+
+        .recommendations-list li {
+            margin-bottom: 10px;
+            color: var(--youtube-text);
+        }
+          /* Loading Spinner Styles */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px; /* Adjust as needed */
+        }
+
+        .loader {
+            border: 8px solid var(--youtube-gray);
+            border-top: 8px solid var(--youtube-primary); /* Use YouTube Red */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo" class="logo">
+        <h1>Youtube Viral Factors</h1>
+    </div>
+
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-icon">💬</div>
+            <div class="kpi-title">Total Comments</div>
+            <div class="kpi-value">81</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">👍</div>
+            <div class="kpi-title">Average Likes</div>
+            <div class="kpi-value">8.5</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">⭐</div>
+            <div class="kpi-title">Max Likes</div>
+            <div class="kpi-value">25</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🔥</div>
+            <div class="kpi-title">Hot Topics</div>
+            <div class="kpi-value">5</div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <div class="chart-card">
+            <h2 class="chart-title">Sentiment Distribution</h2>
+            <div class="chart-wrapper" id="sentimentChart">
+                <div class="loader-container"><div class="loader"></div></div>
+            </div>
+            <div class="insight">
+               A breakdown of the sentiments expressed in the comments, categorized as Negative/Concern, Question/Neutral, Positive/Expectation, and Other.
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h2 class="chart-title">Comment Type Distribution</h2>
+            <div class="chart-wrapper" id="commentTypeChart">
+                <div class="loader-container"><div class="loader"></div></div>
+            </div>
+            <div class="insight">
+                Distribution of comments based on their type: Usage Experience, Safety Concerns, Usage Questions, Product Comparison, and Experience Sharing.
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+       <h2 class="section-title">High-Rated Comments Analysis</h2>
+
+        <h3 class="section-title">Usage Experience Comments</h3>
+        <table>
+            <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>"Respectfully I ain't doin alldat but this is good info"</td><td>25</td><td>• Complex steps<br/>• Valuable info</td><td>• Simplify process<br/>• Highlight key benefits<br/>• Emphasize convenience</td></tr>
+                <tr><td>"Bruh it doesn't take that long"</td><td>18</td><td>• Time spent<br/>• Efficiency concerns</td><td>• Show actual time<br/>• Compare time efficiency<br/>• Quick demo</td></tr>
+            </tbody>
+        </table>
+
+         <h3 class="section-title">Safety-Related Comments</h3>
+        <table>
+           <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+               <tr><td>"There have recently been many reports of robot litter boxes malfunctioning..."</td><td>24</td><td>• Safety concerns<br/>• Product doubts</td><td>• Show safety features<br/>• Differentiate<br/>• Emphasize certifications</td></tr>
+                <tr><td>"Just so you know, there's been reviews of self cleaning litter boxes..."</td><td>9</td><td>• Usage risks<br/>• Safety reminders</td><td>• Detailed safety design<br/>• Prevention instructions<br/>• Usage precautions</td></tr>
+            </tbody>
+        </table>
+
+         <h3 class="section-title">Usage Question Comments</h3>
+         <table>
+            <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+               <tr><td>"How else do they drink?"</td><td>11</td><td>• Usage method<br/>• Feature questions</td><td>• Showcase usage<br/>• Detailed feature explanation<br/>• FAQ</td></tr>
+                <tr><td>"Well maybe if you put the water bowl so high then yes"</td><td>10</td><td>• Design rationality<br/>• Usage suggestions</td><td>• Design concept<br/>• Usage tips<br/>• Scenario showcase</td></tr>
+            </tbody>
+         </table>
+    </div>
+
+    <div class="section">
+       <h2 class="section-title">Key Findings</h2>
+        <div>
+            <h3 class="section-title">Core Concerns</h3>
+            <ul class="recommendations-list">
+                <li>Safety is the top concern (35% of comments)</li>
+                <li>Convenience is the second major concern (30% of comments)</li>
+                <li>Practicality receives positive feedback (25% positive)</li>
+            </ul>
+        </div>
+        <div>
+             <h3 class="section-title">Viral Elements</h3>
+             <ul class="recommendations-list">
+                <li>Detailed safety mechanism (24 likes)</li>
+                <li>Simplified operation process (25 likes)</li>
+                <li>Differentiated advantages (multiple comments)</li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="section-title">Recommendations</h3>
+             <ul class="recommendations-list">
+                <li>Strengthen content on safety</li>
+                <li>Highlight convenience in demos</li>
+                <li>Emphasize brand differentiation</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title">Viral Factor Design</h2>
+        <h3 class="section-title">Content Strategy Table</h3>
+        <table class="matrix-table">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th >Content Section</th>
+                    <th>Viral Factor</th>
+                    <th>Data Support</th>
+                    <th>Implementation</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr>
+                    <td>Opening Design<br/>(0-3 seconds)</td>
+                    <td>
+                        • Visual impact on safety<br/>
+                        • Quick convenience display<br/>
+                        • Differentiated highlight
+                    </td>
+                    <td>
+                        • Safety discussion (24 likes)<br/>
+                        • Convenience comments (25 likes)<br/>
+                        • Comparison needs (8+ comments)
+                    </td>
+                    <td>
+                        • Safety mechanism animation<br/>
+                        • Quick operation demo<br/>
+                        • Differentiated
+<td>
+                        • Safety mechanism animation<br/>
+                        • Quick operation demo<br/>
+                        • Differentiated feature comparison
+                    </td>
+                </tr>
+                <tr>
+                    <td>Core Content<br/>(4-15 seconds)</td>
+                    <td>
+                        • Detailed safety mechanism<br/>
+                        • Operation process demo<br/>
+                        • Before/after effect
+                    </td>
+                    <td>
+                        • 15+ safety-related comments<br/>
+                        • 10+ usage experience comments<br/>
+                        • 13 likes on practicality
+                    </td>
+                    <td>
+                        • Professional certification<br/>
+                        • Step-by-step guide<br/>
+                        • Before/after comparison
+                    </td>
+                </tr>
+                <tr>
+                    <td>Conversion Design<br/>(16-20 seconds)</td>
+                    <td>
+                        • User testimonials<br/>
+                        • Scenario application<br/>
+                        • Interaction guidance
+                    </td>
+                    <td>
+                        • 6 likes on user experience<br/>
+                        • Multiple scenario discussions<br/>
+                        • High interaction comment analysis
+                    </td>
+                    <td>
+                        • Real user recommendations<br/>
+                        • Multi-scenario showcase<br/>
+                        • Set interactive topics
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+         <h3 class="section-title">Hashtag Strategy Table</h3>
+        <table >
+            <thead>
+                <tr >
+                    <th >Tag Type</th>
+                    <th >Recommended Tags</th>
+                    <th >Usage Strategy</th>
+                    <th >Expected Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Core Tags</td>
+                    <td>
+                        • #catlink<br/>
+                        • #catlitterbox<br/>
+                        • #catproducts
+                    </td>
+                    <td>
+                        • Brand recognition<br/>
+                        • Product category<br/>
+                        • Key features
+                    </td>
+                    <td>
+                        • Increase discovery<br/>
+                        • Strengthen brand<br/>
+                        • Ensure category coverage
+                    </td>
+                </tr>
+                <tr>
+                    <td>Scenario Tags</td>
+                    <td>
+                        • #catlife<br/>
+                        • #funny<br/>
+                        • #cute
+                    </td>
+                    <td>
+                        • Life scenarios<br/>
+                        • Humorous content<br/>
+                        • Emotional resonance
+                    </td>
+                    <td>
+                        • Scenario guidance<br/>
+                        • Increase interaction<br/>
+                        • Boost spread
+                    </td>
+                </tr>
+                <tr>
+                    <td>Attribute Tags</td>
+                    <td>
+                        • #cathealth<br/>
+                        • #petsmart<br/>
+                        • #petcare
+                    </td>
+                    <td>
+                        • Professional attributes<br/>
+                        • Functional value<br/>
+                        • Usage scenarios
+                    </td>
+                    <td>
+                        • Professional endorsement<br/>
+                        • Value delivery<br/>
+                        • Application guidance
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="recommendations">
+        <h2 class="recommendations-title">Recommendations and Action Items</h2>
+        <p class="recommendations-text">
+            Based on the analysis of high-rated comments and identified viral factors, we recommend the following actions to optimize the YouTube content strategy and maximize engagement with the cat litter box product:
+        </p>
+        <ul class="recommendations-list">
+            <li><strong>Address Safety Concerns Head-On:</strong>  Create dedicated content (short videos, explainer animations) that directly address the safety concerns raised in the comments. Showcase any safety certifications, design features that prevent accidents, and provide clear instructions for safe operation.</li>
+            <li><strong>Simplify and Demonstrate:</strong>  Produce short, visually engaging videos demonstrating the ease and speed of setup, use, and cleaning.  Focus on the time-saving benefits.  Consider a before-and-after comparison to highlight the convenience.
+            </li>
+            <li><strong>Highlight the Differentiators:</strong> What makes *this* cat litter box better than the competition?  Create content that clearly showcases these unique selling propositions (USPs).  This could be a comparison video, a feature highlight reel, or testimonials focusing on the unique advantages.</li>
+            <li><strong>Leverage User-Generated Content (UGC):</strong> Encourage users to share their experiences (positive *and* addressing concerns constructively) with the product. Feature the best UGC in your content.  Run contests or challenges to incentivize participation.</li>
+            <li><strong>Create a FAQ Video:</strong>  Address common questions and concerns directly in a dedicated FAQ video. This can preemptively answer potential customer questions and build trust.</li>
+            <li><strong>Optimize Video Structure:</strong>
+                <ul>
+                    <li><strong>Strong Hook (0-3 seconds):</strong>  Start with a visually compelling and attention-grabbing opening. This could be a cute cat video, a striking visual of the product, or a quick problem/solution statement.</li>
+                    <li><strong>Core Content (4-15 seconds):</strong>  Clearly demonstrate the product's key features and benefits. Focus on safety, convenience, and any unique selling points.</li>
+                    <li><strong>Call to Action (16-20 seconds):</strong>  Encourage viewers to like, comment, subscribe, and visit the product page.  Consider offering a special discount or promotion for viewers.</li>
+                </ul>
+            </li>
+            <li><strong>Strategic Hashtag Use:</strong> Implement a consistent hashtag strategy using a mix of:
+                 <ul>
+                    <li>**Core Tags:**  (#catlink, #catlitterbox, #catproducts) - for brand and product identification.</li>
+                    <li>**Scenario Tags:** (#catlife, #funny, #cute) - to connect with broader cat-related content and increase discoverability.</li>
+                    <li>**Attribute Tags:** (#cathealth, #petsmart, #petcare) - to associate the product with relevant topics and establish credibility.</li>
+                </ul>
+            </li>
+             <li><strong>Engage with the Community:</strong> Actively respond to comments, answer questions, and address concerns.  This shows viewers that you are listening and care about their feedback.</li>
+            <li><strong>Monitor and Iterate:</strong> Track key metrics (likes, comments, shares, watch time, click-through rate to product page) to measure the effectiveness of your content strategy.  Use this data to refine your approach and create even better content in the future.</li>
+            <li><strong>Consider Influencer Marketing:</strong> Partner with relevant cat-focused YouTube channels or social media influencers to reach a wider audience.</li>
+
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+    // Helper functions for creating charts
+    function createPieChart(elementId, data, dataKey, nameKey) {
+        const chart = echarts.init(document.getElementById(elementId));
+        const COLORS = ['#FF8042', '#FFBB28', '#00C49F', '#0088FE'];
+
+        const option = {
+            tooltip: { trigger: 'item' },
+            legend: {
+                orient: 'vertical',
+                right: 'right', // Legend on the right
+                top: 'center',    // Centered vertically
+                data: data.map(item => item[nameKey]) // Show legend
+            },
+            series: [
+                {
+                    name: 'Distribution',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: { borderRadius: 5, borderColor: '#fff', borderWidth: 1 },
+                    label: {
+                        show: true, // Show labels
+                        formatter: '{b}: {d}%' // Format: Name (Percentage)
+                    },
+                    labelLine: { show: true },
+                    data: data.map((item, index) => ({
+                        value: item[dataKey],
+                        name: item[nameKey],
+                        itemStyle: { color: COLORS[index % COLORS.length] }
+                    })),
+                }
+            ]
+        };
+        chart.setOption(option);
+        return chart;
+    }
+
+    function createBarChart(elementId, data, xDataKey, yDataKey, color, yAxisName = null) {
+        const chart = echarts.init(document.getElementById(elementId));
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: data.map(item => item[xDataKey]),
+                axisLabel: {
+                    interval: 0,
+                    rotate: 30,
+                    fontSize: 11
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: yAxisName,
+                nameTextStyle: {
+                    padding: [0, 0, 0, 30]
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data.map(item => item[yDataKey]),
+                itemStyle: { 
+                    color: color,
+                    borderRadius: [3, 3, 0, 0]
+                },
+                barWidth: '60%'
+            }]
+        };
+        chart.setOption(option);
+        return chart;
+    }
+    // Data (from your React code)
+    const sentimentData = [
+        { name: 'Negative/Concern', value: 35 },
+        { name: 'Question/Neutral', value: 30 },
+        { name: 'Positive/Expectation', value: 25 },
+        { name: 'Other', value: 10 }
+    ];
+
+    const commentTypeData = [
+        { type: 'Usage Experience', count: 35 },
+        { type: 'Safety Concerns', count: 28 },
+        { type: 'Usage Questions', count: 20 },
+        { type: 'Product Comparison', count: 15 },
+        { type: 'Experience Sharing', count: 12 }
+    ];
+
+    const topicData = [
+        { name: 'Safety Mechanism', engagement: 24 },
+        { name: 'Usage Efficiency', engagement: 18 },
+        { name: 'Practical Features', engagement: 13 },
+        { name: 'Product Comparison', engagement: 10 },
+        { name: 'Usage Experience', engagement: 8 }
+    ];
+
+
+    // Chart Initialization
+    let sentimentChart, commentTypeChart, topicChart;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化图表
+        sentimentChart = createPieChart('sentimentChart', sentimentData, 'value', 'name');
+        document.querySelectorAll('.loader-container').forEach(loader => {
+            loader.style.display = 'none';
+        });
+
+        commentTypeChart = createBarChart('commentTypeChart', commentTypeData, 'type', 'count', '#FF4444', 'Count');
+        window.addEventListener('resize', () => {
+            sentimentChart && sentimentChart.resize();
+            commentTypeChart && commentTypeChart.resize();
+        });
+    });
+
+    // KPI Trend Icon/Value Styling
+    document.querySelectorAll('.kpi-trend').forEach(trendContainer => {
+        const valueElement = trendContainer.querySelector('.kpi-trend-value');
+        const iconElement = trendContainer.querySelector('.kpi-trend-icon');
+        const trendValue = parseFloat(valueElement.textContent);
+
+        if (trendValue < 0) {
+            iconElement.classList.add('negative');
+            valueElement.classList.add('negative');
+        }
+    });
+</script>
+</body>
+</html>

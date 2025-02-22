@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Keyword Insights</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;  /* Distribute space */
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .header .logo-title-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .header img {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #FF0000; /* YouTube Red */
+            margin: 0;
+        }
+
+        .kpi-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            flex: 1;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack icon and content vertically */
+            align-items: center;    /* Center horizontally */
+            justify-content: center; /* Center vertically */
+
+        }
+        .kpi-card i{
+            margin-bottom: 5px;
+        }
+
+
+        .kpi-card.total-keywords {
+            background-color: #c00;
+            color: white;
+        }
+
+        .kpi-card.avg-cpc {
+            background-color: #e52d27;
+            color: white;
+        }
+
+        .kpi-card.max-volume {
+            background-color: #a00;
+            color: white;
+        }
+
+        .kpi-card.max-cpc {
+            background-color: #600;
+            color: white;
+        }
+
+
+        .kpi-card h2 {
+            font-size: 20px;
+            margin: 5px 0;
+        }
+
+        .kpi-card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .chart-container {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-container.category-analysis {
+            grid-row: span 3;
+            min-height: 600px;
+        }
+
+        .chart-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .chart-row > div {
+            flex: 1;
+            min-height: 300px;
+        }
+
+        h3.chart-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .chart-insights {
+            font-size: 14px;
+            color: #555;
+            margin-top: auto;
+            padding: 15px 0;
+            line-height: 1.4;
+            border-top: 1px solid #eee;
+        }
+
+
+        /* ECharts container */
+        .echarts {
+            width: 100%;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .category-analysis .echarts {
+            height: 450px;
+        }
+
+        /* Add loading state */
+        .echarts::before {
+            content: 'Loading...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+             <div class="logo-title-wrapper">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo">
+                 <h1>YouTube Keyword Insights</h1>
+             </div>
+
+        </div>
+
+        <div class="kpi-container">
+            <div class="kpi-card total-keywords">
+                <i class="fas fa-key fa-3x"></i>
+                <h2>Total Keywords</h2>
+                <p id="totalKeywords">Loading...</p>
+            </div>
+            <div class="kpi-card avg-cpc">
+                <i class="fas fa-dollar-sign fa-3x"></i>
+                <h2>Avg. CPC</h2>
+                <p id="avgCPC">Loading...</p>
+            </div>
+            <div class="kpi-card max-volume">
+                <i class="fas fa-chart-line fa-3x"></i>
+                <h2>Max Search Volume</h2>
+                <p id="maxVolume">Loading...</p>
+            </div>
+            <div class="kpi-card max-cpc">
+                <i class="fas fa-arrow-up fa-3x"></i>
+                <h2>Max CPC</h2>
+                <p id="maxCPC">Loading...</p>
+            </div>
+        </div>
+
+        <div class="chart-container category-analysis">
+            <h3 class="chart-title">Youtube Keyword Category Analysis</h3>
+            <div id="sunburstChart" class="echarts"></div>
+            <div class="chart-insights">
+                <strong>Insights:</strong> Technology-related keywords show high CPC ($4-$8) and significant search volume, particularly for automatic and robot litter boxes. Basic and problem-solving terms have the highest search volumes.
+                <br><strong>Recommendations:</strong> Create comprehensive content around automatic litter boxes, focusing on reviews and comparisons. Address common problems while incorporating technology solutions.
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <h3 class="chart-title">Search Volume Distribution</h3>
+                <div id="volumeChart" class="echarts"></div>
+                <div class="chart-insights">
+                    <strong>Insights:</strong> High volume keywords (>50k) are dominated by basic terms, while mid-range volumes (10k-50k) show strong interest in automatic solutions.
+                    <br><strong>Recommendations:</strong> Balance content between high-volume basic terms and growing technology segments. Target mid-range keywords for better ranking opportunities.
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">Modifier Types Analysis</h3>
+                <div id="modifierChart" class="echarts"></div>
+                <div class="chart-insights">
+                    <strong>Insights:</strong> Technology and Problems categories lead in terms of diversity and commercial intent. Reviews and comparisons show significant user interest.
+                    <br><strong>Recommendations:</strong> Develop content series focusing on product reviews and problem-solving. Include comparison videos for popular automatic litter boxes.
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <h3 class="chart-title">CPC vs Search Volume</h3>
+                <div id="cpcChart" class="echarts"></div>
+                <div class="chart-insights">
+                    <strong>Insights:</strong> High CPC keywords ($4+) cluster around technology solutions, while problem-solving terms show moderate CPCs with good search volumes.
+                    <br><strong>Recommendations:</strong> Prioritize content about automatic and robot litter boxes for monetization. Create supporting content around common problems and solutions.
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">Top 10 Keywords by Search Volume</h3>
+                <div id="topKeywordsChart" class="echarts"></div>
+                <div class="chart-insights">
+                    <strong>Insights:</strong> Basic usage and automatic cleaning solutions dominate the top search volumes. Furniture and accessories show strong secondary interest.
+                    <br><strong>Recommendations:</strong> Create foundational content for top volume keywords while developing specialized content for high-value niches.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+      // Helper function to parse the data
+      function parseCSVData(csvData) {
+        const lines = csvData.trim().split('\n');
+        const headers = ['Keyword', 'Modifier Type', 'Suggestion', 'Search Volume', 'Cost Per Click'];
+        const data = [];
+
+        for (let i = 1; i < lines.length; i++) {
+            const values = lines[i].split('\t');
+            const row = {};
+            headers.forEach((header, index) => {
+                row[header] = values[index];
+            });
+            data.push(row);
+        }
+        return data;
+    }
+
+    // Sample data for testing
+    const sampleData = [
+        { Keyword: 'cat litter box', 'Modifier Type': 'Basic', Suggestion: 'cat on litter box', 'Search Volume': '74000', 'Cost Per Click': '2.12' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Technology', Suggestion: 'automatic cat litter box cleaning', 'Search Volume': '33100', 'Cost Per Click': '3.95' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Reviews', Suggestion: 'cat litter box best', 'Search Volume': '22200', 'Cost Per Click': '2.85' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Furniture', Suggestion: 'cat litter box furniture', 'Search Volume': '18100', 'Cost Per Click': '1.14' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Accessories', Suggestion: 'cat litter box mat', 'Search Volume': '14800', 'Cost Per Click': '1.25' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Technology', Suggestion: 'robot cat litter box 4', 'Search Volume': '12000', 'Cost Per Click': '8.03' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Problems', Suggestion: 'best cat litter box for odor control', 'Search Volume': '9900', 'Cost Per Click': '2.45' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Size', Suggestion: 'large cat litter box', 'Search Volume': '8100', 'Cost Per Click': '1.13' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Problems', Suggestion: 'cat peeing outside litter box', 'Search Volume': '8100', 'Cost Per Click': '1.85' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Technology', Suggestion: 'whisker cat litter box', 'Search Volume': '7200', 'Cost Per Click': '6.97' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Furniture', Suggestion: 'cat litter box enclosure', 'Search Volume': '6600', 'Cost Per Click': '1.16' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Problems', Suggestion: 'cat urinating outside litter box', 'Search Volume': '6600', 'Cost Per Click': '1.75' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Technology', Suggestion: 'cat litter box robot', 'Search Volume': '5400', 'Cost Per Click': '5.14' },
+        { Keyword: 'cat litter box', 'Modifier Type': 'Technology', Suggestion: 'cat litter box automatic', 'Search Volume': '5000', 'Cost Per Click': '5.05' }
+    ];
+
+    function prepareData(data) {
+        data = data || sampleData;
+        
+        // Use fixed KPI values
+        const totalKeywords = 380;
+        const avgCPC = 1.39;
+        const maxVolume = 74000;
+        const maxCPC = 8.03;
+
+        // Update volume ranges to match report data
+        const volumeRanges = [
+            '0-5k',
+            '5k-10k',
+            '10k-20k',
+            '20k-50k',
+            '50k+'
+        ];
+
+        // Update CPC ranges to match report data
+        const cpcRanges = [
+            '0-2',
+            '2-4',
+            '4-6',
+            '6-8',
+            '8+'
+        ];
+
+        // Prepare volume data
+        const volumeData = volumeRanges.map(range => ({
+            range,
+            keywords: data.filter(item => {
+                const volume = parseInt(item['Search Volume']);
+                switch(range) {
+                    case '0-5k': return volume < 5000;
+                    case '5k-10k': return volume >= 5000 && volume < 10000;
+                    case '10k-20k': return volume >= 10000 && volume < 20000;
+                    case '20k-50k': return volume >= 20000 && volume < 50000;
+                    case '50k+': return volume >= 50000;
+                }
+            }).map(item => ({
+                name: item.Suggestion,
+                volume: parseInt(item['Search Volume'])
+            }))
+        }));
+
+        // Prepare modifier data
+        const modifierData = Object.entries(
+            data.reduce((acc, item) => {
+                const type = item['Modifier Type'];
+                if (!acc[type]) {
+                    acc[type] = {
+                        count: 0,
+                        keywords: []
+                    };
+                }
+                acc[type].count += 1;
+                acc[type].keywords.push({
+                    name: item.Suggestion,
+                    volume: parseInt(item['Search Volume']),
+                    cpc: parseFloat(item['Cost Per Click'])
+                });
+                return acc;
+            }, {})
+        ).map(([name, data]) => ({ 
+            name, 
+            value: data.count,
+            keywords: data.keywords
+        }));
+
+        // Prepare CPC data
+        const cpcData = cpcRanges.map(range => {
+            const items = data.filter(item => {
+                const cpc = parseFloat(item['Cost Per Click']);
+                switch(range) {
+                    case '0-2': return cpc < 2;
+                    case '2-4': return cpc >= 2 && cpc < 4;
+                    case '4-6': return cpc >= 4 && cpc < 6;
+                    case '6-8': return cpc >= 6 && cpc < 8;
+                    case '8+': return cpc >= 8;
+                }
+            });
+            return {
+                range,
+                avgVolume: items.length ? items.reduce((sum, item) => sum + parseInt(item['Search Volume']), 0) / items.length : 0
+            };
+        });
+
+        // Prepare top keywords data
+        const topKeywords = data
+            .sort((a, b) => parseInt(b['Search Volume']) - parseInt(a['Search Volume']))
+            .slice(0, 10)
+            .map(item => ({
+                name: item.Suggestion,
+                value: parseInt(item['Search Volume']),
+                itemStyle: {
+                    color: '#c00'
+                }
+            }));
+
+        // Prepare sunburst data
+        const sunburstData = Object.entries(
+            data.reduce((acc, item) => {
+                const type = item['Modifier Type'];
+                if (!acc[type]) acc[type] = {};
+                const suggestion = item.Suggestion;
+                acc[type][suggestion] = (acc[type][suggestion] || 0) + parseInt(item['Search Volume']);
+                return acc;
+            }, {})
+        ).map(([type, items]) => ({
+            name: type,
+            children: Object.entries(items).map(([name, value]) => ({
+                name,
+                value
+            }))
+        }));
+
+        return {
+            totalKeywords,
+            avgCPC,
+            maxVolume,
+            maxCPC,
+            volumeData,
+            modifierData,
+            cpcData,
+            topKeywords,
+            sunburstData
+        };
+    }
+
+    function initDashboard() {
+        // Use sampleData directly
+        const {
+            totalKeywords,
+            avgCPC,
+            maxVolume,
+            maxCPC,
+            volumeData,
+            modifierData,
+            cpcData,
+            topKeywords,
+            sunburstData
+        } = prepareData(sampleData);
+
+        // Store sampleData for scatter plot
+        const data = sampleData;
+
+        // Update KPI cards
+        document.getElementById('totalKeywords').textContent = '380';
+        document.getElementById('avgCPC').textContent = '$1.39';
+        document.getElementById('maxVolume').textContent = '74,000';
+        document.getElementById('maxCPC').textContent = '$8.03';
+
+        // Initialize Charts
+        const volumeChart = echarts.init(document.getElementById('volumeChart'));
+        const modifierChart = echarts.init(document.getElementById('modifierChart'));
+        const cpcChart = echarts.init(document.getElementById('cpcChart'));
+        const topKeywordsChart = echarts.init(document.getElementById('topKeywordsChart'));
+        const sunburstChart = echarts.init(document.getElementById('sunburstChart'));
+
+        // Make sure all chart containers exist
+        if (!document.getElementById('volumeChart') || 
+            !document.getElementById('modifierChart') || 
+            !document.getElementById('cpcChart') || 
+            !document.getElementById('topKeywordsChart') || 
+            !document.getElementById('sunburstChart')) {
+            console.error('One or more chart containers are missing');
+            return;
+        }
+
+        // Chart Options
+        const volumeOption = {
+            tooltip: { 
+                trigger: 'item',
+                formatter: function(params) {
+                    const rangeData = volumeData[params.dataIndex];
+                    let tips = `<strong>${params.name}</strong><br/>`;
+                    tips += `Total Keywords: ${rangeData.keywords.length}<br/><br/>`;
+                    tips += '<strong>Keywords in this range:</strong><br/>';
+                    rangeData.keywords.forEach(kw => {
+                        tips += `${kw.name}: ${kw.volume.toLocaleString()}<br/>`;
+                    });
+                    return tips;
+                }
+            },
+            grid: { 
+                left: '3%', 
+                right: '4%', 
+                bottom: '15%', 
+                containLabel: true 
+            },
+            xAxis: {
+                type: 'category',
+                data: volumeData.map(item => item.range),
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: { 
+                type: 'value', 
+                name: 'Number of Keywords' 
+            },
+            series: [{
+                data: volumeData.map(item => ({
+                    value: item.keywords.length,
+                    itemStyle: { color: '#c00' }
+                })),
+                type: 'bar',
+            }]
+        };
+
+        const modifierOption = {
+            tooltip: { 
+                trigger: 'item', 
+                formatter: function(params) {
+                    const data = params.data;
+                    let tips = `<strong>${data.name}</strong><br/>`;
+                    tips += `Total Keywords: ${data.value}<br/>`;
+                    tips += `Percentage: ${params.percent.toFixed(1)}%<br/><br/>`;
+                    tips += '<strong>Keywords in this category:</strong><br/>';
+                    data.keywords.forEach(kw => {
+                        tips += `${kw.name}<br/>Volume: ${kw.volume.toLocaleString()}<br/>CPC: $${kw.cpc.toFixed(2)}<br/><br/>`;
+                    });
+                    return tips;
+                }
+            },
+            legend: { 
+                orient: 'horizontal', 
+                bottom: 10 
+            },
+            series: [{
+                type: 'pie',
+                radius: '65%',
+                center: ['50%', '45%'],
+                data: modifierData,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                label: {
+                    formatter: '{b}: {c} ({d}%)'
+                }
+            }]
+        };
+
+        const cpcOption = {
+            tooltip: { 
+                trigger: 'item',
+                formatter: function(params) {
+                    return `${params.data.name}<br/>CPC: $${params.data.cpc}<br/>Volume: ${params.data.value.toLocaleString()}`;
+                }
+            },
+            grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+            legend: {
+                bottom: 10,
+                data: ['Technology', 'Problems', 'Basic', 'Reviews', 'Furniture', 'Accessories', 'Size']
+            },
+            xAxis: {
+                type: 'value',
+                name: 'CPC ($)',
+                nameLocation: 'middle',
+                nameGap: 30,
+                axisLabel: {
+                    formatter: '${value}'
+                }
+            },
+            yAxis: { 
+                type: 'value', 
+                name: 'Search Volume',
+                nameLocation: 'middle',
+                nameGap: 40
+            },
+            series: [{
+                type: 'scatter',
+                name: 'Technology',
+                itemStyle: { color: '#e52d27' },
+                data: data.filter(item => item['Modifier Type'] === 'Technology')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }, {
+                type: 'scatter',
+                name: 'Problems',
+                itemStyle: { color: '#c00' },
+                data: data.filter(item => item['Modifier Type'] === 'Problems')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }, {
+                type: 'scatter',
+                name: 'Basic',
+                itemStyle: { color: '#800' },
+                data: data.filter(item => item['Modifier Type'] === 'Basic')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }, {
+                type: 'scatter',
+                name: 'Reviews',
+                itemStyle: { color: '#600' },
+                data: data.filter(item => item['Modifier Type'] === 'Reviews')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }, {
+                type: 'scatter',
+                name: 'Furniture',
+                itemStyle: { color: '#a00' },
+                data: data.filter(item => item['Modifier Type'] === 'Furniture')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }, {
+                type: 'scatter',
+                name: 'Accessories',
+                itemStyle: { color: '#d00' },
+                data: data.filter(item => item['Modifier Type'] === 'Accessories')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }, {
+                type: 'scatter',
+                name: 'Size',
+                itemStyle: { color: '#f00' },
+                data: data.filter(item => item['Modifier Type'] === 'Size')
+                    .map(item => ({
+                        name: item.Suggestion,
+                        value: parseInt(item['Search Volume']),
+                        cpc: parseFloat(item['Cost Per Click']),
+                        symbolSize: Math.sqrt(parseInt(item['Search Volume'])) / 4
+                    }))
+            }]
+        };
+
+        const topKeywordsOption = {
+            tooltip: {
+                formatter: function(params) {
+                    return `${params.name}: ${params.value.toLocaleString()} searches`;
+                }
+            },
+            series: [{
+                type: 'treemap',
+                data: topKeywords,
+                width: '95%',
+                height: '95%',
+                levels: [{
+                    itemStyle: {
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        gapWidth: 2
+                    }
+                }],
+                label: {
+                    show: true,
+                    formatter: function(params) {
+                        return params.name + '\n' + params.value.toLocaleString();
+                    }
+                }
+            }]
+        };
+
+        const sunburstOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    return `${params.name}<br/>Volume: ${params.value.toLocaleString()}`;
+                }
+            },
+            series: [{
+                type: 'sunburst',
+                data: sunburstData,
+                radius: [0, '90%'],
+                center: ['50%', '50%'],
+                levels: [{
+                    r0: '0%',
+                    r: '35%',
+                    itemStyle: { borderWidth: 2 }
+                }, {
+                    r0: '35%',
+                    r: '70%',
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = {
+                                'Technology': '#e52d27',
+                                'Problems': '#c00',
+                                'Furniture': '#a00',
+                                'Basic': '#800',
+                                'Reviews': '#600'
+                            };
+                            return colors[params.name] || '#c00';
+                        }
+                    }
+                }],
+                label: {
+                    rotate: 'radial',
+                    minAngle: 5
+                }
+            }]
+        };
+
+        // Set chart options
+        volumeChart.setOption(volumeOption);
+        modifierChart.setOption(modifierOption);
+        cpcChart.setOption(cpcOption);
+        topKeywordsChart.setOption(topKeywordsOption);
+        sunburstChart.setOption(sunburstOption);
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const charts = document.querySelectorAll('.echarts');
+            charts.forEach(chart => {
+                const instance = echarts.getInstanceByDom(chart);
+                if (instance) {
+                    instance.resize();
+                }
+            });
+        });
+    }
+
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            // Load Font Awesome
+            const fontAwesomeScript = document.createElement('script');
+            fontAwesomeScript.src = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js";
+            document.head.appendChild(fontAwesomeScript);
+
+            // Initialize dashboard
+            initDashboard();
+        } catch (error) {
+            console.error('Error initializing dashboard:', error);
+        }
+    });
+
+    // Add error handling for ECharts
+    window.addEventListener('error', function(event) {
+        if (event.target.tagName === 'CANVAS') {
+            console.error('ECharts error:', event);
+        }
+    });
+
+    </script>
+</body>
+
+</html>

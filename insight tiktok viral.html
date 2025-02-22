@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Viral Factors</title>
+    <style>
+        /* TikTok Brand Colors (Approximation) */
+        :root {
+            --tiktok-primary: #000000;
+            --tiktok-secondary: #ffffff;
+            --tiktok-red: #FE2C55;
+            --tiktok-cyan: #25F4EE;
+            --tiktok-accent: #69C9D0;
+            --background-gray: #f8f8f8;
+            --positive-green: #28a745;
+            --negative-red: #dc3545;
+            --table-header-bg: #f2f2f2; /* Light gray for table headers */
+            --table-border: #ddd;
+            --section-title-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-gray);
+            color: var(--tiktok-primary);
+            line-height: 1.6; /* Improved readability */
+        }
+
+        .container {
+            max-width: 1400px; /* Wider container */
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--tiktok-accent);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin: 0;
+            color: var(--tiktok-primary);
+            flex-grow: 1;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+
+        /* KPI Card Styles */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease-in-out;
+        }
+        .kpi-card:hover {
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .kpi-icon { font-size: 2em; margin-bottom: 10px; }
+        .professional-content { border-left: 4px solid #FE2C55; }
+        .user-story { border-left: 4px solid #25F4EE; }
+        .tutorial-completion { border-left: 4px solid #69C9D0;}
+        .safety-content { border-left: 4px solid #ff7597; }
+        .kpi-title { font-size: 1em; color: #666; margin-bottom: 5px; }
+        .kpi-value { font-size: 1.8em; font-weight: bold; margin-bottom: 5px; }
+        .kpi-trend { display: flex; align-items: center; margin-top: 5px;}
+        .kpi-trend-icon { font-size: 1.2em; margin-right: 5px; color: var(--positive-green);}
+        .kpi-trend-icon.negative { color: var(--negative-red); }
+        .kpi-trend-value { font-size: 0.9em; margin-right: 5px; color: var(--positive-green); }
+        .kpi-trend-value.negative { color: var(--negative-red); }
+        .kpi-trend-text{ font-size: 0.9em; color: #999; }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--section-title-color);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--table-border);
+            padding-bottom: 10px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Space between tables */
+        }
+
+        th, td {
+            padding: 12px 15px; /* More padding */
+            text-align: left;
+            border-bottom: 1px solid var(--table-border);
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+            font-weight: 600; /* Slightly bolder header text */
+        }
+
+        td {
+            vertical-align: top; /* Align cell content to the top */
+        }
+
+        /* Matrix Table (for Video Content Design) */
+        .matrix-table th {
+            text-align: center; /* Center-align matrix header cells */
+        }
+        .matrix-table td {
+             vertical-align: middle; /* Vertically center content in matrix */
+              text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .kpi-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .kpi-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+         /* Recommendations Section */
+        .recommendations {
+            margin-top: 40px;
+            border-top: 2px solid var(--tiktok-accent);
+            padding-top: 20px;
+        }
+
+        .recommendations-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--section-title-color);
+        }
+
+        .recommendations-text {
+            font-size: 1em;
+            line-height: 1.7;
+            color: #555;
+        }
+        .recommendations-list{
+            list-style-type: disc; /* Use disc bullets for the list */
+            margin-left: 20px;
+            padding-left: 0;
+        }
+
+        .recommendations-list li {
+            margin-bottom: 10px; /* Spacing between list items */
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img src="https://sf16-scmcdn-h5.pstatp.com/obj/eden-cn/uhtyvueh7nulogttphp/tiktok_logo_2020_white.svg" alt="TikTok Logo" class="logo">
+        <h1>TikTok Viral Factors</h1>
+    </div>
+
+     <div class="kpi-container">
+        <div class="kpi-card professional-content">
+            <div class="kpi-icon">🏆</div>
+            <div class="kpi-title">Professional Content Impact</div>
+            <div class="kpi-value">85%</div>
+            <div class="kpi-trend">
+                <span class="kpi-trend-icon">↑</span>
+                <span class="kpi-trend-value">12%</span>
+                <span class="kpi-trend-text">vs last period</span>
+            </div>
+        </div>
+        <div class="kpi-card user-story">
+            <div class="kpi-icon">🗣️</div>
+            <div class="kpi-title">User Story Engagement</div>
+            <div class="kpi-value">75%</div>
+             <div class="kpi-trend">
+                <span class="kpi-trend-icon">↑</span>
+                <span class="kpi-trend-value">8%</span>
+                <span class="kpi-trend-text">engagement rate</span>
+            </div>
+        </div>
+        <div class="kpi-card tutorial-completion">
+            <div class="kpi-icon">✅</div>
+            <div class="kpi-title">Tutorial Completion</div>
+            <div class="kpi-value">65%</div>
+            <div class="kpi-trend">
+                <span class="kpi-trend-icon negative">↓</span>
+                <span class="kpi-trend-value negative">3%</span>
+                <span class="kpi-trend-text">watch completion</span>
+            </div>
+        </div>
+        <div class="kpi-card safety-content">
+            <div class="kpi-icon">🛡️</div>
+            <div class="kpi-title">Safety Content Reach</div>
+            <div class="kpi-value">55%</div>
+            <div class="kpi-trend">
+                <span class="kpi-trend-icon">↑</span>
+                <span class="kpi-trend-value">5%</span>
+                <span class="kpi-trend-text">audience reach</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">High-Rated Comments Analysis</h2>
+
+        <h3 class="section-title">Usage Experience Comments</h3>
+        <table>
+            <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>"You should move there food somewhere not so close to the box!! Otherwise my cats do this aswell, it's like them saying this is soooo good"</td><td>45</td><td>Product placement and usage</td><td>1. Proper usage demo  2. Pet interaction</td></tr>
+                <tr><td>"Move the water and food bowl away from the litter box, and separate the food and water... Also look into getting a water fountain!"</td><td>19</td><td>Usage tips and optimization</td><td>1. Usage tips 2. Related product suggestions</td></tr>
+                <tr><td>"Elle est trop bien" (It's great)</td><td>2</td><td>Product satisfaction</td><td>1. Multilingual feedback 2. Genuine reviews</td></tr>
+            </tbody>
+        </table>
+
+         <h3 class="section-title">Safety-Related Comments</h3>
+        <table>
+           <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+               <tr><td>"Please check the recalls on automatic litter boxes like that they have been killing cats"</td><td>0</td><td>Product safety</td><td>1. Safety certifications 2. Quality assurance</td></tr>
+                <tr><td>"I'd stop the habit now. Cat bites are dangerous"</td><td>1</td><td>Usage safety reminder</td><td>1. Safe usage guide  2. Risk prevention</td></tr>
+                <tr><td>"some cats are very sensitive to still water, their instinct is to bury it as it's deemed unsafe"</td><td>0</td><td>Pet behavior and safety </td><td>1. Product suitability 2. Expert advice</td></tr>
+            </tbody>
+        </table>
+
+         <h3 class="section-title">Usage Question Comments</h3>
+         <table>
+            <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+               <tr><td>"How we can order this please"</td><td>0</td><td>Purchase channel</td><td>1. Clear purchase guide 2. Multi-platform links</td></tr>
+                <tr><td>"What does this mean?"</td><td>1</td><td>Product feature understanding</td><td>1. Detailed feature explanation  2. Demo videos</td></tr>
+                <tr><td>"how to clean/use it?"</td><td>0</td><td>Usage instructions</td><td>1. Usage tutorial  2. Maintenance guide</td></tr>
+            </tbody>
+         </table>
+
+        <h3 class="section-title">Experience Sharing Comments</h3>
+         <table>
+            <thead>
+                <tr><th>Comment</th><th>Likes</th><th>User Focus</th><th>Viral Factor</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>"it's in their instincts to cover up their food to protect it!"</td><td>54</td><td>Pet behavior explanation</td><td>1. Professional knowledge 2. Behavior analysis</td></tr>
+                <tr><td>"My cat does this for minutes after eating it's to 'cover' their food!"</td><td>35</td><td>Usage scenario sharing</td><td>1. Real usage scenarios 2. User stories</td></tr>
+                <tr><td>"Mine does this (his food is in a whole different room than his litter)"</td><td>4</td><td>Usage experience sharing</td><td>1. Multi-scenario suitability 2. Real effect showcase</td></tr>
+            </tbody>
+         </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Viral Factor Design</h2>
+
+        <h3 class="section-title">Video Content Design Matrix</h3>
+        <table class="matrix-table">
+            <thead>
+                <tr><th>Viral Factor</th><th>Visuals</th><th>Audio</th><th>Camera Work</th><th>Interaction</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Professional Knowledge</strong></td><td>Text explanation of pet behavior<br>Animation of key points<br>Expert appearance</td><td>Professional voiceover<br>Soft background music<br>Natural pet sounds</td><td>Close-ups for details<br>Split-screen comparisons<br>Slow-motion emphasis</td><td>Pop-up knowledge points<br>Interactive Q&A<br>Knowledge cards</td></tr>
+                <tr><td><strong>Real Usage Scenarios</strong></td><td>Home setting shots<br>Multi-angle views<br>Before/after comparison</td><td>Real environment sounds<br>Warm music<br>Owner's voice</td><td>Tracking shots<br>First-person perspective<br>Multi-camera switching</td><td>Usage tips<br>Interactive polls</td></tr>
+                <tr><td><strong>Safety Assurance</strong></td><td>Safety certification display<br>Usage precautions<br>Risk prevention demo</td><td>Formal voiceover<br>Warning sound effects<br>Gentle reminders</td><td>Text emphasis<br>Icon prompts<br>Step-by-step guide</td><td>Safety tips<br>Reminder boxes<br>Interactive questions</td></tr>
+                <tr><td><strong>Multilingual Localization</strong></td><td>Multilingual subtitles<br>Universal icons<br>Cross-cultural visuals</td><td>Multilingual voiceover<br>International music<br>Localized sound effects</td><td>International camera work<br>Cultural symbols<br>Globalized scenes</td><td>Multilingual interaction<br>Cultural difference tips<br>Localized tags</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">Viral Video Structure Design</h3>
+         <table>
+             <thead>
+                <tr><th>Video Section</th><th>Duration (%)</th><th>Key Elements</th><th>Emotional Appeal</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Opening Hook</strong></td><td>15%</td><td>• Pet close-ups<br>• Problem scenario<br>• Suspense</td><td>• Curiosity<br>• Empathy<br>• Anticipation</td></tr>
+                <tr><td><strong>Product Intro</strong></td><td>25%</td><td>• Feature highlights<br>• Usage scenarios<br>• Expert endorsement</td><td>• Trust<br>• Value recognition<br>• Security</td></tr>
+                <tr><td><strong>Usage Tutorial</strong></td><td>35%</td><td>• Detailed steps<br>• Precautions<br>• Effect showcase</td><td>• Learning desire<br>• Control<br>• Achievement</td></tr>
+                <tr><td><strong>Interaction</strong></td><td>25%</td><td>• Comment interaction<br>• Share incentives<br>• Community guide</td><td>• Participation<br>• Belonging<br>• Value</td></tr>
+            </tbody>
+         </table>
+
+        <h3 class="section-title">Scenario-Based Application Design</h3>
+        <table>
+            <thead><tr><th>Scenario</th><th>Core Demand</th><th>Video Focus</th><th>Interaction Strategy</th></tr></thead>
+            <tbody>
+                <tr><td><strong>First Use</strong></td><td>Safe and reliable<br>Easy to use</td><td>• Detailed instructions<br>• Safety tips<br>• FAQs</td><td>• Beginner Q&A<br>• Usage check-in<br>• Feedback collection</td></tr>
+                <tr><td><strong>Daily Use</strong></td><td>Convenient and efficient<br>Problem-solving</td><td>• Usage tips<br>• Maintenance<br>• Scenario application</td><td>• Experience sharing<br>• Tips exchange<br>• Scenario submissions</td></tr>
+                <tr><td><strong>Advanced Use</strong></td><td>Feature enhancement<br>Value increase</td><td>• Advanced techniques<br>• Creative uses<br>• Effect optimization</td><td>• Expert sharing<br>• Creative discussions<br>• Community events</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">Interactive Growth Design</h3>
+         <table>
+            <thead><tr><th>Interaction Type</th><th>Design Points</th><th>Expected Results</th><th>Metrics</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Comment Guidance</strong></td><td>• Set topic questions<br>• Share usage experiences<br>• Polls</td><td>• Increase participation<br>• Collect user feedback<br>• Foster community</td><td>• Comment count<br>• Engagement rate<br>• Topic popularity</td></tr>
+                <tr><td><strong>Sharing & Spreading</strong></td><td>• Creative gameplay design<br>• Practical value sharing<br>• Emotional resonance</td><td>• Expand reach<br>• Enhance brand awareness<br>• Drive sales conversion</td><td>• Share count<br>• Spread range<br>• Sales conversion rate</td></tr>
+                <tr><td><strong>Community Building</strong></td><td>• User story collection<br>• Influencer collaborations<br>• Event planning</td><td>• Build loyal users<br>• Establish brand culture<br>• Sustainable growth</td><td>• Follower count<br>• Activity level<br>• Repurchase rate</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">Hashtag Design</h3>
+         <table>
+            <thead><tr><th>Type</th><th>Hashtag Examples</th><th>Use Case</th><th>Expected Results</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Feature</strong></td><td>#SmartLitterBox<br>#AutoScooper<br>#LazyEssential</td><td>Product feature showcase<br>Usage scenario demos</td><td>Highlight product selling points<br>Increase search visibility</td></tr>
+                <tr><td><strong>Emotional</strong></td><td>#MyCatSlaveLife<br>#CatParenting<br>#CatsLoveIt</td><td>Emotional connection<br>User story sharing</td><td>Trigger emotional resonance<br>Increase interaction</td></tr>
+                <tr><td><strong>Professional</strong></td><td>#CatBehavior<br>#PetHealth<br>#ScienceOfCats</td><td>Professional knowledge sharing<br>Behavior analysis</td><td>Establish authority<br>Increase trust</td></tr>
+                <tr><td><strong>Event</strong></td><td>#ShowYourChoice<br>#PetSharingInfluencer<br>#ReviewContest</td><td>Interactive events<br>User submissions</td><td>Increase participation<br>Expand influence</td></tr>
+            </tbody>
+
+         </table>
+    </div>
+
+    <div class="recommendations">
+        <h2 class="recommendations-title">Recommendations and Action Items</h2>
+        <p class="recommendations-text">
+            Based on the analysis of high-rated comments and viral factors, we recommend the following actions to optimize TikTok content strategy and maximize engagement:
+        </p>
+        <ul class="recommendations-list">
+            <li><strong>Prioritize Educational Content:</strong>  Create more videos demonstrating proper product usage, addressing safety concerns, and explaining relevant pet behaviors.  Leverage expert opinions and clear visual demonstrations.</li>
+            <li><strong>Highlight User Stories:</strong> Encourage users to share their experiences with the product. Feature authentic testimonials and real-life scenarios to build trust and relatability.</li>
+            <li><strong>Develop Multi-Language Content:</strong>  Given the presence of comments in multiple languages, create content with subtitles or voiceovers in key languages (French, German, Italian, etc.) to reach a broader audience.</li>
+            <li><strong>Improve Video Structure:</strong> Focus on strong hooks at the beginning of videos to capture attention immediately.  Provide clear, concise tutorials, and emphasize the call to action.</li>
+            <li><strong>Engage with Comments Actively:</strong> Respond to user questions and concerns promptly.  Use comments as a source of inspiration for future content.  Acknowledge and feature positive comments.
+            </li>
+             <li><strong>Run Targeted Campaigns:</strong> Leverage the identified viral factors in targeted campaigns. For example, create a campaign around "pet safety" or "easy cleaning" to address specific user interests.</li>
+            <li><strong>Track and Iterate:</strong> Continuously monitor key metrics (engagement, shares, comments, website traffic from TikTok) and adjust the content strategy based on performance data. A/B test different video formats and topics.</li>
+            <li><strong>Collaborate with Pet Influencers:</strong> Partner with relevant influencers who can authentically showcase the product and its benefits to their followers.</li>
+            <li><strong>Address Safety Concerns Proactively:</strong> Create content directly addressing the safety concerns raised in the comments. Showcase safety certifications and provide clear instructions on safe usage.</li>
+            <li><strong>Create a Clear Call to Action:</strong>  Make it easy for viewers to learn more or purchase the product by including clear links in the bio and captions, and by verbally mentioning the call to action in the video.</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    // KPI Trend Icon/Value Styling (This part goes *after* the HTML, so the elements exist)
+    document.querySelectorAll('.kpi-trend').forEach(trendContainer => {
+        const valueElement = trendContainer.querySelector('.kpi-trend-value');
+        const iconElement = trendContainer.querySelector('.kpi-trend-icon');
+        const trendValue = parseFloat(valueElement.textContent);
+
+        if (trendValue < 0) {
+            iconElement.classList.add('negative');
+            valueElement.classList.add('negative');
+        }
+    });
+</script>
+</body>
+</html>

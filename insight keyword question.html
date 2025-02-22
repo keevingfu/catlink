@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cat Litter Box “Questions” Keyword</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            overflow: hidden;
+        }
+
+        #chart-container {
+            width: 800px; /* Adjust as needed */
+            height: 600px; /* Adjust as needed */
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #insights {
+            width: 800px; /* Match chart width */
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .question-category {
+          font-weight: bold;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Cat Litter Box Questions Keyword</h2>
+
+    <div id="chart-container"></div>
+
+    <div id="insights">
+        <h2>Insights & Recommendations</h2>
+        <p>This sunburst chart visualizes common questions about cat litter boxes, categorized by question type ("can", "how", "what", "when", "where", "which").  Here are some key insights and recommendations:</p>
+
+        <div class="question-category">Can (Possibility/Ability)</div>
+        <ul>
+          <li><strong>Health Concerns:</strong>  A significant number of questions revolve around potential health risks.  Emphasize using low-dust, non-toxic litters, and good ventilation in the litter box area.  Pregnant women should avoid changing litter due to toxoplasmosis risk.</li>
+            <li><strong>Relocation:</strong> Moving a litter box *is* possible, but should be done gradually to avoid confusing the cat and causing accidents.</li>
+        </ul>
+
+        <div class="question-category">How (Method/Process)</div>
+        <ul>
+            <li><strong>Cleaning Frequency & Training:</strong>  "How often" and "how to clean" are major concerns.  Daily scooping and a full litter change every 2-4 weeks (depending on litter type and number of cats) is crucial. For training, introduce kittens to the litter box early and provide positive reinforcement.</li>
+            <li><strong>Box Dimensions:</strong>  Size matters!  A litter box should be at least 1.5 times the length of the cat, and deep enough (3-4 inches of litter) to allow for digging and covering.</li>
+        </ul>
+
+        <div class="question-category">What (Choice/Specification)</div>
+        <ul>
+            <li><strong>Best Type & Odor Control:</strong> "What" questions focus heavily on choosing the *right* litter box.  There's no single "best" option; it depends on the cat's preferences, owner's budget, and desired features (odor control, clumping, material).  Odor control is a major concern, suggesting a need for litters with activated carbon, baking soda, or other odor-neutralizing agents.  Covered boxes can help, but require good ventilation.</li>
+             <li><strong>Cleaning Products:</strong>  Use mild, unscented soap and water or a cat-safe cleaner to avoid deterring the cat.  Avoid harsh chemicals like bleach.</li>
+        </ul>
+
+        <div class="question-category">When (Time/Circumstance)</div>
+        <ul>
+            <li><strong>Litter Changes & Problem Behaviors:</strong>  "When" questions highlight the timing of litter changes and troubleshooting problems.  Regular cleaning prevents many issues.  Sudden changes in litter box habits (pooping/peeing outside the box, not using it at all) can indicate medical problems, stress, or an issue with the litter box itself (dirty, wrong location, wrong type).  Veterinary consultation is recommended if the behavior persists.</li>
+        </ul>
+
+        <div class="question-category">Where (Location)</div>
+        <ul>
+          <li><strong>Placement Importance:</strong>  Location is key!  The litter box should be in a quiet, accessible, and low-traffic area.  Avoid placing it near food and water bowls.  In small apartments, consider corners, bathrooms, or even a dedicated, screened-off area.  Multiple litter boxes (one per cat, plus one extra) are ideal, especially in multi-cat households.</li>
+           <li><strong>Accessibility:</strong> Make sure it easy for the cat to get in and out of.  Consider the cats age and mobility.</li>
+        </ul>
+
+        <div class="question-category">Which (Selection from Options)</div>
+        <ul>
+          <li><strong>Variety of Options:</strong> Similar to "What" questions, but often focusing on specific types, like automatic litter boxes.  Research different brands and models, read reviews, and consider the cat's needs before making a purchase.  Automatic litter boxes can be convenient, but aren't suitable for all cats.</li>
+        </ul>
+          <p><strong>Overall Recommendation:</strong>  Prioritize cleanliness, choose a litter and box that suits your cat's preferences and your lifestyle, and be observant of any changes in your cat's litter box habits, as they can be indicators of underlying health or behavioral issues.</p>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        var myChart = echarts.init(document.getElementById('chart-container'));
+
+        var data = [
+          {
+            name: 'Can',
+            children: [
+              { name: 'cat litter box smell make you sick', value: 1 },
+              { name: 'cat litter box make you sick', value: 1 },
+              { name: 'you change the location of a cat litter box', value: 1 },
+            ],
+          },
+          {
+            name: 'How',
+            children: [
+              { name: 'clean cat litter box', value: 1 },
+              { name: 'big cat litter box', value: 1 },
+              { name: 'deep cat litter box', value: 1 },
+              { name: 'train cat litter box', value: 1 },
+              { name: 'often clean cat litter box', value: 1 },
+            ],
+          },
+           {
+                name: 'What',
+                children: [
+                  {name: 'cat litter box is best', value: 1},
+                  {name: 'cat litter box', value: 1},
+                  {name: 'size cat litter box', value: 1},
+                  {name: 'to clean cat litter box with', value: 1},
+                  {name: 'the best cat litter box for odor control', value: 1},
+                ]
+            },
+            {
+                name: 'When',
+                children: [
+                    {name: 'to clean cat litter box', value: 1},
+                    {name: 'cat poops outside litter box', value: 1},
+                    {name: 'cat pees outside litter box', value: 1},
+                    {name: 'cat stops using litter box', value: 1},
+                    {name: 'to change litter in cat box', value: 1},
+                ]
+            },
+          {
+                name: 'Where',
+                children: [
+                    {name: 'cat litter box', value: 1},
+                    {name: 'put cat litter box', value: 1},
+                    {name: 'should cat litter box be', value: 1},
+                    {name: 'to put cat litter box in small apartment', value: 1},
+                    {name: 'to buy cat litter box', value: 1},
+                ]
+            },
+            {
+                name: 'Which',
+                children: [
+                    {name: 'cat litter box is best', value: 1},
+                    {name: 'cat litter box', value: 1},
+                    {name: 'automatic cat litter box is best', value: 1},
+                ]
+            },
+
+        ];
+
+        var option = {
+          series: {
+            type: 'sunburst',
+            data: data,
+            radius: [0, '90%'],
+            label: {
+              rotate: 'radial',
+              
+            },
+          }
+        };
+
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

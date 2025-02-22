@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Search Keyword</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .kpi-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .kpi-card {
+            flex: 1; /* Equal width */
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px; /* Add margin for spacing */
+            display: flex;
+            align-items: center; /* Vertical align */
+            min-width: 250px; /* Minimum width */
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+
+        }
+
+        .kpi-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .kpi-content {
+            flex-grow: 1; /* Take up remaining space */
+        }
+
+        .kpi-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .kpi-label {
+            color: #666;
+        }
+
+
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chart-row{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            width: calc(50% - 10px); /* Two charts per row */
+            margin-bottom: 20px; /* Add margin at the bottom of each chart */
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .chart-insights{
+            margin-top: 15px;
+        }
+        .chart-insights p{
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+
+        }
+
+
+        /* KPI Colors */
+        .kpi-card.total-volume { background-color: #e6f7ff; } /* Light Blue */
+        .kpi-card.total-volume .kpi-icon { color: #1890ff; }
+        .kpi-card.average-cpc { background-color: #fff7e6; } /* Light Yellow */
+        .kpi-card.average-cpc .kpi-icon { color: #faad14; }
+        .kpi-card.top-competitor { background-color: #f2ffe6; } /* Light Green */
+        .kpi-card.top-competitor .kpi-icon { color: #52c41a; }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .kpi-container {
+                flex-direction: column; /* Stack on smaller screens */
+            }
+
+           .chart-wrapper {
+                width: 100%; /* Full width on smaller screens */
+            }
+            .chart-row{
+                 flex-direction: column;
+            }
+
+        }
+
+        .chart-wrapper.full-width {
+            width: 100% !important; /* 强制占满整行 */
+            margin-bottom: 40px;
+        }
+
+        .chart-wrapper.full-width #keywordCategoryChart {
+            height: 600px !important; /* 增加图表高度 */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1 class="dashboard-title">Google Search Keyword</h1>
+
+        <div class="kpi-container">
+            <div class="kpi-card total-volume">
+                <span class="kpi-icon">&#x1F4C8;</span>
+                <div class="kpi-content">
+                    <div class="kpi-value">147,100</div>
+                    <div class="kpi-label">Total Search Volume</div>
+                </div>
+            </div>
+            <div class="kpi-card average-cpc">
+                <span class="kpi-icon">&#x1F4B2;</span>
+                <div class="kpi-content">
+                    <div class="kpi-value">$4.78</div>
+                    <div class="kpi-label">Average CPC</div>
+                </div>
+            </div>
+            <div class="kpi-card top-competitor">
+               <span class="kpi-icon">&#x1F91D;</span>
+                <div class="kpi-content">
+                    <div class="kpi-value">Target</div>
+                    <div class="kpi-label">Top Competitor</div>
+                </div>
+            </div>
+             <div class="kpi-card top-competitor">
+               <span class="kpi-icon">&#x1F50D;</span>
+                <div class="kpi-content">
+                    <div class="kpi-value">70%</div>
+                    <div class="kpi-label">Question-Type Keywords</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+
+            <div class="chart-row">
+               <div class="chart-wrapper">
+                    <h2 class="chart-title">Search Volume Trend</h2>
+                    <div id="searchVolumeChart" style="width: 100%; height: 400px;"></div>
+                    <div class="chart-insights">
+                        <p><b>Insights:</b> The keyword "cat litter box" has the highest search volume, indicating strong user interest.  Long-tail keywords like "cat litter box furniture" also present significant opportunities.</p>
+                        <p><b>Suggestions:</b> Focus content and ad campaigns on high-volume keywords. Explore opportunities to create detailed content addressing long-tail keyword searches.</p>
+                    </div>
+                </div>
+                 <div class="chart-wrapper">
+                    <h2 class="chart-title">Keyword Type Distribution</h2>
+                    <div id="keywordTypeChart" style="width: 100%; height: 400px;"></div>
+                     <div class="chart-insights">
+                        <p><b>Insights:</b> "How" and "What" questions dominate the keyword types.  This suggests users are looking for information and solutions related to cat litter boxes.</p>
+                        <p><b>Suggestions:</b> Create informative content that directly answers "How" and "What" questions.  Develop comprehensive guides and tutorials.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                 <div class="chart-wrapper">
+                    <h2 class="chart-title">CPC vs Search Volume</h2>
+                    <div id="cpcVsVolumeChart" style="width: 100%; height: 400px;"></div>
+                    <div class="chart-insights">
+                        <p><b>Insights:</b>  There's a general trend of higher search volume correlating with lower CPC.  However, some keywords like "cat litter box virus" have very high CPC despite low volume, likely due to high commercial intent or competition.</p>
+                        <p><b>Suggestions:</b> Prioritize high-volume, low-CPC keywords for organic traffic. Carefully evaluate high-CPC keywords and consider their ROI potential.</p>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h2 class="chart-title">Competitor Brand Mentions</h2>
+                    <div id="competitorChart" style="width: 100%; height: 400px;"></div>
+                    <div class="chart-insights">
+                        <p><b>Insights:</b> Target, Amazon, and Walmart have significantly more mentions than specialized cat litter box brands like Breeze and Modkat.</p>
+                        <p><b>Suggestions:</b> Analyze the content and strategies of major retailers (Target, Amazon, Walmart) to understand their success.  Consider partnerships or collaborations to increase brand visibility.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-wrapper full-width">
+                <h2 class="chart-title">Keyword Category Analysis</h2>
+                <div id="keywordCategoryChart" style="width: 100%; height: 600px;"></div>
+                <div class="chart-insights">
+                    <p><b>Insights:</b> Related and Alphabetical categories dominate the search volume, while Questions have lower but more specific intent.</p>
+                    <p><b>Suggestions:</b> Focus content strategy on high-volume related terms while addressing specific questions in FAQ sections.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts
+        var searchVolumeChart = echarts.init(document.getElementById('searchVolumeChart'));
+        var keywordTypeChart = echarts.init(document.getElementById('keywordTypeChart'));
+        var cpcVsVolumeChart = echarts.init(document.getElementById('cpcVsVolumeChart'));
+        var competitorChart = echarts.init(document.getElementById('competitorChart'));
+        var keywordCategoryChart = echarts.init(document.getElementById('keywordCategoryChart'));
+
+        // Data (from your React code)
+        const searchVolumeData = [
+            { name: 'cat litter box', volume: 74000 },
+            { name: 'cat litter box best', volume: 22200 },
+            { name: 'cat litter box furniture', volume: 18100 },
+            { name: 'cat litter box mat', volume: 14800 },
+            { name: 'cat litter box pellets', volume: 14800 },
+        ];
+
+        const keywordTypeData = [
+            { name: 'How', value: 30 },
+            { name: 'What', value: 20 },
+            { name: 'Why', value: 15 },
+            { name: 'Where', value: 10 },
+            { name: 'When', value: 5 },
+        ];
+
+        const cpcVsVolumeData = [
+            { 
+                name: 'self cleaning litter box',
+                cpc: 2.12, 
+                volume: 74000,
+                symbolSize: 30  // 根据搜索量调整点的大小
+            },
+            { 
+                name: 'automatic litter box',
+                cpc: 3.15, 
+                volume: 40500,
+                symbolSize: 25
+            },
+            { 
+                name: 'litter robot',
+                cpc: 4.36, 
+                volume: 18100,
+                symbolSize: 20
+            },
+            { 
+                name: 'hidden litter box',
+                cpc: 1.25, 
+                volume: 12200,
+                symbolSize: 15
+            },
+            { 
+                name: 'odorless litter box',
+                cpc: 2.85, 
+                volume: 9800,
+                symbolSize: 15
+            }
+        ];
+
+        const competitorData = [
+            { name: 'Breeze', mentions: 720 },
+            { name: 'Modkat', mentions: 320 },
+            { name: 'Walmart', mentions: 3600 },
+            { name: 'Amazon', mentions: 2900 },
+            { name: 'Target', mentions: 6600 },
+        ];
+
+        const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+        const keywordCategoryData = [{
+            name: 'Cat Litter Box Keywords',
+            children: [{
+                name: 'Related',
+                value: 149600,
+                itemStyle: { color: '#0088FE' },
+                children: [
+                    { name: 'cat litter box', value: 74000 },
+                    { name: 'cat litter box furniture', value: 18100 },
+                    { name: 'cat litter box mat', value: 14800 },
+                    { name: 'cat litter box pellets', value: 14800 },
+                    { name: 'cat litter box crystals', value: 9900 },
+                    { name: 'cat litter box for maine coon', value: 9900 },
+                    { name: 'cat litter box with pellets', value: 8100 }
+                ]
+            }, {
+                name: 'Alphabeticals',
+                value: 97800,
+                itemStyle: { color: '#00C49F' },
+                children: [
+                    { name: 'cat litter box best', value: 22200 },
+                    { name: 'cat litter box furniture', value: 18100 },
+                    { name: 'cat litter box mat', value: 14800 },
+                    { name: 'cat litter box pellets', value: 14800 },
+                    { name: 'cat litter box crystals', value: 9900 },
+                    { name: 'cat litter box for maine coon', value: 9900 },
+                    { name: 'cat litter box and pregnancy', value: 8100 }
+                ]
+            }, {
+                name: 'Prepositions',
+                value: 37700,
+                itemStyle: { color: '#FFBB28' },
+                children: [
+                    { name: 'cat litter box for maine coon', value: 9900 },
+                    { name: 'cat litter box for large cats', value: 8100 },
+                    { name: 'cat litter box for big cats', value: 8100 },
+                    { name: 'cat litter box with pellets', value: 8100 },
+                    { name: 'cat litter box with cover', value: 3600 }
+                ]
+            }, {
+                name: 'Comparisons',
+                value: 16200,
+                itemStyle: { color: '#FF8042' },
+                children: [
+                    { name: 'cat litter box and pregnancy', value: 8100 },
+                    { name: 'cat litter box and pregnant women', value: 8100 }
+                ]
+            }, {
+                name: 'Questions',
+                value: 8900,
+                itemStyle: { color: '#8884d8' },
+                children: [
+                    { name: 'how often change cat litter box', value: 3600 },
+                    { name: 'why cat poop outside litter box', value: 2900 },
+                    { name: 'where put cat litter box', value: 2400 }
+                ]
+            }]
+        }];
+
+        // Search Volume Chart Options
+       const searchVolumeOption = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Volume'],
+                bottom: 0
+            },
+            xAxis: {
+                type: 'category',
+                data: searchVolumeData.map(item => item.name),
+                axisLabel: {
+                    rotate: 45,
+                    interval: 0, // Ensure all labels are shown
+                    formatter: function(value){
+                         return value.length > 10 ? value.substring(0,10) + '...' : value;
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: 'Volume',
+                type: 'bar',
+                data: searchVolumeData.map(item => item.volume),
+                itemStyle: {
+                    color: '#8884d8' // Consistent color
+                }
+            }]
+        };
+
+        // Keyword Type Chart Options
+      const keywordTypeOption = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: keywordTypeData.map(item => item.name),
+            bottom: 0
+        },
+        series: [
+            {
+                name: 'Keyword Type',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: keywordTypeData,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                label: {
+                    formatter: '{b}: {d}%' // Show percentage
+                },
+                 itemStyle: {
+                        color: function(params) {
+                            // build a color map as your need
+                            return COLORS[params.dataIndex % COLORS.length];
+                        }
+                 }
+            }
+        ]
+    };
+
+        // CPC vs Volume Chart Options
+        const cpcVsVolumeOption = {
+            title: {
+                text: 'CPC vs Search Volume Analysis',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params) {
+                    return `${params.data.name}<br/>` +
+                           `CPC: $${params.data.cpc.toFixed(2)}<br/>` +
+                           `Volume: ${params.data.volume.toLocaleString()}`;
+                }
+            },
+            xAxis: {
+                type: 'value',
+                name: 'CPC ($)',
+                nameLocation: 'middle',
+                nameGap: 30,
+                axisLabel: {
+                    formatter: '${value}'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Search Volume',
+                nameLocation: 'middle',
+                nameGap: 40
+            },
+            series: [{
+                name: 'Keywords',
+                type: 'scatter',
+                data: cpcVsVolumeData.map(item => ({
+                    name: item.name,
+                    value: [item.cpc, item.volume],
+                    symbolSize: item.symbolSize,
+                    itemStyle: {
+                        color: '#8884d8',
+                        opacity: 0.8
+                    },
+                    ...item
+                })),
+                label: {
+                    show: true,
+                    formatter: '{b}',
+                    position: 'right',
+                    fontSize: 10
+                }
+            }]
+        };
+
+        // Competitor Chart Options
+        const competitorOption = {
+           tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Mentions'],
+                bottom: 0
+            },
+            xAxis: {
+                type: 'category',
+                data: competitorData.map(item => item.name),
+                axisLabel: {
+                    rotate: 45,
+                    interval: 0,
+                    formatter: function(value){
+                      return value.length > 8 ? value.substring(0,8)+'...' : value
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: 'Mentions',
+                type: 'bar',
+                data: competitorData.map(item => item.mentions),
+                itemStyle: {
+                    color: '#82ca9d'
+                }
+            }]
+        };
+
+        // Keyword Category Chart Options
+        const keywordCategoryOption = {
+            title: {
+                text: 'Cat Litter Box Keyword Categories',
+                subtext: 'Based on search volume',
+                left: 'center',
+                bottom: 0,  // 将标题移到底部
+                textStyle: {
+                    fontSize: 16,
+                    fontWeight: 'normal'
+                },
+                subtextStyle: {
+                    fontSize: 12,
+                    color: '#666'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params) {
+                    return `${params.name}<br/>Search Volume: ${params.value.toLocaleString()}`;
+                }
+            },
+            series: {
+                type: 'sunburst',
+                data: keywordCategoryData,
+                radius: [0, '85%'],  // 调整半径，为底部标题留出空间
+                center: ['50%', '45%'],  // 将图表整体向上移动一点
+                sort: null,
+                emphasis: {
+                    focus: 'ancestor'
+                },
+                levels: [
+                    {},
+                    {
+                        r0: '0%',
+                        r: '20%',
+                        itemStyle: {
+                            borderWidth: 2
+                        },
+                        label: {
+                            rotate: 'radial'
+                        }
+                    },
+                    {
+                        r0: '20%',
+                        r: '50%',
+                        label: {
+                            align: 'right'
+                        }
+                    },
+                    {
+                        r0: '50%',
+                        r: '70%',
+                        label: {
+                            position: 'outside',
+                            padding: 3,
+                            silent: false
+                        }
+                    }
+                ],
+                label: {
+                    show: true,
+                    formatter: function (param) {
+                        if (param.depth === 1) {
+                            return param.name + '\n' + param.value.toLocaleString();
+                        }
+                        return param.depth === 2 ? 
+                            param.name + '\n' + param.value.toLocaleString() :
+                            param.name;
+                    }
+                }
+            }
+        };
+
+        // Set options
+        searchVolumeChart.setOption(searchVolumeOption);
+        keywordTypeChart.setOption(keywordTypeOption);
+        cpcVsVolumeChart.setOption(cpcVsVolumeOption);
+        competitorChart.setOption(competitorOption);
+        keywordCategoryChart.setOption(keywordCategoryOption);
+
+        // Responsive resize
+        window.addEventListener('resize', function() {
+            searchVolumeChart.resize();
+            keywordTypeChart.resize();
+            cpcVsVolumeChart.resize();
+            competitorChart.resize();
+            keywordCategoryChart.resize();
+        });
+
+    </script>
+</body>
+</html>
